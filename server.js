@@ -11,6 +11,8 @@ const cors = require("cors");
 //var
 var indexRouter = require("./routes/index");
 var strands_typeRouter = require("./routes/strands_type");
+var careerRouter = require("./routes/career");
+var videoclipRouter = require("./routes/videoclip");
 
 var app = express();
 
@@ -34,6 +36,8 @@ app.use(express.static(path.join(__dirname, "assets")));
 //app.use
 app.use("/", indexRouter);
 app.use("/strands_type", strands_typeRouter);
+app.use("/career", careerRouter);
+app.use("/videoclip", videoclipRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

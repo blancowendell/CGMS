@@ -1,0 +1,161 @@
+<script>
+    $(document).ready(function () {
+        LoadTable();
+        LoadStrandId();
+
+        function LoadTable() {
+            $("#dataTableStrandsType").DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                searching: false,
+                info: false,
+                scrollY: 600,
+                scrollCollapse: true,
+                serverMethod: "GET",
+                ajax: {
+                    url: "/videoclip/load",
+                    dataSrc: (json) => {
+                        var finalData = [];
+                        var data = json.data;
+
+                        $.each(data, (key, item) => {
+                            var action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editadminusersmodal">
+                    <i class="fas fa-fw fa-pen"></i>
+                  </button>
+                `;
+
+                            finalData.push({
+                                id: item.id,
+                                name: item.name,
+                                strands: item.strands,
+                                description: item.description,
+                                create_date: item.create_date,
+                                create_by: item.create_by,
+                                action: action,
+                            });
+                        });
+
+                        return finalData;
+                    },
+                },
+                columns: [
+                    { data: "id" },
+                    { data: "name" },
+                    { data: "strands" },
+                    { data: "description" },
+                    { data: "create_date" },
+                    { data: "create_by" },
+                    { data: "action" },
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    $("td", row).each(function () {
+                        this.style.textAlign = "center";
+                        this.style.verticalAlign = "middle";
+                        this.style.fontSize = "14px";
+                    });
+                },
+                initComplete: function () {
+                    $("#dataTableStrandsType thead th").css({
+                        "font-size": "14px",
+                        "font-weight": "bold",
+                        "text-align": "center"
+                    });
+                },
+            });
+        }
+
+        function LoadStrandId() {
+            $.ajax({
+                type: "GET",
+                url: "/strands_type/loadstrands",
+                success: function (result) {
+                    var data = result.data;
+
+                    $.each(data, function (key, item) {
+                        var options = new Option(item.id, item.id);
+                        $(options).html(item.name);
+                        $("#strandsName").append(options);
+                    });
+                },
+                error: function (result) {
+                    alert("error: " + result.data);
+                },
+            });
+        }
+
+
+        $(document).on("click", "#videoclipsubmit", function () {
+            let image = base64String;
+            let clipname = $("#clipName").val();
+            let strandsname = $("#strandsName").val();
+            let clipdescription = $("#clipDescription").val();
+            let clipupload = $("#clipUpload").val();
+            let youtubelink = $("#youtubeLink").val();
+
+            var message = "";
+
+            if (clipname == "") {
+                message += "clipname is required ";
+            }
+
+            if (strandsname == "") {
+                message += "strandsname is required ";
+            }
+
+            if (clipdescription == "") {
+                message += "clipdescription is required ";
+            }
+
+            if (clipupload == "") {
+                message += "clipupload is required ";
+            }
+
+            if (youtubelink == "") {
+                message += "youtubelink is required ";
+            }
+
+            if (message !== "") {
+                swal("Validation Error", message, "error");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/announcement/save",
+                    data: {
+                        // image: image,
+                        clipname: clipname,
+                        strandsname: strandsname,
+                        clipdescription: clipdescription,
+                        clipupload: clipupload,
+                        youtubelink: youtubelink,
+                    },
+                    success: function (result) {
+                        if (result.msg == "success") {
+                            swal({
+                                title: "Saved Successfully",
+                                text: "You clicked the button!",
+                                icon: "success",
+                                button: "OK!",
+                            }).then((results) => {
+                                window.location.reload();
+                            });
+                            LoadTable();
+                        } else {
+                            swal({
+                                title: "Exist",
+                                text: "Data already exists!",
+                                icon: "warning",
+                                button: "OK!",
+                            });
+                        }
+                    },
+                    error: function (err) {
+                        swal("Data already exist!", "You clicked the button!", "warning");
+                    },
+                });
+            }
+        });
+    });
+</script>

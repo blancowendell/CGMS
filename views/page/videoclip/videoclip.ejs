@@ -1,0 +1,77 @@
+<div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-4">
+          <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+            <h6>Video Clips</h6>
+            <!-- Modal Trigger Button -->
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addClipModal">
+              Add New Clip
+            </button>
+          </div>
+          <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive p-0">
+              <table class="table align-items-center mb-0" id="dataTableStrandsType">
+                <thead>
+                  <tr>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Clip Name</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Strands Name</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Clip Description</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Create Date</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Create By</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Structure -->
+  <div class="modal fade" id="addClipModal" tabindex="-1" aria-labelledby="addClipModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addClipModalLabel">Add New Clip</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Form Content -->
+          <form>
+            <div class="mb-3">
+              <label for="clipName" class="form-label">Clip Name</label>
+              <input type="text" class="form-control" id="clipName">
+            </div>
+            <div class="mb-3">
+              <label for="strandsName" class="form-label">Strands Name</label>
+              <select class="form-control" id="strandsName">
+                <option selected disabled>Select Strands</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="clipDescription" class="form-label">Clip Description</label>
+              <textarea class="form-control" id="clipDescription"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="clipUpload" class="form-label">Upload Video Clip</label>
+              <input type="file" class="form-control" id="clipUpload" accept="video/*">
+            </div>
+            <div class="mb-3">
+              <label for="youtubeLink" class="form-label">Or Embed YouTube Link</label>
+              <input type="url" class="form-control" id="youtubeLink" placeholder="https://www.youtube.com/watch?v=example">
+            </div>
+            <!-- Additional form fields can be added here -->
+            <button type="close" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn bg-gradient-primary" id="videoclipsubmit">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
