@@ -4,7 +4,7 @@ var express = require("express");
 const { MessageStatus, JsonErrorResponse, JsonSuccess, JsonWarningResponse, JsonDataResponse } = require("./repository/response");
 const { SelectStatement, InsertStatement, GetCurrentDatetime } = require("./repository/customhelper");
 const { InsertTable, Select } = require("./repository/dbconnect");
-//const { Validator } = require("./controller/middleware");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentYear = moment().format("YY");
 const currentMonth = moment().format("MM");
@@ -13,8 +13,12 @@ const { DataModeling } = require("../routes/model/cgmsdb");
 require("dotenv").config();
 
 /* GET home page. */
+// router.get("/", function (req, res, next) {
+//   res.render("indexlayout", { title: "Express" });
+// });
 router.get("/", function (req, res, next) {
-  res.render("indexlayout", { title: "Express" });
+  Validator(req, res, "indexlayout");
 });
+
 
 module.exports = router;

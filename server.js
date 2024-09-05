@@ -13,6 +13,9 @@ var indexRouter = require("./routes/index");
 var strands_typeRouter = require("./routes/strands_type");
 var careerRouter = require("./routes/career");
 var videoclipRouter = require("./routes/videoclip");
+var loginRouter = require("./routes/login");
+var admin_userRouter = require("./routes/admin_user");
+var acessRouter = require("./routes/access");
 
 var app = express();
 
@@ -38,6 +41,9 @@ app.use("/", indexRouter);
 app.use("/strands_type", strands_typeRouter);
 app.use("/career", careerRouter);
 app.use("/videoclip", videoclipRouter);
+app.use("/login", loginRouter);
+app.use("/admin_user", admin_userRouter);
+app.use("/access", acessRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

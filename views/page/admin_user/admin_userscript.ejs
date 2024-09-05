@@ -1,0 +1,409 @@
+<script>
+        let userid = "";
+        let base64String = "";
+        let currentPassword = "";
+    $(document).ready(function () {
+        LoadTable();
+        LoadAccess();
+        EditLoadAccess();
+
+        function LoadTable() {
+            $("#dataTableAdminUsers").DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                searching: false,
+                info: false,
+                scrollY: 600,
+                scrollCollapse: true,
+                serverMethod: "GET",
+                ajax: {
+                    url: "/admin_user/load",
+                    dataSrc: (json) => {
+                        var finalData = [];
+                        var data = json.data;
+
+                        $.each(data, (key, item) => {
+                            var action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editadminusersmodal">
+                    <i class="fas fa-fw fa-pen"></i>
+                  </button>
+                `;
+
+                            var imgElement = document.createElement("img");
+                            imgElement.src = "data:image/jpg;base64," + item.image;
+                            imgElement.alt = "Profile Image";
+                            imgElement.style.width = "90px";
+                            imgElement.style.height = "90px";
+
+                            finalData.push({
+                                image: imgElement.outerHTML,
+                                userid: item.userid,
+                                fullname: item.fullname,
+                                accesstype: item.accesstype,
+                                username: item.username,
+                                status: item.status,
+                                action: action,
+                            });
+                        });
+
+                        return finalData;
+                    },
+                },
+                columns: [
+                    { data: "image" },
+                    { data: "userid" },
+                    { data: "fullname" },
+                    { data: "accesstype" },
+                    { data: "username" },
+                    { data: "status" },
+                    { data: "action" },
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    var jobStatusCell = $(row).find("td:eq(5)");
+                    var jobStatusText = data.status;
+
+                    var jobStatusClass = "";
+                    if (jobStatusText === "Active") {
+                        jobStatusClass = "badge badge-sm bg-gradient-success text-white rounded-pill";
+                    } else if (jobStatusText === "Inactive") {
+                        jobStatusClass = "badge badge-sm bg-gradient-danger text-white rounded-pill";
+                    }
+
+                    jobStatusCell.html(`<span class="${jobStatusClass}">${jobStatusText}</span>`);
+
+                    $("td", row).each(function () {
+                        this.style.textAlign = "center";
+                        this.style.verticalAlign = "middle";
+                        this.style.fontSize = "14px";
+                    });
+                },
+                initComplete: function () {
+                    $("#dataTableStrandsType thead th").css({
+                        "font-size": "14px",
+                        "font-weight": "bold",
+                        "text-align": "center"
+                    });
+                },
+            });
+        }
+
+        function LoadAccess() {
+            $.ajax({
+                type: "GET",
+                url: "/access/load",
+                success: function (result) {
+                    var data = result.data;
+
+                    $.each(data, function (key, item) {
+                        var options = new Option(item.accessid, item.accessid);
+                        $(options).html(item.accessname);
+                        $("#accesstype").append(options);
+                    });
+                },
+                error: function (result) {
+                    alert("error: " + result.data);
+                },
+            });
+        }
+
+        $(document).on("click", "#adminusersavebtn", function () {
+            let accesstype = $("#accesstype").val();
+            let fullname = $("#fullname").val();
+            let username = $("#username").val();
+            let password = $("#password").val();
+            let confirmpassword = $("#confirmpassword").val();
+            let image = base64String;
+
+            var message = "";
+
+            if (accesstype == "") {
+                message += "accesstype is required. ";
+            }
+
+            if (fullname == "") {
+                message += "fullname is required. ";
+            }
+
+            if (username == "") {
+                message += "username is required. ";
+            }
+
+            if (password == "") {
+                message += "password is required. ";
+            }
+
+            if (confirmpassword == "") {
+                message += "confirmpassword is required. ";
+            }
+
+            if (password !== confirmpassword) {
+                message += "Password and Confirm Password do not match. ";
+            }
+
+            if (message !== "") {
+                toastr.error(message, "Validation Error");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/admin_user/save",
+                    data: {
+                        accesstype: accesstype,
+                        fullname: fullname,
+                        username: username,
+                        password: password,
+                        image: image,
+                    },
+                    success: function (result) {
+                        if (result.msg == "success") {
+                            toastr.success("Saved Successfully", "Success");
+
+                            // Reload page after toast
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 2000);
+                            LoadTable();
+                        } else {
+                            toastr.warning("Data already exists!", "Warning");
+                        }
+                    },
+                    error: function (err) {
+                        toastr.warning("Data already exists!", "Warning");
+                    },
+                });
+            }
+        });
+
+
+        $("#dataTableAdminUsers tbody").on("click", "tr", function () {
+            var dataRow = [];
+            $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                    dataRow.push($(this).text());
+                });
+            userid = dataRow[1];
+            console.log(dataRow);
+        });
+
+        function EditLoadAccess() {
+            $.ajax({
+                type: "GET",
+                url: "/access/load",
+                success: function (result) {
+                    var data = result.data;
+
+                    $.each(data, function (key, item) {
+                        var options = new Option(item.accessid, item.accessid);
+                        $(options).html(item.accessname);
+                        $("#editaccesstype").append(options);
+                    });
+                },
+                error: function (result) {
+                    alert("error: " + result.data);
+                },
+            });
+        }
+
+        $(document).on("click", "#editBtn", function () {
+            $.ajax({
+                type: "POST",
+                url: "/admin_user/getadminusers",
+                data: {
+                    userid: userid,
+                },
+                success: function (result) {
+                    if (result.msg === "success") {
+                        const existingData = result.data;
+
+                        $.each(existingData, (key, item) => {
+                            $("#editdepartmentid").val(item.userid);
+                            $("#editaccesstype").val(item.accesstype);
+                            $("#editfullname").val(item.fullname);
+                            $("#editusername").val(item.username);
+                            currentPassword = item.password;
+                            $("#editstatus").val(item.status);
+                            $("#editpreview").attr(
+                                "src",
+                                "data:image/jpg;base64," + item.image
+                            );
+                        });
+
+                        console.log(currentPassword, "currentPassword");
+                    } else {
+                        toastr.error("Error fetching employee data", "Error");
+                    }
+                },
+                error: function (err) {
+                    toastr.error("An error occurred while fetching employee data", "Error");
+                },
+            });
+        });
+
+        $(document).on("click", "#adminUserEditBtn", function () {
+            let id = userid;
+            let accesstype = $("#editaccesstype").val();
+            let fullname = $("#editfullname").val();
+            let username = $("#editusername").val();
+            let status = $("#editstatus").val();
+            let currentpassword = $("#currentPassword").val();
+            let newpassword = $("#newpassword").val();
+            let image = base64String;
+
+            // Assume currentPassword is a global variable that holds the actual current password
+            if (currentpassword !== currentPassword) {
+                toastr.error("Current password is incorrect.", "Validation Error");
+                return; // Exit early if current password is incorrect
+            }
+
+            var message = "";
+
+            if (accesstype === "") {
+                message += "Accesstype is required. ";
+            }
+
+            if (fullname === "") {
+                message += "Fullname is required. ";
+            }
+
+            if (username === "") {
+                message += "Username is required. ";
+            }
+
+            if (status === "") {
+                message += "Status is required. ";
+            }
+
+            if (newpassword === "") {
+                message += "Newpassword is required. ";
+            }
+
+            if (message !== "") {
+                toastr.error(message, "Validation Error");
+            } else {
+                $.ajax({
+                    type: "PUT",
+                    url: "admin_user/edit",
+                    data: {
+                        userid: userid,
+                        accesstype: accesstype,
+                        fullname: fullname,
+                        username: username,
+                        status: status,
+                        currentpassword: currentpassword,
+                        newpassword: newpassword,
+                        image: image,
+                    },
+                    success: function (result) {
+                        if (result.msg === "success") {
+                            toastr.success("Update Successfully", "Success");
+                            // Reload page after toast
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 2000);
+                            LoadTable();
+                        } else if (result.msg === "exist") {
+                            toastr.warning("Data already exists!", "Warning");
+                        } else {
+                            toastr.warning("Data already exists!", "Warning");
+                        }
+                    },
+                    error: function (err) {
+                        toastr.error("An error occurred while saving data.", "Error");
+                    },
+                });
+            }
+        });
+
+        $(document).on("change", "#announcementimage", function (e) {
+            const input = document.getElementById("announcementimage");
+            const file = input.files[0];
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+                const preview = document.getElementById("preview");
+                preview.src = reader.result;
+            };
+            imageUploaded();
+        });
+
+        function imageUploaded() {
+            const input = document.getElementById("announcementimage");
+            const file = input.files[0];
+
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+                imageBase64Stringsep = base64String;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        $(document).on("change", "#editannouncementimage", function (e) {
+            const input = document.getElementById("editannouncementimage");
+            const file = input.files[0];
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+                const preview = document.getElementById("editpreview");
+                preview.src = reader.result;
+            };
+            editimage();
+        });
+
+        function editimage() {
+            const input = document.getElementById("editannouncementimage");
+            const file = input.files[0];
+
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+                imageBase64Stringsep = base64String;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function searchTable() {
+            var input, filter, found, table, tr, td, i, j;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("dataTableAdminUsers");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td");
+                for (j = 0; j < td.length; j++) {
+                    if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                    }
+                }
+                if (found) {
+                    tr[i].style.display = "";
+                    found = false;
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+
+        $(".toggle-password").on("click", function () {
+            const targetSelector = $(this).data("target");
+            const passwordInput = $(targetSelector);
+            const passwordFieldType = passwordInput.attr("type");
+            if (passwordFieldType === "password") {
+                passwordInput.attr("type", "text");
+                $(this).find("i").removeClass("fa-eye").addClass("fa-eye-slash");
+            } else {
+                passwordInput.attr("type", "password");
+                $(this).find("i").removeClass("fa-eye-slash").addClass("fa-eye");
+            }
+        });
+    });
+</script>

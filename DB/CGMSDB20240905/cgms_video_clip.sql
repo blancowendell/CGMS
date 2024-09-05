@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: cgms
+-- Host: localhost    Database: cgms
 -- ------------------------------------------------------
--- Server version	8.0.36
+-- Server version	8.0.39
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,6 +27,8 @@ CREATE TABLE `video_clip` (
   `vc_name` varchar(50) NOT NULL,
   `vc_strandsid` int NOT NULL,
   `vc_file` longtext NOT NULL,
+  `vc_description` text,
+  `vc_youtubelink` text,
   `vc_create_date` date NOT NULL,
   `vc_create_by` varchar(50) NOT NULL,
   PRIMARY KEY (`vc_id`),
@@ -53,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-09 16:13:13
+-- Dump completed on 2024-09-05 23:31:55

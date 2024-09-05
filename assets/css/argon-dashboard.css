@@ -4,6 +4,16 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+#preview,
+#editpreview {
+  margin-top: 50px;
+  width: 250px;
+  height: 250px;
+}
+
+
+
 :root {
   --bs-blue: #63B3ED;
   --bs-indigo: #596CFF;

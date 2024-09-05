@@ -23,8 +23,13 @@ const { DataModeling } = require("../routes/model/cgmsdb");
 require("dotenv").config();
 
 /* GET home page. */
+// router.get("/", function (req, res, next) {
+//   res.render("videocliplayout", { title: "Express" });
+// });
+
+
 router.get("/", function (req, res, next) {
-  res.render("videocliplayout", { title: "Express" });
+  Validator(req, res, "videocliplayout");
 });
 
 module.exports = router;
