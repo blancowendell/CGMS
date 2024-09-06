@@ -20,12 +20,12 @@ var roleacess = [
       {
         layout: "videocliplayout",
       },
-      // {
-      //   layout: "announcementslayout",
-      // },
-      // {
-      //   layout: "pendingapplicationlayout",
-      // },
+      {
+        layout: "job_requirementslayout",
+      },
+      {
+        layout: "skills_requirementslayout",
+      },
       // {
       //   layout: "calendarlayout",
       // },

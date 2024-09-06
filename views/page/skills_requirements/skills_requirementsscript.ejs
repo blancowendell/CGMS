@@ -1,0 +1,352 @@
+<script>
+    let userid = "";
+    let base64String = "";
+    let currentPassword = "";
+    let requirementid = "";
+    $(document).ready(function () {
+      LoadTable();
+      LoadStrandId();
+      EditLoadStrandId();
+  
+      function LoadTable() {
+        $("#dataTableAdminUsers").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 600,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/skills_requirements/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = `
+                <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editjobreqmodal">
+                  <i class="fas fa-fw fa-pen"></i>
+                </button>
+              `;
+  
+                finalData.push({
+                  id: item.id,
+                  name: item.name,
+                  strands: item.strands,
+                  status: item.status,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columns: [
+            { data: "id" },
+            { data: "name" },
+            { data: "strands" },
+            { data: "status" },
+            { data: "action" }
+          ],
+          createdRow: function (row, data, dataIndex) {
+            var jobStatusCell = $(row).find("td:eq(2)");
+            var jobStatusText = data.strands;
+  
+            var jobStatusClass = "";
+            if (jobStatusText === "STEM") {
+              jobStatusClass =
+                "badge badge-sm bg-gradient-success text-white rounded-pill";
+            } else if (jobStatusText === "HE") {
+              jobStatusClass =
+                "badge badge-sm bg-gradient-danger text-white rounded-pill";
+            }
+  
+            jobStatusCell.html(
+              `<span class="${jobStatusClass}">${jobStatusText}</span>`
+            );
+  
+            $("td", row).each(function () {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+              this.style.fontSize = "14px";
+            });
+          },
+          initComplete: function () {
+            $("#dataTableStrandsType thead th").css({
+              "font-size": "14px",
+              "font-weight": "bold",
+              "text-align": "center",
+            });
+          },
+        });
+      }
+  
+      function LoadStrandId() {
+        $.ajax({
+          type: "GET",
+          url: "/strands_type/loadstrands",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.id, item.id);
+              $(options).html(item.name);
+              $("#strandsName").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+      $(document).on("click", "#jobreqSaveBtn", function () {
+        let strandid = $("#strandsName").val();
+        let requirement = $("#reqname").val();
+  
+        var message = "";
+  
+        if (strandid == "") {
+          message += "Strand Name is required. ";
+        }
+  
+        if (requirement == "") {
+          message += "Requirement Name is required. ";
+        }
+  
+        if (message !== "") {
+          toastr.error(message, "Validation Error");
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "/skills_requirements/save",
+            data: {
+              strandsName: strandid,
+              reqname: requirement,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                toastr.success("Saved Successfully", "Success");
+  
+                // Reload page after toast
+                setTimeout(function () {
+                  window.location.reload();
+                }, 2000);
+                LoadTable();
+              } else {
+                toastr.warning("Data already exists!", "Warning");
+              }
+            },
+            error: function (err) {
+              toastr.warning("Data already exists!", "Warning");
+            },
+          });
+        }
+      });
+  
+      $("#dataTableAdminUsers tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+         requirementid = dataRow[0];
+        console.log(dataRow);
+      });
+  
+      function EditLoadStrandId() {
+        $.ajax({
+          type: "GET",
+          url: "/strands_type/loadstrands",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.id, item.id);
+              $(options).html(item.name);
+              $("#editstrandsName").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+      $(document).on("click", "#editBtn", function () {
+        $.ajax({
+          type: "POST",
+          url: "/skills_requirements/viewjobrequirements",
+          data: {
+              requirementid: requirementid,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+  
+              $.each(existingData, (key, item) => {
+                $("#editstrandsName").val(item.strandid);
+                $("#editreqname").val(item.name);
+                $("#editstatus").val(item.status);
+              });
+            } else {
+              toastr.error("Error fetching employee data", "Error");
+            }
+          },
+          error: function (err) {
+            toastr.error(
+              "An error occurred while fetching employee data",
+              "Error"
+            );
+          },
+        });
+      });
+  
+      $(document).on("click", "#jobreqEditBtn", function () {
+        let id = requirementid;
+        let strandid = $("#editstrandsName").val();
+        let requirement = $("#editreqname").val();
+        let status = $("#editstatus").val();
+  
+        var message = "";
+  
+        if (strandid === "") {
+          message += "Strand Name is required. ";
+        }
+  
+        if (requirement === "") {
+          message += "Requirement Name is required. ";
+        }
+  
+        if (status === "") {
+          message += "Select Status is required. ";
+        }
+  
+        if (message !== "") {
+          toastr.error(message, "Validation Error");
+        } else {
+          $.ajax({
+            type: "PUT",
+            url: "skills_requirements/edit",
+            data: {
+              requirementid: id,
+              strandid: strandid,
+              name: requirement,
+              status: status,
+            },
+            success: function (result) {
+              if (result.msg === "success") {
+                toastr.success("Update Successfully", "Success");
+                setTimeout(function () {
+                  window.location.reload();
+                }, 2000);
+                LoadTable();
+              } else if (result.msg === "exist") {
+                toastr.warning("Data already exists!", "Warning");
+              } else {
+                toastr.warning("Data already exists!", "Warning");
+              }
+            },
+            error: function (err) {
+              toastr.error("An error occurred while saving data.", "Error");
+            },
+          });
+        }
+      });
+  
+      $(document).on("change", "#announcementimage", function (e) {
+        const input = document.getElementById("announcementimage");
+        const file = input.files[0];
+  
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = function () {
+          const preview = document.getElementById("preview");
+          preview.src = reader.result;
+        };
+        imageUploaded();
+      });
+  
+      function imageUploaded() {
+        const input = document.getElementById("announcementimage");
+        const file = input.files[0];
+  
+        var reader = new FileReader();
+  
+        reader.onload = function () {
+          base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+  
+          imageBase64Stringsep = base64String;
+        };
+        reader.readAsDataURL(file);
+      }
+  
+      $(document).on("change", "#editannouncementimage", function (e) {
+        const input = document.getElementById("editannouncementimage");
+        const file = input.files[0];
+  
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = function () {
+          const preview = document.getElementById("editpreview");
+          preview.src = reader.result;
+        };
+        editimage();
+      });
+  
+      function editimage() {
+        const input = document.getElementById("editannouncementimage");
+        const file = input.files[0];
+  
+        var reader = new FileReader();
+  
+        reader.onload = function () {
+          base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+  
+          imageBase64Stringsep = base64String;
+        };
+        reader.readAsDataURL(file);
+      }
+  
+      function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dataTableAdminUsers");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td");
+          for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+              found = true;
+            }
+          }
+          if (found) {
+            tr[i].style.display = "";
+            found = false;
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+  
+      $(".toggle-password").on("click", function () {
+        const targetSelector = $(this).data("target");
+        const passwordInput = $(targetSelector);
+        const passwordFieldType = passwordInput.attr("type");
+        if (passwordFieldType === "password") {
+          passwordInput.attr("type", "text");
+          $(this).find("i").removeClass("fa-eye").addClass("fa-eye-slash");
+        } else {
+          passwordInput.attr("type", "password");
+          $(this).find("i").removeClass("fa-eye-slash").addClass("fa-eye");
+        }
+      });
+    });
+  </script>
+  

@@ -16,6 +16,8 @@ var videoclipRouter = require("./routes/videoclip");
 var loginRouter = require("./routes/login");
 var admin_userRouter = require("./routes/admin_user");
 var acessRouter = require("./routes/access");
+var job_requirementsRouter = require("./routes/job_requirements");
+var skills_requirementsRouter = require("./routes/skills_requirements");
 
 var app = express();
 
@@ -44,6 +46,8 @@ app.use("/videoclip", videoclipRouter);
 app.use("/login", loginRouter);
 app.use("/admin_user", admin_userRouter);
 app.use("/access", acessRouter);
+app.use("/job_requirements", job_requirementsRouter);
+app.use("/skills_requirements", skills_requirementsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

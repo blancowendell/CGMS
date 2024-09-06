@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: cgms
+-- Host: 127.0.0.1    Database: cgms
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,34 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `academic_strands`
+-- Table structure for table `job_requirements`
 --
 
-DROP TABLE IF EXISTS `academic_strands`;
+DROP TABLE IF EXISTS `job_requirements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `academic_strands` (
-  `as_id` int NOT NULL AUTO_INCREMENT,
-  `as_strands_type` int NOT NULL,
-  `as_name` varchar(50) NOT NULL,
-  `as_course_description` text NOT NULL,
-  `as_job_description` text NOT NULL,
-  `as_create_by` varchar(50) NOT NULL,
-  `as_create_date` date NOT NULL,
-  PRIMARY KEY (`as_id`),
-  KEY `as_strands_type` (`as_strands_type`),
-  CONSTRAINT `academic_strands_ibfk_1` FOREIGN KEY (`as_strands_type`) REFERENCES `strands_type` (`st_id`)
+CREATE TABLE `job_requirements` (
+  `jr_id` int NOT NULL AUTO_INCREMENT,
+  `jr_name` text NOT NULL,
+  `jr_strandid` int NOT NULL,
+  `jr_status` varchar(50) NOT NULL,
+  PRIMARY KEY (`jr_id`),
+  KEY `jr_strandid` (`jr_strandid`),
+  CONSTRAINT `job_requirements_ibfk_1` FOREIGN KEY (`jr_strandid`) REFERENCES `academic_strands` (`as_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `academic_strands`
+-- Dumping data for table `job_requirements`
 --
 
-LOCK TABLES `academic_strands` WRITE;
-/*!40000 ALTER TABLE `academic_strands` DISABLE KEYS */;
-INSERT INTO `academic_strands` VALUES (1,1,'STEM','Science and Technology Engineering Mathematics','Sample','Tanggol','2024-08-09'),(2,2,'HE','Home Economics','Sample','Tanggol','2024-08-09');
-/*!40000 ALTER TABLE `academic_strands` ENABLE KEYS */;
+LOCK TABLES `job_requirements` WRITE;
+/*!40000 ALTER TABLE `job_requirements` DISABLE KEYS */;
+INSERT INTO `job_requirements` VALUES (1,'Matalino',2,'Active'),(2,'Mabait',1,'Active');
+/*!40000 ALTER TABLE `job_requirements` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-05 23:31:55
+-- Dump completed on 2024-09-06 15:47:55

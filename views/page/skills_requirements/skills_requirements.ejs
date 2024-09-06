@@ -1,0 +1,121 @@
+<div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-4">
+        <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+            <h6>Skills Requirements</h6>
+            <!-- Modal Trigger Button -->
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addadminusersmodal">
+                Add Skills Requirements
+            </button>
+        </div>
+          <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive p-0">
+              <table class="table align-items-center mb-0" id="dataTableAdminUsers">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">ID</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Skills</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Strands</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Status</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Action</th>
+                    </tr>             
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="addadminusersmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">Add Skills Requirements</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+            <div class="col">
+                <div class="form-floating">
+                <select type="text" class="form-control border-form-modal" id="strandsName" name="strandsName" placeholder="First Name">
+                    <option selected disabled>Strand Type</option>
+                </select>
+                <label for="floatingInput">Strand Name</label>
+                </div>
+            </div>
+            <br>
+            <div class="col">
+                <div class="form-floating">
+                <input type="text" class="form-control border-form-modal" id="reqname" name="reqname" placeholder="First Name">
+                <label for="floatingInput">Skills Name</label>
+                </div>
+            </div>
+            <br>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn bg-gradient-primary" id="jobreqSaveBtn">Save</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editjobreqmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">Edit Skills Requirements</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+            <div class="col">
+                <div class="form-floating">
+                <select class="form-control border-form-modal" id="editstrandsName" name="editstrandsName" placeholder="First Name">
+                    <option selected disabled>Strand Type</option>
+                </select>
+                <label for="floatingInput">Strand Name</label>
+                </div>
+            </div>
+            <br>
+            <div class="col">
+                <div class="form-floating">
+                <input type="text" class="form-control border-form-modal" id="editreqname" name="editreqname" placeholder="First Name">
+                <label for="floatingInput">Skills Name</label>
+                </div>
+            </div>
+            <br>
+            <div class="col">
+                <div class="form-floating">
+                <select type="text" class="form-control border-form-modal" id="editstatus" name="editstatus" placeholder="First Name">
+                    <option selected disabled>Select Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+                <label for="floatingInput">Status</label>
+                </div>
+            </div>
+            <br>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn bg-gradient-primary" id="jobreqEditBtn">Save</button>
+        </div>
+    </div>
+    </div>
+</div>

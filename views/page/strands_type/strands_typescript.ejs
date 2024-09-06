@@ -1,7 +1,13 @@
 <script>
+  let strandtypeid = "";
+  let strandid = "";
     $(document).ready(function () {
         LoadStarandsType();
         LoadStrands();
+        LoadStrandTypeId();
+        EditLoadStrandTypeId();
+
+      //#region Strands Type
   
       function LoadStarandsType() {
         $("#dataTableStrandsType").DataTable({
@@ -22,7 +28,7 @@
   
               $.each(data, (key, item) => {
                 var action = `
-                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editadminusersmodal">
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editstrandstypemodal">
                     <i class="fas fa-fw fa-pen"></i>
                   </button>
                 `;
@@ -77,7 +83,144 @@
         });
       }
 
+      $(document).on("click", "#addStrandsTypeBtn", function () {
+        let strandname = $("#strandtype").val();
+        let description = $("#description").val();
+  
+        var message = "";
+        if (strandname == "") {
+          message += "Strand Name is required. ";
+        }
 
+        if (description == "") {
+          message += "Description is required. ";
+        }
+  
+        if (message !== "") {
+          toastr.error(message, "Validation Error");
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "/strands_type/savetype",
+            data: {
+              strandsName: strandname,
+              description: description,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                toastr.success("Saved Successfully", "Success");
+  
+                // Reload page after toast
+                setTimeout(function () {
+                  window.location.reload();
+                }, 2000);
+                LoadTable();
+              } else {
+                toastr.warning("Data already exists!", "Warning");
+              }
+            },
+            error: function (err) {
+              toastr.warning("Data already exists!", "Warning");
+            },
+          });
+        }
+      });
+
+      $("#dataTableStrandsType tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+         strandtypeid = dataRow[0];
+        console.log(dataRow);
+      });
+
+      $(document).on("click", "#editBtn", function () {
+        $.ajax({
+          type: "POST",
+          url: "/strands_type/viewstrandtype",
+          data: {
+            strandtypeid: strandtypeid,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+  
+              $.each(existingData, (key, item) => {
+                $("#editstrandtype").val(item.name);
+                $("#editstatus").val(item.status);
+                $("#editescription").val(item.description);
+              });
+            } else {
+              toastr.error("Error fetching employee data", "Error");
+            }
+          },
+          error: function (err) {
+            toastr.error(
+              "An error occurred while fetching employee data",
+              "Error"
+            );
+          },
+        });
+      });
+
+      $(document).on("click", "#editStrandsTypeBtn", function () {
+        let id = strandtypeid;
+        let strandid = $("#editstrandtype").val();
+        let description = $("#editescription").val();
+        let status = $("#editstatus").val();
+  
+        var message = "";
+  
+        if (strandid === "") {
+          message += "Strand Name is required. ";
+        }
+  
+        if (description === "") {
+          message += "Description is required. ";
+        }
+  
+        if (status === "") {
+          message += "Select Status is required. ";
+        }
+        if (message !== "") {
+          toastr.error(message, "Validation Error");
+        } else {
+          $.ajax({
+            type: "PUT",
+            url: "strands_type/edittype",
+            data: {
+              strandtypeid: id,
+              name: strandid,
+              status: status,
+              description: description,
+            },
+            success: function (result) {
+              if (result.msg === "success") {
+                toastr.success("Update Successfully", "Success");
+                setTimeout(function () {
+                  window.location.reload();
+                }, 2000);
+                LoadTable();
+              } else if (result.msg === "exist") {
+                toastr.warning("Data already exists!", "Warning");
+              } else {
+                toastr.warning("Data already exists!", "Warning");
+              }
+            },
+            error: function (err) {
+              toastr.error("An error occurred while saving data.", "Error");
+            },
+          });
+        }
+      });
+
+      //#endregion
+
+      //#region Strands
       function LoadStrands() {
         $("#dataTableStrands").DataTable({
           destroy: true,
@@ -97,7 +240,7 @@
   
               $.each(data, (key, item) => {
                 var action = `
-                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editadminusersmodal">
+                  <button id="editBtnStrand" class="btn text-primary" name="editBtnStrand" data-bs-toggle="modal" data-bs-target="#editstrandsmodal">
                     <i class="fas fa-fw fa-pen"></i>
                   </button>
                 `;
@@ -155,6 +298,205 @@
           },
         });
       }
+
+      function LoadStrandTypeId() {
+        $.ajax({
+          type: "GET",
+          url: "/strands_type/loadtype",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.id, item.id);
+              $(options).html(item.name);
+              $("#strandtypename").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+
+      $(document).on("click", "#addStrandSabeBtn", function () {
+        let strandname = $("#strandname").val();
+        let description = $("#coursedescription").val();
+        let jobdescription = $("#jobdescription").val(); 
+        let strandsType = $("#strandtypename").val();
+  
+        var message = "";
+        if (strandname == "") {
+          message += "Strand Name is required. ";
+        }
+  
+        if (description == "") {
+          message += "Description is required. ";
+        }
+  
+        if (jobdescription == "") {
+          message += "Job Description is required. ";
+        } 
+
+        if (strandsType == "") {
+          message += "Strand Type is required. ";
+        }
+  
+        if (message !== "") {
+          toastr.error(message, "Validation Error");
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "/strands_type/savestrands",
+            data: {
+              strandsType: strandsType,
+              strandsName: strandname,
+              coursedesc: description,
+              jobdesc: jobdescription,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                toastr.success("Saved Successfully", "Success");
+  
+                // Reload page after toast
+                setTimeout(function () {
+                  window.location.reload();
+                }, 2000);
+                LoadTable();
+              } else {
+                toastr.warning("Data already exists!", "Warning");
+              }
+            },
+            error: function (err) {
+              toastr.warning("Data already exists!", "Warning");
+            },
+          });
+        }
+      });
+
+      $("#dataTableStrands tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+          strandid = dataRow[0];
+        console.log(dataRow);
+      });
+
+
+      $(document).on("click", "#editBtnStrand", function () {
+        $.ajax({
+          type: "POST",
+          url: "/strands_type/viewstrand",
+          data: {
+            strandid: strandid,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+  
+              $.each(existingData, (key, item) => {
+                $("#editstrandtypename").val(item.strands_type);
+                $("#editstrandname").val(item.name);
+                $("#editcoursedescription").val(item.course_description);
+                $("#editjobdescription").val(item.job_description);
+              });
+            } else {
+              toastr.error("Error fetching employee data", "Error");
+            }
+          },
+          error: function (err) {
+            toastr.error(
+              "An error occurred while fetching employee data",
+              "Error"
+            );
+          },
+        });
+      });
+
+      function EditLoadStrandTypeId() {
+        $.ajax({
+          type: "GET",
+          url: "/strands_type/loadtype",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.id, item.id);
+              $(options).html(item.name);
+              $("#editstrandtypename").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+
+      $(document).on("click", "#editStrandsBtn", function () {
+        let id = strandid;
+        let strandtypeid = $("#editstrandtypename").val();
+        let strandname = $("#editstrandname").val();
+        let coursedesc = $("#editcoursedescription").val();
+        let jobdesc = $("#editjobdescription").val();
+
+  
+        var message = "";
+
+        if (strandname === "") {
+          message += "Strand Name is required. ";
+        }
+  
+        if (coursedesc === "") {
+          message += "Course Description is required. ";
+        }
+  
+        if (jobdesc === "") {
+          message += "Job Description is required. ";
+        }
+  
+        // if (status === "") {
+        //   message += "Select Status is required. ";
+        // }
+        if (message !== "") {
+          toastr.error(message, "Validation Error");
+        } else {
+          $.ajax({
+            type: "PUT",
+            url: "strands_type/editstrand",
+            data: {
+              strandid: id,
+              strandtypeid: strandtypeid,
+              name: strandname,
+              coursedesc: coursedesc,
+              jobdesc: jobdesc,
+            },
+            success: function (result) {
+              if (result.msg === "success") {
+                toastr.success("Update Successfully", "Success");
+                setTimeout(function () {
+                  window.location.reload();
+                }, 2000);
+                LoadTable();
+              } else if (result.msg === "exist") {
+                toastr.warning("Data already exists!", "Warning");
+              } else {
+                toastr.warning("Data already exists!", "Warning");
+              }
+            },
+            error: function (err) {
+              toastr.error("An error occurred while saving data.", "Error");
+            },
+          });
+        }
+      });
+
+
+
+
+      //#endregion
     });
   </script>
   

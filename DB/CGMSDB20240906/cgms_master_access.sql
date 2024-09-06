@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: cgms
+-- Host: 127.0.0.1    Database: cgms
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,31 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `strands_type`
+-- Table structure for table `master_access`
 --
 
-DROP TABLE IF EXISTS `strands_type`;
+DROP TABLE IF EXISTS `master_access`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `strands_type` (
-  `st_id` int NOT NULL AUTO_INCREMENT,
-  `st_name` varchar(50) NOT NULL,
-  `st_description` text NOT NULL,
-  `st_status` varchar(50) NOT NULL,
-  `st_create_date` date NOT NULL,
-  `st_create_by` varchar(50) NOT NULL,
-  PRIMARY KEY (`st_id`)
+CREATE TABLE `master_access` (
+  `ma_accessid` int NOT NULL AUTO_INCREMENT,
+  `ma_accessname` varchar(300) NOT NULL,
+  `ma_createby` varchar(20) NOT NULL,
+  `ma_createdate` varchar(20) NOT NULL,
+  `ma_status` varchar(20) NOT NULL,
+  PRIMARY KEY (`ma_accessid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `strands_type`
+-- Dumping data for table `master_access`
 --
 
-LOCK TABLES `strands_type` WRITE;
-/*!40000 ALTER TABLE `strands_type` DISABLE KEYS */;
-INSERT INTO `strands_type` VALUES (1,'Academic Strands','Sample','Active','2024-09-09','Tanggol'),(2,'Technical Vocational Tracks','Sample','Active','2024-09-09','Tanggol');
-/*!40000 ALTER TABLE `strands_type` ENABLE KEYS */;
+LOCK TABLES `master_access` WRITE;
+/*!40000 ALTER TABLE `master_access` DISABLE KEYS */;
+INSERT INTO `master_access` VALUES (1,'Admin','Tanggol','2024-08-09','Active'),(2,'Student','Tanggol','2024-08-09','Active');
+/*!40000 ALTER TABLE `master_access` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-05 23:31:55
+-- Dump completed on 2024-09-06 15:47:55

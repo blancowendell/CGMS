@@ -2,9 +2,13 @@
     <div class="row">
       <div class="col-12">
         <div class="card mb-4">
-          <div class="card-header pb-0">
+          <div class="card-header pb-0 d-flex justify-content-between align-items-center">
             <h6>Strands Types</h6>
-          </div>
+            <!-- Modal Trigger Button -->
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addstrandstypemodal">
+                Add Strands Types
+            </button>
+         </div>
           <div class="card-body px-0 pt-0 pb-2">
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0" id="dataTableStrandsType">
@@ -29,9 +33,13 @@
     <div class="row">
       <div class="col-12">
         <div class="card mb-4">
-          <div class="card-header pb-0">
+          <div class="card-header pb-0 d-flex justify-content-between align-items-center">
             <h6>Strands</h6>
-          </div>
+            <!-- Modal Trigger Button -->
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addstrandsmodal">
+                Add Strands
+            </button>
+         </div>
           <div class="card-body px-0 pt-0 pb-2">
             <div class="table-responsive p-0">
               <table class="table align-items-center justify-content-center mb-0" id="dataTableStrands">
@@ -56,3 +64,206 @@
       </div>
     </div>
   </div>
+
+
+<!-- Modal Add Strands Type -->
+<div class="modal fade" id="addstrandstypemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">Add Strands Type</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+            <div class="col">
+                <div class="form-floating">
+                <input type="text" class="form-control border-form-modal" id="strandtype" name="strandtype" placeholder="First Name">
+                <label for="floatingInput">Strands Type Name</label>
+                </div>
+            </div>
+            <br>
+            <div class="col">
+              <div class="form-floating">
+              <textarea class="form-control border-form-modal" id="description" name="description" placeholder="First Name"></textarea>
+              <label for="floatingInput">Description</label>
+              </div>
+          </div>
+          <br>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn bg-gradient-primary" id="addStrandsTypeBtn">Save</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Edit Strands Type -->
+<div class="modal fade" id="editstrandstypemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">Edit Strands Type</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+            <div class="col">
+                <div class="form-floating">
+                <input type="text" class="form-control border-form-modal" id="editstrandtype" name="editstrandtype" placeholder="First Name">
+                <label for="floatingInput">Strands Type Name</label>
+                </div>
+            </div>
+            <br>
+            <div class="col">
+              <div class="form-floating">
+              <textarea class="form-control border-form-modal" id="editescription" name="editescription" placeholder="First Name"></textarea>
+              <label for="floatingInput">Description</label>
+              </div>
+            </div>
+            <br>
+            <div class="col">
+              <div class="form-floating">
+              <select type="text" class="form-control border-form-modal" id="editstatus" name="editstatus" placeholder="First Name">
+                  <option selected disabled>Select Status</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+              </select>
+              <label for="floatingInput">Status</label>
+              </div>
+            </div>
+            <br>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn bg-gradient-primary" id="editStrandsTypeBtn">Save</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal Add Strands -->
+<div class="modal fade" id="addstrandsmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+  <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+      <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+      colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+      <h3 class="modal-title" id="exampleModalLabel">Add Strands</h3>
+      <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+          <form>
+          <div class="col">
+              <div class="form-floating">
+              <select type="text" class="form-control border-form-modal" id="strandtypename" name="strandtypename" placeholder="First Name">
+                  <option selected disabled>Strand Type</option>
+              </select>
+              <label for="floatingInput">Strand Type</label>
+              </div>
+          </div>
+          <br>
+          <div class="col">
+              <div class="form-floating">
+              <input type="text" class="form-control border-form-modal" id="strandname" name="strandname" placeholder="First Name">
+              <label for="floatingInput">Strands Name</label>
+              </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+            <textarea class="form-control border-form-modal" id="coursedescription" name="coursedescription" placeholder="First Name"></textarea>
+            <label for="floatingInput">Course Description</label>
+            </div>
+        </div>
+        <br>
+        <div class="col">
+          <div class="form-floating">
+          <textarea class="form-control border-form-modal" id="jobdescription" name="jobdescription" placeholder="First Name"></textarea>
+          <label for="floatingInput">Job Description</label>
+          </div>
+      </div>
+      <br>
+          </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+      <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+      <button type="button" class="btn bg-gradient-primary" id="addStrandSabeBtn">Save</button>
+      </div>
+  </div>
+  </div>
+</div>
+
+
+<!-- Modal Edit Strands -->
+<div class="modal fade" id="editstrandsmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">Edit Strands</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+            <div class="col">
+                <div class="form-floating">
+                <select type="text" class="form-control border-form-modal" id="editstrandtypename" name="editstrandtypename" placeholder="First Name">
+                    <option selected disabled>Strand Type</option>
+                </select>
+                <label for="floatingInput">Strand Type</label>
+                </div>
+            </div>
+            <br>
+            <div class="col">
+                <div class="form-floating">
+                <input type="text" class="form-control border-form-modal" id="editstrandname" name="editstrandname" placeholder="First Name">
+                <label for="floatingInput">Strands Name</label>
+                </div>
+            </div>
+            <br>
+            <div class="col">
+              <div class="form-floating">
+              <textarea class="form-control border-form-modal" id="editcoursedescription" name="editcoursedescription" placeholder="First Name"></textarea>
+              <label for="floatingInput">Course Description</label>
+              </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+            <textarea class="form-control border-form-modal" id="editjobdescription" name="editjobdescription" placeholder="First Name"></textarea>
+            <label for="floatingInput">Job Description</label>
+            </div>
+        </div>
+        <br>
+        <!-- <div class="col">
+          <div class="form-floating">
+          <select type="text" class="form-control border-form-modal" id="editstrandstatus" name="editstrandstatus" placeholder="First Name">
+              <option selected disabled>Select Status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+          </select>
+          <label for="floatingInput">Status</label>
+          </div>
+        </div>
+        <br> -->
+        </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn bg-gradient-primary" id="editStrandsBtn">Save</button>
+        </div>
+    </div>
+  </div>
+</div>
