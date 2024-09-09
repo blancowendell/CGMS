@@ -1,0 +1,160 @@
+<script>
+    $(document).ready(function () {
+        LoadStarandsType();
+        LoadStrands();
+  
+      function LoadStarandsType() {
+        $("#dataTableStrandsType").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 600,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/strands_type/loadtype",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editadminusersmodal">
+                    <i class="fas fa-fw fa-pen"></i>
+                  </button>
+                `;
+  
+                finalData.push({
+                  id: item.id,
+                  name: item.name,
+                  status: item.status,
+                  create_date: item.create_date,
+                  create_by: item.create_by,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columns: [
+            { data: "id" },
+            { data: "name" },
+            { data: "status" },
+            { data: "create_date" },
+            { data: "create_by" },
+            { data: "action" },
+          ],
+          createdRow: function (row, data, dataIndex) {
+            var jobStatusCell = $(row).find("td:eq(2)");
+            var jobStatusText = data.status;
+  
+            var jobStatusClass = "";
+            if (jobStatusText === "Active") {
+              jobStatusClass = "badge badge-sm bg-gradient-success text-white rounded-pill";
+            } else if (jobStatusText === "Inactive") {
+              jobStatusClass = "badge badge-sm bg-gradient-danger text-white rounded-pill";
+            }
+  
+            jobStatusCell.html(`<span class="${jobStatusClass}">${jobStatusText}</span>`);
+  
+            $("td", row).each(function () {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+              this.style.fontSize = "14px";
+            });
+          },
+          initComplete: function () {
+            $("#dataTableStrandsType thead th").css({
+              "font-size": "14px", 
+              "font-weight": "bold",
+              "text-align": "center"
+            });
+          },
+        });
+      }
+
+
+      function LoadStrands() {
+        $("#dataTableStrands").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 600,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/strands_type/loadstrands",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editadminusersmodal">
+                    <i class="fas fa-fw fa-pen"></i>
+                  </button>
+                `;
+  
+                finalData.push({
+                  id: item.id,
+                  strand: item.strand,
+                  name: item.name,
+                  course_description: item.course_description,
+                  job_description: item.job_description,
+                  create_date: item.create_date,
+                  create_by: item.create_by,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columns: [
+            { data: "id" },
+            { data: "strand" },
+            { data: "name" },            
+            { data: "course_description" },
+            { data: "job_description" },
+            { data: "create_by" },
+            { data: "create_date" },
+            { data: "action" },
+          ],
+          createdRow: function (row, data, dataIndex) {
+            var jobStatusCell = $(row).find("td:eq(1)");
+            var jobStatusText = data.strand;
+  
+            var jobStatusClass = "";
+            if (jobStatusText === "Academic Strands") {
+              jobStatusClass = "badge badge-sm bg-gradient-success text-white rounded-pill";
+            } else if (jobStatusText === "Technical Vocational Tracks") {
+              jobStatusClass = "badge badge-sm bg-gradient-danger text-white rounded-pill";
+            }
+  
+            jobStatusCell.html(`<span class="${jobStatusClass}">${jobStatusText}</span>`);
+  
+            $("td", row).each(function () {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+              this.style.fontSize = "14px";
+            });
+          },
+          initComplete: function () {
+            $("#dataTableStrands thead th").css({
+              "font-size": "14px", 
+              "font-weight": "bold",
+              "text-align": "center"
+            });
+          },
+        });
+      }
+    });
+  </script>
+  

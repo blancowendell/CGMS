@@ -9,6 +9,8 @@ const cors = require("cors");
 
 
 //var
+var indexRouter = require("./routes/index");
+var strands_typeRouter = require("./routes/strands_type");
 
 var app = express();
 
@@ -24,12 +26,14 @@ app.use(
   express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 500000 })
 );
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "assets")));
 
 // app.use(cors(corsOptions));
 
 
 //app.use
+app.use("/", indexRouter);
+app.use("/strands_type", strands_typeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
