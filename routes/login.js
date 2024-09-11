@@ -23,7 +23,7 @@ module.exports = router;
 
 router.post("/login", (req, res) => {
   try {
-    const { username, password, accesstypeid } = req.body;
+    const { username, password, accesstypeid, schoolid } = req.body;
 
     console.log(req.body);
     
@@ -37,12 +37,14 @@ router.post("/login", (req, res) => {
       au_fullname AS fullname,
       ma_accessname AS accesstype,
       au_status AS status,
-      au_image AS image
+      au_image AS image,
+      au_schoolid AS schoolid
       FROM admin_user
       INNER JOIN master_access ON admin_user.au_accesstype = ma_accessid
       WHERE au_username = '${username}'
       AND au_password = '${encrypted}'
-      AND au_accesstype = '${accesstypeid}'`;
+      AND au_accesstype = '${accesstypeid}'
+      AND au_schoolid = '${schoolid}'`;
 
       mysql.mysqlQueryPromise(sql)
         .then((result) => {
@@ -62,8 +64,9 @@ router.post("/login", (req, res) => {
                   req.session.accesstype = user.accesstype;
                   req.session.status = user.status;
                   req.session.image = user.image;
+                  req.session.schoolid = user.schoolid;
                 });
-                console.log('accesstype',req.session.accesstype);
+                console.log('schoolid',req.session.schoolid);
                 return res.json({
                   msg: "success",
                   data: data,

@@ -43,6 +43,50 @@ var roleacess = [
       // },
     ],
   },
+  {
+    role: "Super Admin",
+    routes: [
+      {
+        layout: "sp_admin_indexlayout",
+      },
+      {
+        layout: "sp_admin_schoollayout",
+      },
+      // {
+      //   layout: "admin_userlayout",
+      // },
+      // {
+      //   layout: "careerlayout",
+      // },
+      // {
+      //   layout: "strands_typelayout",
+      // },
+      // {
+      //   layout: "videocliplayout",
+      // },
+      // {
+      //   layout: "job_requirementslayout",
+      // },
+      // {
+      //   layout: "skills_requirementslayout",
+      // },
+      // {
+      //   layout: "calendarlayout",
+      // },
+      // {
+      //   layout: "questionslayout",
+      // },
+      // {
+      //   layout: "scholarshiplayout",
+      // },
+      // {
+      //   layout: "approvedapplicationlayout",
+      // },
+      // {
+      //   layout: "master_gradeslayout",
+      // },
+    ],
+  },
   // {
   //   role: "STUDENT",
   //   routes: [
@@ -108,6 +152,40 @@ exports.Validator = function (req, res, layout) {
     });
   }
 };
+
+
+exports.SuperAdminValidator = function (req, res, layout) {
+  let ismatch = false;
+  let counter = 0;
+
+  roleacess.forEach((key, item) => {
+    counter += 1;
+    var routes = key.routes;
+
+    routes.forEach((value, index) => {
+      // Check if the layout matches
+      if (value.layout == layout) {
+        console.log("Layout: ", layout);
+        ismatch = true;
+
+        return res.render(`${layout}`, {
+          image: req.session.image,
+          userid: req.session.userid,
+          fullname: req.session.fullname,
+          status: req.session.status,
+        });
+      }
+    });
+
+    if (counter == roleacess.length) {
+      if (!ismatch) {
+        res.redirect("/sp_admin_login");
+      }
+    }
+  });
+};
+
+
 
 
 // exports.UserValidator = function (req, res, layout) {

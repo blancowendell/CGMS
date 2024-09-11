@@ -1,0 +1,161 @@
+<script>
+    $(document).ready(function () {
+      console.log("Initialize");
+      LoadAccess();
+      LoadSchholId();
+      
+      function LoadAccess() {
+        $.ajax({
+          type: "GET",
+          url: "/access/load",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.accessid, item.accessid);
+              $(options).html(item.accessname);
+              $("#loginUrl").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+  
+      function LoadSchholId() {
+        $.ajax({
+          type: "GET",
+          url: "/sp_admin_school/load",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.school_id, item.school_id);
+              $(options).html(item.school_name);
+              $("#schoolid").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+  
+      $(document).on("click", "#loginBtn", function () {
+        let username = $("#username").val();
+        let password = $("#password").val();
+  
+        var message = "";
+  
+        if (username === "") {
+          message += "Username ";
+        }
+  
+        if (password === "") {
+          message += "Password";
+        }
+  
+        if (message !== "") {
+          toastr.error(`Please fill up ${message}`, "Required");
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "/sp_admin_login/login",
+            data: {
+              username: username,
+              password: password,
+            },
+            success: function (result) {
+              if (result.msg === "success") {
+                toastr.success("Login Successful!", "Success");
+                setTimeout(() => {
+                  if (result.data[0]) {
+                    location.replace("/sp_admin_index");
+                  } else {
+                    location.replace("/sp_admin_index");
+                  }
+                }, 2000);
+              } else if (result.msg === "incorrect") {
+                toastr.error(
+                  "Incorrect Credentials. Please try again!",
+                  "Incorrect"
+                );
+              }
+            },
+            error: function (err) {
+              toastr.error("An error occurred while saving data.", "Error");
+            },
+          });
+        }
+      });
+  
+  
+    //   $(document).on("click", "#forgotPasswordBtn", function (event) {
+    //     event.preventDefault(); // Prevent the default form submission
+  
+    //     let email = $("#forgotEmail").val();
+  
+    //     if (email === "") {
+    //       swal({
+    //         icon: 'warning',
+    //         title: 'Required',
+    //         text: 'Please fill up email',
+    //       });
+    //     } else {
+    //       $.ajax({
+    //         type: "POST",
+    //         url: "/login/forgotpassword",
+    //         data: {
+    //           email: email,
+    //         },
+    //         success: function (result) {
+    //           if (result.msg === "success") {
+    //             swal({
+    //               icon: 'success',
+    //               title: 'Success',
+    //               text: 'Password reset link sent to your email!',
+    //             }).then(() => {
+    //               window.location.reload();
+    //             });
+    //           } else if (result.msg === "notexist") {
+    //             swal({
+    //               icon: 'error',
+    //               title: 'Error',
+    //               text: 'Email does not exist. Please try again!',
+    //             });
+    //           } else {
+    //             swal({
+    //               icon: 'error',
+    //               title: 'Error',
+    //               text: 'An error occurred while processing your request.',
+    //             });
+    //           }
+    //         },
+    //         error: function (err) {
+    //           swal({
+    //             icon: 'error',
+    //             title: 'Error',
+    //             text: 'A server error occurred.',
+    //           });
+    //         },
+    //       });
+    //     }
+    //   });
+  
+  
+    //   $(".toggle-password").on("click", function () {
+    //     const passwordInput = $("#password");
+    //     const passwordFieldType = passwordInput.attr("type");
+    //     if (passwordFieldType === "password") {
+    //       passwordInput.attr("type", "text");
+    //       $(this).find("i").removeClass("fa-eye").addClass("fa-eye-slash");
+    //     } else {
+    //       passwordInput.attr("type", "password");
+    //       $(this).find("i").removeClass("fa-eye-slash").addClass("fa-eye");
+    //     }
+    //   });
+    });
+  </script>

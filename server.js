@@ -18,6 +18,9 @@ var admin_userRouter = require("./routes/admin_user");
 var acessRouter = require("./routes/access");
 var job_requirementsRouter = require("./routes/job_requirements");
 var skills_requirementsRouter = require("./routes/skills_requirements");
+var sp_admin_indexlayoutRouter = require("./routes/sp_admin_index");
+var sp_admin_schoolRouter = require("./routes/sp_admin_school");
+var sp_admin_loginRouter = require("./routes/sp_admin_login");
 
 var app = express();
 
@@ -48,6 +51,10 @@ app.use("/admin_user", admin_userRouter);
 app.use("/access", acessRouter);
 app.use("/job_requirements", job_requirementsRouter);
 app.use("/skills_requirements", skills_requirementsRouter);
+app.use("/sp_admin_index", sp_admin_indexlayoutRouter);
+app.use("/sp_admin_school", sp_admin_schoolRouter);
+app.use("/sp_admin_login", sp_admin_loginRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

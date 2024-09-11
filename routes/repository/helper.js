@@ -141,10 +141,32 @@ exports.AdminLogin = (result, callback) => {
         accesstype: row.accesstype,
         status: row.status,
         image: row.image,
+        schoolid: row.schoolid,
       });
     });
 
     return AdminData;
+  } catch (error) {
+    console.log(error);
+    callback(error);
+  }
+};
+
+
+exports.SuperAdminLogin = (result, callback) => {
+  try {
+    const SuperAdminData = [];
+
+    result.forEach((row) => {
+      SuperAdminData.push({
+        userid: row.userid,
+        fullname: row.fullname,
+        status: row.status,
+        image: row.image,
+      });
+    });
+
+    return SuperAdminData;
   } catch (error) {
     console.log(error);
     callback(error);

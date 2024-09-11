@@ -1,8 +1,9 @@
 <script>
   $(document).ready(function () {
     console.log("Initialize");
-
     LoadAccess();
+    LoadSchholId();
+    
     function LoadAccess() {
       $.ajax({
         type: "GET",
@@ -23,10 +24,31 @@
     }
 
 
+    function LoadSchholId() {
+      $.ajax({
+        type: "GET",
+        url: "/sp_admin_school/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.school_id, item.school_id);
+            $(options).html(item.school_name);
+            $("#schoolid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+
     $(document).on("click", "#loginBtn", function () {
       let username = $("#username").val();
       let password = $("#password").val();
       let accesstypeid = $("#loginUrl").val();
+      let schoolid = $("#schoolid").val();
 
       var message = "";
 
@@ -42,6 +64,10 @@
         message += "Access Type";
       }
 
+      if (schoolid === "") {
+        message += "School Code";
+      }
+
       if (message !== "") {
         toastr.error(`Please fill up ${message}`, "Required");
       } else {
@@ -52,6 +78,7 @@
             username: username,
             password: password,
             accesstypeid: accesstypeid,
+            schoolid: schoolid,
           },
           success: function (result) {
             if (result.msg === "success") {
