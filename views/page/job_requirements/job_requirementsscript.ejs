@@ -109,11 +109,11 @@
 
       var message = "";
 
-      if (strandid == "") {
+      if (strandid == "" || strandid == null) {
         message += "Strand Name is required. ";
       }
 
-      if (requirement == "") {
+      if (requirement == "" || requirement == null) {
         message += "Requirement Name is required. ";
       }
 
@@ -215,15 +215,15 @@
 
       var message = "";
 
-      if (strandid === "") {
+      if (strandid === "" || strandid == null) {
         message += "Strand Name is required. ";
       }
 
-      if (requirement === "") {
+      if (requirement === "" || requirement == null) {
         message += "Requirement Name is required. ";
       }
 
-      if (status === "") {
+      if (status === "" || status == null) {
         message += "Select Status is required. ";
       }
 

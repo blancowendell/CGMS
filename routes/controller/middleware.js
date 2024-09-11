@@ -26,12 +26,12 @@ var roleacess = [
       {
         layout: "skills_requirementslayout",
       },
-      // {
-      //   layout: "calendarlayout",
-      // },
-      // {
-      //   layout: "questionslayout",
-      // },
+      {
+        layout: "assessmentslayout",
+      },
+      {
+        layout: "personality_typelayout",
+      },
       // {
       //   layout: "scholarshiplayout",
       // },
@@ -53,7 +53,7 @@ var roleacess = [
         layout: "sp_admin_schoollayout",
       },
       // {
-      //   layout: "admin_userlayout",
+      //   layout: "assessmentslayout",
       // },
       // {
       //   layout: "careerlayout",

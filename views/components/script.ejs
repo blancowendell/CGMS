@@ -4,6 +4,21 @@
 <script src="/js/plugins/smooth-scrollbar.min.js"></script>
 <script src="/js/plugins/chartjs.min.js"></script>
 <script>
+
+  // Function to show a spinner inside a toast
+  function showSpinnerToast(message, title) {
+    toastr.info('<i class="fa fa-spinner fa-spin"></i> ' + message, title, { timeOut: 0, extendedTimeOut: 0 });
+  }
+
+  // Function to clear toast messages
+  function clearToast() {
+    toastr.clear();
+  }
+
+  // Function to show success toast message
+  function showSuccessToast(message, title) {
+    toastr.success(message, title);
+  }
   var ctx1 = document.getElementById("chart-line").getContext("2d");
 
   var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);

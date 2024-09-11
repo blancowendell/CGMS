@@ -21,6 +21,8 @@ var skills_requirementsRouter = require("./routes/skills_requirements");
 var sp_admin_indexlayoutRouter = require("./routes/sp_admin_index");
 var sp_admin_schoolRouter = require("./routes/sp_admin_school");
 var sp_admin_loginRouter = require("./routes/sp_admin_login");
+var assessmentsRouter = require("./routes/assessments");
+var personality_typeRouter = require("./routes/personality_type");
 
 var app = express();
 
@@ -54,6 +56,8 @@ app.use("/skills_requirements", skills_requirementsRouter);
 app.use("/sp_admin_index", sp_admin_indexlayoutRouter);
 app.use("/sp_admin_school", sp_admin_schoolRouter);
 app.use("/sp_admin_login", sp_admin_loginRouter);
+app.use("/assessments", assessmentsRouter);
+app.use("/personality_type", personality_typeRouter);
 
 
 // catch 404 and forward to error handler

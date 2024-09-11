@@ -1,0 +1,339 @@
+<script>
+    let userid = "";
+    let base64String = "";
+    let currentPassword = "";
+    let assessment_id = "";
+    $(document).ready(function () {
+        LoadTable();
+
+        function LoadTable() {
+            $("#dataTableAssessmentsType").DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                searching: false,
+                info: false,
+                scrollY: 600,
+                scrollCollapse: true,
+                serverMethod: "GET",
+                ajax: {
+                    url: "/assessments/load",
+                    dataSrc: (json) => {
+                        var finalData = [];
+                        var data = json.data;
+
+                        console.log(data);
+
+
+                        $.each(data, (key, item) => {
+                            var action = `
+                            <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editassessmentstypemodal">
+                            <i class="fas fa-fw fa-pen"></i>
+                            </button>
+                        `;
+
+                            finalData.push({
+                                assessment_id: item.assessment_id,
+                                assessment_name: item.assessment_name,
+                                assessment_type: item.assessment_type,
+                                created_by: item.created_by,
+                                created_date: item.created_date,
+                                action: action,
+                            });
+                        });
+
+                        return finalData;
+                    },
+                },
+                columns: [
+                    { data: "assessment_id" },
+                    { data: "assessment_name" },
+                    { data: "assessment_type" },
+                    { data: "created_by" },
+                    { data: "created_date" },
+                    { data: "action" },
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    var jobStatusCell = $(row).find("td:eq(2)");
+                    var jobStatusText = data.assessment_type;
+
+                    var jobStatusClass = "";
+                    if (jobStatusText === "Personality Test") {
+                        jobStatusClass =
+                            "badge badge-sm bg-gradient-success text-white rounded-pill";
+                    } else if (jobStatusText === "Interest Assessment") {
+                        jobStatusClass =
+                            "badge badge-sm bg-gradient-danger text-white rounded-pill";
+                    }
+
+                    else if (jobStatusText === "Skill Assessment") {
+                        jobStatusClass =
+                            "badge badge-sm bg-gradient-warning text-black rounded-pill";
+                    }
+
+                    jobStatusCell.html(
+                        `<span class="${jobStatusClass}">${jobStatusText}</span>`
+                    );
+
+                    $("td", row).each(function () {
+                        this.style.textAlign = "center";
+                        this.style.verticalAlign = "middle";
+                        this.style.fontSize = "14px";
+                    });
+                },
+                initComplete: function () {
+                    $("#dataTableStrandsType thead th").css({
+                        "font-size": "14px",
+                        "font-weight": "bold",
+                        "text-align": "center",
+                    });
+                },
+            });
+        }
+
+        // Main function for saving assessments
+        $(document).on("click", "#saveassessmentsbtn", function () {
+            let assessmentname = $("#assessmentname").val();
+            let assessmenttype = $("#assesmenttype").val();
+            let description = $("#description").val();
+
+            var message = "";
+
+            if (assessmentname == "" || assessmentname == null) {
+                message += "Assessment Name is required. ";
+            }
+
+            if (assessmenttype == "" || assessmenttype == null) {
+                message += "Assessment Type is required. ";
+            }
+
+
+            if (description == "" || description == null) {
+                message += "Description is required. ";
+            }
+
+            if (message !== "") {
+                toastr.error(message, "Validation Error");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/assessments/save",
+                    data: {
+                        assessmentname: assessmentname,
+                        assessmenttype: assessmenttype,
+                        description: description,
+                    },
+                    beforeSend: function () {
+                        // Show a spinner toast
+                        showSpinnerToast("Saving...", "Please wait");
+                    },
+                    success: function (result) {
+                        // Clear the spinner toast
+                        clearToast();
+
+                        if (result.msg == "success") {
+                            // Show success message without spinner
+                            showSuccessToast("Saved Successfully", "Success");
+
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 2000);
+
+                            // Call LoadTable function
+                            LoadTable();
+                        } else {
+                            toastr.warning("Data already exists!", "Warning");
+                        }
+                    },
+                    error: function (err) {
+                        clearToast();
+                        toastr.warning("Data already exists!", "Warning");
+                    }
+                });
+            }
+        });
+
+        $("#dataTableAssessmentsType tbody").on("click", "tr", function () {
+            var dataRow = [];
+            $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                    dataRow.push($(this).text());
+                });
+            assessment_id = dataRow[0];
+            console.log(dataRow);
+        });
+
+        $(document).on("click", "#editBtn", function () {
+            $.ajax({
+                type: "POST",
+                url: "/assessments/getassessments",
+                data: {
+                    assessment_id: assessment_id,
+                },
+                success: function (result) {
+                    if (result.msg === "success") {
+                        const existingData = result.data;
+
+                        $.each(existingData, (key, item) => {
+                            $("#editassessmentname").val(item.assessment_name);
+                            $("#editassessmenttype").val(item.assessment_type);
+                            $("#editdescription").val(item.assessment_description);
+                        });
+                    } else {
+                        toastr.error("Error fetching employee data", "Error");
+                    }
+                },
+                error: function (err) {
+                    toastr.error(
+                        "An error occurred while fetching employee data",
+                        "Error"
+                    );
+                },
+            });
+        });
+
+        $(document).on("click", "#editassessmentsbtn", function () {
+            let id = assessment_id;
+            let assessmentname = $("#editassessmentname").val();
+            let assessmenttype = $("#editassessmenttype").val();
+            let description = $("#editdescription").val();
+
+            var message = "";
+
+            if (assessmentname === "" || assessmentname == null) {
+                message += "Assessment Name is required. "; 
+            }
+
+            if (assessmenttype === "" || assessmenttype == null) {
+                message += "Assessment Type is required. ";
+            }
+
+            if (description === "" || description == null) {
+                message += "Description is required. ";
+            }
+
+            if (message !== "") {
+                toastr.error(message, "Validation Error");
+            } else {
+                $.ajax({
+                    type: "PUT",
+                    url: "/assessments/edit",
+                    data: {
+                        assessment_id: id,
+                        assessmentname: assessmentname,
+                        assessmenttype: assessmenttype,
+                        description: description,
+                    },
+                    success: function (result) {
+                        if (result.msg === "success") {
+                            toastr.success("Update Successfully", "Success");
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 2000);
+                            LoadTable();
+                        } else if (result.msg === "exist") {
+                            toastr.warning("Data already exists!", "Warning");
+                        } else {
+                            toastr.warning("Data already exists!", "Warning");
+                        }
+                    },
+                    error: function (err) {
+                        toastr.error("An error occurred while saving data.", "Error");
+                    },
+                });
+            }
+        });
+
+        $(document).on("change", "#announcementimage", function (e) {
+            const input = document.getElementById("announcementimage");
+            const file = input.files[0];
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+                const preview = document.getElementById("preview");
+                preview.src = reader.result;
+            };
+            imageUploaded();
+        });
+
+        function imageUploaded() {
+            const input = document.getElementById("announcementimage");
+            const file = input.files[0];
+
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+                imageBase64Stringsep = base64String;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        $(document).on("change", "#editannouncementimage", function (e) {
+            const input = document.getElementById("editannouncementimage");
+            const file = input.files[0];
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+                const preview = document.getElementById("editpreview");
+                preview.src = reader.result;
+            };
+            editimage();
+        });
+
+        function editimage() {
+            const input = document.getElementById("editannouncementimage");
+            const file = input.files[0];
+
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+                imageBase64Stringsep = base64String;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function searchTable() {
+            var input, filter, found, table, tr, td, i, j;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("dataTableAdminUsers");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td");
+                for (j = 0; j < td.length; j++) {
+                    if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                    }
+                }
+                if (found) {
+                    tr[i].style.display = "";
+                    found = false;
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+
+        $(".toggle-password").on("click", function () {
+            const targetSelector = $(this).data("target");
+            const passwordInput = $(targetSelector);
+            const passwordFieldType = passwordInput.attr("type");
+            if (passwordFieldType === "password") {
+                passwordInput.attr("type", "text");
+                $(this).find("i").removeClass("fa-eye").addClass("fa-eye-slash");
+            } else {
+                passwordInput.attr("type", "password");
+                $(this).find("i").removeClass("fa-eye-slash").addClass("fa-eye");
+            }
+        });
+    });
+</script>
