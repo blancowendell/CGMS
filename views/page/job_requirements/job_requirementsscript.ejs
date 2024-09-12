@@ -49,7 +49,7 @@
           { data: "name" },
           { data: "strands" },
           { data: "status" },
-          { data: "action" }
+          { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
           var jobStatusCell = $(row).find("td:eq(2)");
@@ -104,12 +104,12 @@
     }
 
     $(document).on("click", "#jobreqSaveBtn", function () {
-      let strandid = $("#strandsName").val();
+      let strand_id = $("#strandsName").val();
       let requirement = $("#reqname").val();
 
       var message = "";
 
-      if (strandid == "" || strandid == null) {
+      if (strand_id == "" || strand_id == null) {
         message += "Strand Name is required. ";
       }
 
@@ -124,7 +124,7 @@
           type: "POST",
           url: "/job_requirements/save",
           data: {
-            strandsName: strandid,
+            strandsName: strand_id,
             reqname: requirement,
           },
           success: function (result) {
@@ -155,7 +155,7 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-       requirementid = dataRow[0];
+      requirementid = dataRow[0];
       console.log(dataRow);
     });
 
@@ -183,14 +183,14 @@
         type: "POST",
         url: "/job_requirements/viewjobrequirements",
         data: {
-            requirementid: requirementid,
+          requirementid: requirementid,
         },
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#editstrandsName").val(item.strandid);
+              $("#editstrandsName").val(item.strand_id);
               $("#editreqname").val(item.name);
               $("#editstatus").val(item.status);
             });
@@ -209,13 +209,13 @@
 
     $(document).on("click", "#jobreqEditBtn", function () {
       let id = requirementid;
-      let strandid = $("#editstrandsName").val();
+      let strand_id = $("#editstrandsName").val();
       let requirement = $("#editreqname").val();
       let status = $("#editstatus").val();
 
       var message = "";
 
-      if (strandid === "" || strandid == null) {
+      if (strand_id === "" || strand_id == null) {
         message += "Strand Name is required. ";
       }
 
@@ -235,7 +235,7 @@
           url: "job_requirements/edit",
           data: {
             requirementid: id,
-            strandid: strandid,
+            strand_id: strand_id,
             name: requirement,
             status: status,
           },

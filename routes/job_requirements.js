@@ -29,195 +29,189 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-
 router.get("/load", (req, res) => {
-    try {
-        let sql = `SELECT
-        jr_id,
-        jr_name,
-        as_name as jr_strands,
-        jr_status
-        FROM job_requirements
-        INNER JOIN academic_strands ON job_requirements.jr_strandid = as_id`;
+  try {
+    let school_id = req.session.schoolid;
+    let sql = `SELECT
+    jr_id,
+    jr_name,
+    as_name as jr_strands,
+    jr_status
+    FROM job_requirements
+    INNER JOIN academic_strands ON job_requirements.jr_strand_id = as_id
+    AND jr_school_id = '${school_id}'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-                console.error(err);
-                res.json(JsonErrorResponse(err));
-            }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-            //console.log(result);
+      //console.log(result);
 
-            if (result != 0) {
-                let data = DataModeling(result, "jr_");
+      if (result != 0) {
+        let data = DataModeling(result, "jr_");
 
-                //console.log(data);
-                res.json(JsonDataResponse(data));
-            } else {
-                res.json(JsonDataResponse(result));
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        res.json(JsonErrorResponse(error));
-    }
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
 });
 
 router.post("/save", (req, res) => {
-    try {
-      const { strandsName, reqname } = req.body;
-      let status = 'Active';
-  
-      let sql = InsertStatement("job_requirements", "jr", [
-        "name",
-        "strandid",
-        "status",
-      ]);
-  
-      let data = [
-        [
-          reqname,
-          strandsName,
-          status,
-        ],
-      ];
-      let checkStatement = SelectStatement(
-        "select * from job_requirements where jr_name=? and jr_strandid=? and jr_status=?",
-        [reqname, strandsName, status]
-      );
-  
-      Check(checkStatement)
-        .then((result) => {
-          console.log(result);
-          if (result != 0) {
-            return res.json(JsonWarningResponse(MessageStatus.EXIST));
-          } else {
-            InsertTable(sql, data, (err, result) => {
-              if (err) {
-                console.log(err);
-                res.json(JsonErrorResponse(err));
-              }
-  
-              res.json(JsonSuccess());
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          res.json(JsonErrorResponse(error));
-        });
-    } catch (error) {
-      console.log(err);
-      res.json(JsonErrorResponse(error));
-    }
+  try {
+    let schoolid = req.session.schoolid;
+    const { strandsName, reqname } = req.body;
+    let status = "Active";
+
+    let sql = InsertStatement("job_requirements", "jr", [
+      "school_id",
+      "name",
+      "strand_id",
+      "status",
+    ]);
+
+    let data = [[schoolid, reqname, strandsName, status]];
+    let checkStatement = SelectStatement(
+      "select * from job_requirements where jr_name=? and jr_strand_id=? and jr_status=?",
+      [reqname, strandsName, status]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        console.log(result);
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          InsertTable(sql, data, (err, result) => {
+            if (err) {
+              console.log(err);
+              res.json(JsonErrorResponse(err));
+            }
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.log(err);
+    res.json(JsonErrorResponse(error));
+  }
 });
 
 router.post("/viewjobrequirements", (req, res) => {
-    try {
-        let requirementid = req.body.requirementid;
-        let sql = `SELECT * FROM job_requirements WHERE jr_id = '${requirementid}'`;
+  try {
+    let schoolid = req.session.schoolid;
+    let requirementid = req.body.requirementid;
+    let sql = `SELECT * FROM job_requirements WHERE jr_id = '${requirementid}' AND jr_school_id = '${schoolid}'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-                console.error(err);
-                res.json(JsonErrorResponse(err));
-            }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-            //console.log(result);
+      //console.log(result);
 
-            if (result != 0) {
-                let data = DataModeling(result, "jr_");
+      if (result != 0) {
+        let data = DataModeling(result, "jr_");
 
-                //console.log(data);
-                res.json(JsonDataResponse(data));
-            } else {
-                res.json(JsonDataResponse(result));
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        res.json(JsonErrorResponse(error));
-    }
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
 });
 
-
 router.put("/edit", (req, res) => {
-    try {
-      const { requirementid, strandid, name, status } = req.body;
-  
-      let data = [];
-      let columns = [];
-      let arguments = [];
+  try {
+    const { requirementid, strand_id, name, status } = req.body;
 
-      if (strandid) {
-        data.push(strandid);
-        columns.push("strandid");
-      }
-  
-      if (name) {
-        data.push(name);
-        columns.push("name");
-      }
-  
-      if (status) {
-        data.push(status);
-        columns.push("status");
-      }
-  
-      if (requirementid) {
-        data.push(requirementid);
-        arguments.push("id");
-      }
-  
-      let updateStatement = UpdateStatement(
-        "job_requirements",
-        "jr",
-        columns,
-        arguments
-      );
-  
-      console.log(updateStatement);
-  
-      let checkStatement = SelectStatement(
-        "select * from job_requirements where jr_name = ? and jr_strandid = ? and jr_status = ?",
-        [name, strandid, status]
-      );
-  
-      Check(checkStatement)
-        .then((result) => {
-          if (result != 0) {
-            return res.json(JsonWarningResponse(MessageStatus.EXIST));
-          } else {
-            Update(updateStatement, data, (err, result) => {
-              if (err) console.error("Error: ", err);
-  
-              console.log(result);
-  
-              res.json(JsonSuccess());
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          res.json(JsonErrorResponse(error));
-        });
-    } catch (error) {
-      console.log(error);
-      res.json(JsonErrorResponse(error));
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (strand_id) {
+      data.push(strand_id);
+      columns.push("strand_id");
     }
-  });
 
+    if (name) {
+      data.push(name);
+      columns.push("name");
+    }
 
+    if (status) {
+      data.push(status);
+      columns.push("status");
+    }
 
-  //#region FUNCTION
-  function Check(sql) {
-    return new Promise((resolve, reject) => {
-      Select(sql, (err, result) => {
-        if (err) reject(err);
-  
-        resolve(result);
+    if (requirementid) {
+      data.push(requirementid);
+      arguments.push("id");
+    }
+
+    let updateStatement = UpdateStatement(
+      "job_requirements",
+      "jr",
+      columns,
+      arguments
+    );
+
+    console.log(updateStatement);
+
+    let checkStatement = SelectStatement(
+      "select * from job_requirements where jr_name = ? and jr_strand_id = ? and jr_status = ?",
+      [name, strand_id, status]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          Update(updateStatement, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+
+            console.log(result);
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
       });
-    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
   }
-  //#endregion
-  
+});
+
+//#region FUNCTION
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
+  });
+}
+//#endregion

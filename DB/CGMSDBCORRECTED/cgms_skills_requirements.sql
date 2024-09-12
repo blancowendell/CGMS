@@ -16,33 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `questions`
+-- Table structure for table `skills_requirements`
 --
 
-DROP TABLE IF EXISTS `questions`;
+DROP TABLE IF EXISTS `skills_requirements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `questions` (
-  `q_question_id` int NOT NULL AUTO_INCREMENT,
-  `q_school_id` int NOT NULL,
-  `q_assessment_id` int DEFAULT NULL,
-  `q_question_text` text,
-  `q_question_type` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`q_question_id`),
-  KEY `q_school_id` (`q_school_id`),
-  KEY `q_assessment_id` (`q_assessment_id`),
-  CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`q_school_id`) REFERENCES `school` (`s_school_id`),
-  CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`q_assessment_id`) REFERENCES `assessments` (`a_assessment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `skills_requirements` (
+  `sr_id` int NOT NULL AUTO_INCREMENT,
+  `sr_school_id` int NOT NULL,
+  `sr_name` text NOT NULL,
+  `sr_strand_id` int NOT NULL,
+  `sr_status` varchar(50) NOT NULL,
+  PRIMARY KEY (`sr_id`),
+  KEY `sr_school_id` (`sr_school_id`),
+  KEY `sr_strand_id` (`sr_strand_id`),
+  CONSTRAINT `skills_requirements_ibfk_1` FOREIGN KEY (`sr_school_id`) REFERENCES `school` (`s_school_id`),
+  CONSTRAINT `skills_requirements_ibfk_2` FOREIGN KEY (`sr_strand_id`) REFERENCES `academic_strands` (`as_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `questions`
+-- Dumping data for table `skills_requirements`
 --
 
-LOCK TABLES `questions` WRITE;
-/*!40000 ALTER TABLE `questions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `questions` ENABLE KEYS */;
+LOCK TABLES `skills_requirements` WRITE;
+/*!40000 ALTER TABLE `skills_requirements` DISABLE KEYS */;
+INSERT INTO `skills_requirements` VALUES (1,1,'Matalino',1,'Inactive'),(2,1,'Masipag',2,'Inactive');
+/*!40000 ALTER TABLE `skills_requirements` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-11 16:09:05
+-- Dump completed on 2024-09-12 16:25:27

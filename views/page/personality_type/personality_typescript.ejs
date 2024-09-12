@@ -1,107 +1,105 @@
 <script>
-    let assessment_id = "";
-    $(document).ready(function () {
-        LoadTable();
-        LoadStrandId();
+  let type_id = "";
+  $(document).ready(function () {
+    LoadTable();
+    LoadStrandId();
 
-        function LoadTable() {
-            $("#dataTablePersonalityType").DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                paging: false,
-                searching: false,
-                info: false,
-                scrollY: 600,
-                scrollCollapse: true,
-                serverMethod: "GET",
-                ajax: {
-                    url: "/personality_type/load",
-                    dataSrc: (json) => {
-                        var finalData = [];
-                        var data = json.data;
+    function LoadTable() {
+      $("#dataTablePersonalityType").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/personality_type/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
 
-                        console.log(data);
+            console.log(data);
 
-
-                        $.each(data, (key, item) => {
-                            var action = `
-                            <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editassessmentstypemodal">
+            $.each(data, (key, item) => {
+              var action = `
+                            <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editpersonalitytypemodal">
                             <i class="fas fa-fw fa-pen"></i>
                             </button>
                         `;
 
-                            finalData.push({
-                                type_id: item.type_id,
-                                code: item.code,
-                                strand_names: item.strand_names,
-                                create_date: item.create_date,
-                                create_by: item.create_by,
-                                action: action,
-                            });
-                        });
-
-                        return finalData;
-                    },
-                },
-                columns: [
-                    { data: "type_id" },
-                    { data: "code" },
-                    { data: "strand_names" },
-                    { data: "create_date" },
-                    { data: "create_by" },
-                    { data: "action" },
-                ],
-                createdRow: function (row, data, dataIndex) {
-                    // var jobStatusCell = $(row).find("td:eq(2)");
-                    // var jobStatusText = data.assessment_type;
-
-                    // var jobStatusClass = "";
-                    // if (jobStatusText === "Personality Test") {
-                    //     jobStatusClass =
-                    //         "badge badge-sm bg-gradient-success text-white rounded-pill";
-                    // } else if (jobStatusText === "Interest Assessment") {
-                    //     jobStatusClass =
-                    //         "badge badge-sm bg-gradient-danger text-white rounded-pill";
-                    // }
-
-                    // else if (jobStatusText === "Skill Assessment") {
-                    //     jobStatusClass =
-                    //         "badge badge-sm bg-gradient-warning text-black rounded-pill";
-                    // }
-
-                    // jobStatusCell.html(
-                    //     `<span class="${jobStatusClass}">${jobStatusText}</span>`
-                    // );
-
-                    $("td", row).each(function () {
-                        this.style.textAlign = "center";
-                        this.style.verticalAlign = "middle";
-                        this.style.fontSize = "14px";
-                    });
-                },
-                initComplete: function () {
-                    $("#dataTableStrandsType thead th").css({
-                        "font-size": "14px",
-                        "font-weight": "bold",
-                        "text-align": "center",
-                    });
-                },
+              finalData.push({
+                type_id: item.type_id,
+                code: item.code,
+                strand_names: item.strand_names,
+                create_date: item.create_date,
+                create_by: item.create_by,
+                action: action,
+              });
             });
-        }
 
-        function LoadStrandId() {
-            $.ajax({
-                type: "GET",
-                url: "/strands_type/loadstrands",
-                success: function (result) {
-                    var data = result.data;
-                    var strandsContainer = $("#strandsSelection");
-                    strandsContainer.empty();  // Clear the previous checkboxes if any
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "type_id" },
+          { data: "code" },
+          { data: "strand_names" },
+          { data: "create_date" },
+          { data: "create_by" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          // var jobStatusCell = $(row).find("td:eq(2)");
+          // var jobStatusText = data.assessment_type;
 
-                    $.each(data, function (key, item) {
-                        // Create a checkbox element for each strand
-                        var checkbox = `
+          // var jobStatusClass = "";
+          // if (jobStatusText === "Personality Test") {
+          //     jobStatusClass =
+          //         "badge badge-sm bg-gradient-success text-white rounded-pill";
+          // } else if (jobStatusText === "Interest Assessment") {
+          //     jobStatusClass =
+          //         "badge badge-sm bg-gradient-danger text-white rounded-pill";
+          // }
+
+          // else if (jobStatusText === "Skill Assessment") {
+          //     jobStatusClass =
+          //         "badge badge-sm bg-gradient-warning text-black rounded-pill";
+          // }
+
+          // jobStatusCell.html(
+          //     `<span class="${jobStatusClass}">${jobStatusText}</span>`
+          // );
+
+          $("td", row).each(function () {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+            this.style.fontSize = "14px";
+          });
+        },
+        initComplete: function () {
+          $("#dataTableStrandsType thead th").css({
+            "font-size": "14px",
+            "font-weight": "bold",
+            "text-align": "center",
+          });
+        },
+      });
+    }
+
+    function LoadStrandId() {
+      $.ajax({
+        type: "GET",
+        url: "/strands_type/loadstrands",
+        success: function (result) {
+          var data = result.data;
+          var strandsContainer = $("#strandsSelection");
+          strandsContainer.empty(); // Clear the previous checkboxes if any
+
+          $.each(data, function (key, item) {
+            var checkbox = `
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="strand_${item.id}" value="${item.id}">
                         <label class="form-check-label" for="strand_${item.id}">
@@ -109,200 +107,259 @@
                         </label>
                     </div>
                 `;
-                        strandsContainer.append(checkbox);
-                    });
-                },
-                error: function (result) {
-                    alert("Error: " + result.message);
-                },
-            });
-        }
+            strandsContainer.append(checkbox);
+          });
+        },
+        error: function (result) {
+          alert("Error: " + result.message);
+        },
+      });
+    }
 
+    $(document).on("click", "#personalitysavebtn", function () {
+      let personalitycode = $("#personalitycode").val();
+      let personalitydesc = $("#personalitydesc").val();
+      let selectedStrands = [];
+      $("#strandsSelection input:checked").each(function () {
+        selectedStrands.push($(this).val());
+      });
 
-        $(document).on("click", "#personalitysavebtn", function () {
-            let personalitycode = $("#personalitycode").val();
-            let personalitydesc = $("#personalitydesc").val();
+      let message = "";
 
-            // Collect all checked strands
-            let selectedStrands = [];
-            $("#strandsSelection input:checked").each(function () {
-                selectedStrands.push($(this).val());  // Collect the values of checked checkboxes
-            });
+      if (personalitycode === "" || personalitycode == null) {
+        message += "Personality Code Name is required. ";
+      }
 
-            let message = "";
+      if (personalitydesc === "" || personalitydesc == null) {
+        message += "Personality Description is required. ";
+      }
 
-            if (personalitycode === "" || personalitycode == null) {
-                message += "Personality Code Name is required. ";
-            }
+      if (selectedStrands.length === 0) {
+        message += "At least one strand must be selected. ";
+      }
 
-            if (personalitydesc === "" || personalitydesc == null) {
-                message += "Personality Description is required. ";
-            }
+      if (message !== "") {
+        toastr.error(message, "Validation Error");
+      } else {
+        let strandsid = JSON.stringify(selectedStrands);
 
-            if (selectedStrands.length === 0) {
-                message += "At least one strand must be selected. ";
-            }
+        $.ajax({
+          type: "POST",
+          url: "/personality_type/save",
+          data: {
+            personalitycode: personalitycode,
+            personalitydesc: personalitydesc,
+            strandsid: strandsid,
+          },
+          beforeSend: function () {
+            showSpinnerToast("Saving...", "Please wait");
+          },
+          success: function (result) {
+            clearToast();
 
-            if (message !== "") {
-                toastr.error(message, "Validation Error");
+            if (result.msg == "success") {
+
+              showSuccessToast("Saved Successfully", "Success");
+
+              setTimeout(function () {
+                window.location.reload();
+              }, 2000);
+              LoadTable();
             } else {
-                // Send the selected strands as a JSON string
-                let strandsid = JSON.stringify(selectedStrands);
-
-                $.ajax({
-                    type: "POST",
-                    url: "/personality_type/save",
-                    data: {
-                        personalitycode: personalitycode,
-                        personalitydesc: personalitydesc,
-                        strandsid: strandsid  // Send the selected strands as a JSON array
-                    },
-                    success: function (result) {
-                        if (result.msg == "success") {
-                            toastr.success("Saved Successfully", "Success");
-                            setTimeout(function () {
-                                window.location.reload();
-                            }, 2000);
-                            LoadTable();
-                        } else {
-                            toastr.warning("Data already exists!", "Warning");
-                        }
-                    },
-                    error: function (err) {
-                        toastr.warning("Error occurred!", "Warning");
-                    },
-                });
+              toastr.warning("Data already exists!", "Warning");
             }
+          },
+          error: function (err) {
+            clearToast();
+            toastr.warning("Data already exists!", "Warning");
+          },
         });
-
-
-
-        $("#dataTableAssessmentsType tbody").on("click", "tr", function () {
-            var dataRow = [];
-            $(this)
-                .closest("tr")
-                .find("td")
-                .each(function () {
-                    dataRow.push($(this).text());
-                });
-            assessment_id = dataRow[0];
-            console.log(dataRow);
-        });
-
-        $(document).on("click", "#editBtn", function () {
-            $.ajax({
-                type: "POST",
-                url: "/assessments/getassessments",
-                data: {
-                    assessment_id: assessment_id,
-                },
-                success: function (result) {
-                    if (result.msg === "success") {
-                        const existingData = result.data;
-
-                        $.each(existingData, (key, item) => {
-                            $("#editassessmentname").val(item.assessment_name);
-                            $("#editassessmenttype").val(item.assessment_type);
-                            $("#editdescription").val(item.assessment_description);
-                        });
-                    } else {
-                        toastr.error("Error fetching employee data", "Error");
-                    }
-                },
-                error: function (err) {
-                    toastr.error(
-                        "An error occurred while fetching employee data",
-                        "Error"
-                    );
-                },
-            });
-        });
-
-        $(document).on("click", "#editassessmentsbtn", function () {
-            let id = assessment_id;
-            let assessmentname = $("#editassessmentname").val();
-            let assessmenttype = $("#editassessmenttype").val();
-            let description = $("#editdescription").val();
-
-            var message = "";
-
-            if (assessmentname === "") {
-                message += "Assessment Name is required. ";
-            }
-
-            if (assessmenttype === "") {
-                message += "Assessment Type is required. ";
-            }
-
-            if (description === "") {
-                message += "Description is required. ";
-            }
-
-            if (message !== "") {
-                toastr.error(message, "Validation Error");
-            } else {
-                $.ajax({
-                    type: "PUT",
-                    url: "/assessments/edit",
-                    data: {
-                        assessment_id: id,
-                        assessmentname: assessmentname,
-                        assessmenttype: assessmenttype,
-                        description: description,
-                    },
-                    success: function (result) {
-                        if (result.msg === "success") {
-                            toastr.success("Update Successfully", "Success");
-                            setTimeout(function () {
-                                window.location.reload();
-                            }, 2000);
-                            LoadTable();
-                        } else if (result.msg === "exist") {
-                            toastr.warning("Data already exists!", "Warning");
-                        } else {
-                            toastr.warning("Data already exists!", "Warning");
-                        }
-                    },
-                    error: function (err) {
-                        toastr.error("An error occurred while saving data.", "Error");
-                    },
-                });
-            }
-        });
-
-        function searchTable() {
-            var input, filter, found, table, tr, td, i, j;
-            input = document.getElementById("myInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("dataTableAdminUsers");
-            tr = table.getElementsByTagName("tr");
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td");
-                for (j = 0; j < td.length; j++) {
-                    if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                        found = true;
-                    }
-                }
-                if (found) {
-                    tr[i].style.display = "";
-                    found = false;
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
-        }
-
-        $(".toggle-password").on("click", function () {
-            const targetSelector = $(this).data("target");
-            const passwordInput = $(targetSelector);
-            const passwordFieldType = passwordInput.attr("type");
-            if (passwordFieldType === "password") {
-                passwordInput.attr("type", "text");
-                $(this).find("i").removeClass("fa-eye").addClass("fa-eye-slash");
-            } else {
-                passwordInput.attr("type", "password");
-                $(this).find("i").removeClass("fa-eye-slash").addClass("fa-eye");
-            }
-        });
+      }
     });
+
+    $("#dataTablePersonalityType tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      type_id = dataRow[0];
+      console.log(dataRow);
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/personality_type/getpersonalitytype",
+        data: {
+          type_id: type_id,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            if (existingData.length > 0) {
+              const item = existingData[0];
+              $("#editpersonalitycode").val(item.code);
+              $("#editpersonalitydesc").val(item.description);
+
+              // Get the strand IDs from the result (string of IDs)
+              const selectedStrands = item.strands_id
+                ? item.strands_id.split(",")
+                : [];
+
+              // Load all strands and check only those that match the selected strand IDs
+              EditLoadStrandId(selectedStrands); // Pass selected strands to the LoadStrandId function
+            }
+          } else {
+            toastr.error("Error fetching personality type data", "Error");
+          }
+        },
+        error: function (err) {
+          toastr.error(
+            "An error occurred while fetching personality type data",
+            "Error"
+          );
+        },
+      });
+    });
+
+    function EditLoadStrandId(selectedStrands = []) {
+      $.ajax({
+        type: "GET",
+        url: "/strands_type/loadstrands",
+        success: function (result) {
+          var data = result.data;
+          var strandsContainer = $("#editstrandsSelection"); // Use the edit strands selection container
+          strandsContainer.empty(); // Clear the previous checkboxes if any
+
+          $.each(data, function (key, item) {
+            var isChecked = selectedStrands.includes(item.id.toString())
+              ? "checked"
+              : "";
+
+            var checkbox = `
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="strand_${item.id}" value="${item.id}" ${isChecked}>
+                <label class="form-check-label" for="strand_${item.id}">
+                    ${item.name}
+                </label>
+            </div>
+        `;
+            strandsContainer.append(checkbox);
+          });
+        },
+        error: function (result) {
+          alert("Error: " + result.message);
+        },
+      });
+    }
+
+    function getSelectedStrands() {
+      let selectedStrands = [];
+      $("#editstrandsSelection input[type=checkbox]:checked").each(function () {
+        selectedStrands.push($(this).val());
+      });
+      return selectedStrands;
+    }
+
+    $(document).on("click", "#personalityeditbtn", function () {
+      let id = type_id;
+      let personalitycode = $("#editpersonalitycode").val();
+      let personalitydesc = $("#editpersonalitydesc").val();
+      let selectedStrands = getSelectedStrands();
+      let strandsid = JSON.stringify(selectedStrands);
+
+      var message = "";
+
+      if (personalitycode === "" || personalitycode == null) {
+        message += "Personality Code Name is required. ";
+      }
+
+      if (personalitydesc === "" || personalitydesc == null) {
+        message += "Personality Description is required. ";
+      }
+
+      if (selectedStrands.length === 0) {
+        message += "At least one strand must be selected. ";
+      }
+
+      if (message !== "") {
+        toastr.error(message, "Validation Error");
+      } else {
+        $.ajax({
+          type: "PUT",
+          url: "/personality_type/edit",
+          data: {
+            type_id: id,
+            personalitycode: personalitycode,
+            personalitydesc: personalitydesc,
+            strandsid: strandsid,
+          },
+          beforeSend: function () {
+            // Show a spinner toast
+            showSpinnerToast("Saving...", "Please wait");
+          },
+          success: function (result) {
+            // Clear the spinner toast
+            clearToast();
+
+            if (result.msg == "success") {
+              // Show success message without spinner
+              showSuccessToast("Saved Successfully", "Success");
+
+              setTimeout(function () {
+                window.location.reload();
+              }, 2000);
+
+              // Call LoadTable function
+              LoadTable();
+            } else {
+              toastr.warning("Data already exists!", "Warning");
+            }
+          },
+          error: function (err) {
+            clearToast();
+            toastr.warning("Data already exists!", "Warning");
+          },
+        });
+      }
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTablePersonalityType");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    $(".toggle-password").on("click", function () {
+      const targetSelector = $(this).data("target");
+      const passwordInput = $(targetSelector);
+      const passwordFieldType = passwordInput.attr("type");
+      if (passwordFieldType === "password") {
+        passwordInput.attr("type", "text");
+        $(this).find("i").removeClass("fa-eye").addClass("fa-eye-slash");
+      } else {
+        passwordInput.attr("type", "password");
+        $(this).find("i").removeClass("fa-eye-slash").addClass("fa-eye");
+      }
+    });
+  });
 </script>

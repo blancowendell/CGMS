@@ -16,34 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `academic_strands`
+-- Table structure for table `personality_type`
 --
 
-DROP TABLE IF EXISTS `academic_strands`;
+DROP TABLE IF EXISTS `personality_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `academic_strands` (
-  `as_id` int NOT NULL AUTO_INCREMENT,
-  `as_strands_type` int NOT NULL,
-  `as_name` varchar(50) NOT NULL,
-  `as_course_description` text NOT NULL,
-  `as_job_description` text NOT NULL,
-  `as_create_by` varchar(50) NOT NULL,
-  `as_create_date` date NOT NULL,
-  PRIMARY KEY (`as_id`),
-  KEY `as_strands_type` (`as_strands_type`),
-  CONSTRAINT `academic_strands_ibfk_1` FOREIGN KEY (`as_strands_type`) REFERENCES `strands_type` (`st_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `personality_type` (
+  `pt_type_id` int NOT NULL AUTO_INCREMENT,
+  `pt_school_id` int NOT NULL,
+  `pt_code` varchar(50) NOT NULL,
+  `pt_description` longtext NOT NULL,
+  `pt_strands_id` json NOT NULL,
+  `pt_create_date` datetime DEFAULT NULL,
+  `pt_create_by` varchar(50) NOT NULL,
+  PRIMARY KEY (`pt_type_id`),
+  KEY `pt_school_id` (`pt_school_id`),
+  CONSTRAINT `personality_type_ibfk_1` FOREIGN KEY (`pt_school_id`) REFERENCES `school` (`s_school_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `academic_strands`
+-- Dumping data for table `personality_type`
 --
 
-LOCK TABLES `academic_strands` WRITE;
-/*!40000 ALTER TABLE `academic_strands` DISABLE KEYS */;
-INSERT INTO `academic_strands` VALUES (1,1,'STEM','Science and Technology Engineering Mathematics','Sample','Tanggol','2024-08-09'),(2,2,'HE','Home Economics','Sample','Tanggol','2024-08-09'),(3,2,'ICT','Pindot pindot lang','Bantay Com Shop','Tanggol Dimaguiba','2024-09-06');
-/*!40000 ALTER TABLE `academic_strands` ENABLE KEYS */;
+LOCK TABLES `personality_type` WRITE;
+/*!40000 ALTER TABLE `personality_type` DISABLE KEYS */;
+INSERT INTO `personality_type` VALUES (1,1,'INTP','ASDASDASDASDASDASDAS','[\"1\", \"2\"]','2024-09-13 04:20:00','Tanggol Dimaguiba'),(2,1,'STFU','ASDASDASDASDASDAS','[\"1\", \"2\"]','2024-09-13 04:22:00','Tanggol Dimaguiba');
+/*!40000 ALTER TABLE `personality_type` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-11 16:09:06
+-- Dump completed on 2024-09-12 16:25:25

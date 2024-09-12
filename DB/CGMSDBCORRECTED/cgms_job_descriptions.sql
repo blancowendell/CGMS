@@ -16,33 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `assessments`
+-- Table structure for table `job_descriptions`
 --
 
-DROP TABLE IF EXISTS `assessments`;
+DROP TABLE IF EXISTS `job_descriptions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `assessments` (
-  `a_assessment_id` int NOT NULL AUTO_INCREMENT,
-  `a_assessment_name` varchar(100) DEFAULT NULL,
-  `a_assessment_description` text,
-  `a_assessment_type` varchar(50) DEFAULT NULL,
-  `a_created_by` varchar(50) DEFAULT NULL,
-  `a_created_date` datetime DEFAULT NULL,
-  `a_school_id` int NOT NULL,
-  PRIMARY KEY (`a_assessment_id`),
-  KEY `a_school_id` (`a_school_id`),
-  CONSTRAINT `assessments_ibfk_1` FOREIGN KEY (`a_school_id`) REFERENCES `school` (`s_school_id`)
+CREATE TABLE `job_descriptions` (
+  `jd_id` int NOT NULL AUTO_INCREMENT,
+  `jd_school_id` int NOT NULL,
+  `jd_name` text NOT NULL,
+  `jd_strand_id` int NOT NULL,
+  `jd_status` varchar(50) NOT NULL,
+  PRIMARY KEY (`jd_id`),
+  KEY `jd_school_id` (`jd_school_id`),
+  KEY `jd_strand_id` (`jd_strand_id`),
+  CONSTRAINT `job_descriptions_ibfk_1` FOREIGN KEY (`jd_school_id`) REFERENCES `school` (`s_school_id`),
+  CONSTRAINT `job_descriptions_ibfk_2` FOREIGN KEY (`jd_strand_id`) REFERENCES `academic_strands` (`as_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `assessments`
+-- Dumping data for table `job_descriptions`
 --
 
-LOCK TABLES `assessments` WRITE;
-/*!40000 ALTER TABLE `assessments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `assessments` ENABLE KEYS */;
+LOCK TABLES `job_descriptions` WRITE;
+/*!40000 ALTER TABLE `job_descriptions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `job_descriptions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-11 16:09:04
+-- Dump completed on 2024-09-12 16:25:27

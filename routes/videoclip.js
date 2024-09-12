@@ -31,6 +31,7 @@ module.exports = router;
 
 router.get("/load", function (req, res, next) {
   try {
+    let schoolid = req.session.schoolid;
     let sql = `SELECT
         vc_id,
         vc_name,
@@ -39,7 +40,8 @@ router.get("/load", function (req, res, next) {
         DATE_FORMAT(vc_create_date, '%d-%m-%Y') as vc_create_date,
         vc_create_by
         FROM video_clip
-        INNER JOIN academic_strands ON video_clip.vc_strandsid = as_id`;
+        INNER JOIN academic_strands ON video_clip.vc_strandsid = as_id
+        AND VC_school_id = '${schoolid}'`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -71,10 +73,12 @@ router.post("/save", (req, res) => {
         clipupload,
         youtubelink,
       } = req.body;
+      let schoolid = req.session.schoolid;
       let create_date = GetCurrentDatetime();
       let create_by = req.session.fullname;
   
       let sql = InsertStatement("video_clip", "vc", [
+        "school_id",
         "name",
         "strandsid",
         "file",
@@ -86,6 +90,7 @@ router.post("/save", (req, res) => {
   
       let data = [
         [
+          schoolid,
           clipname,
           strandsname,
           clipupload,
@@ -128,6 +133,7 @@ router.post("/save", (req, res) => {
 
 router.post("/viewvideo", (req, res) => {
   try {
+    let schoolid = req.session.schoolid;
     let clipvideoid = req.body.clipvideoid;
     let sql = `SELECT 
     vc_name,
@@ -136,7 +142,8 @@ router.post("/viewvideo", (req, res) => {
     vc_description,
     vc_youtubelink
     FROM video_clip
-    WHERE vc_id = '${clipvideoid}'`;
+    WHERE vc_id = '${clipvideoid}'
+    AND vc_school_id = '${schoolid}'`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -164,7 +171,7 @@ router.post("/viewvideo", (req, res) => {
 
 router.put("/edit", (req, res) => {
   try {
-    const { clipvideoid, clipname, strandName, 
+    const { clipvideoid, clipName, strandName, 
       clipDescription, youtubeLink, clipUpload } = req.body;
     let create_by = req.session.fullname;
     let create_date = GetCurrentDatetime();
@@ -178,8 +185,8 @@ router.put("/edit", (req, res) => {
       columns.push("file");
     }
 
-    if (clipname) {
-      data.push(clipname);
+    if (clipName) {
+      data.push(clipName);
       columns.push("name");
     }
 
@@ -224,7 +231,7 @@ router.put("/edit", (req, res) => {
 
     let checkStatement = SelectStatement(
       "select * from video_clip where vc_name = ? and vc_strandsid = ? and vc_youtubelink = ?",
-      [clipname, strandName, youtubeLink]
+      [clipName, strandName, youtubeLink]
     );
 
     Check(checkStatement)

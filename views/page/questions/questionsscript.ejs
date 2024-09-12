@@ -9,7 +9,7 @@
     EditLoadStrandId();
 
     function LoadTable() {
-      $("#dataTableAdminUsers").DataTable({
+      $("#dataTableQuestions").DataTable({
         destroy: true,
         processing: true,
         serverSide: true,
@@ -20,7 +20,7 @@
         scrollCollapse: true,
         serverMethod: "GET",
         ajax: {
-          url: "/skills_requirements/load",
+          url: "/questions/load",
           dataSrc: (json) => {
             var finalData = [];
             var data = json.data;
@@ -33,10 +33,10 @@
               `;
 
               finalData.push({
-                id: item.id,
-                name: item.name,
-                strands: item.strands,
-                status: item.status,
+                question_id: item.question_id,
+                assessment: item.assessment,
+                question_text: item.question_text,
+                question_type: item.question_type,
                 action: action,
               });
             });
@@ -317,7 +317,7 @@
       var input, filter, found, table, tr, td, i, j;
       input = document.getElementById("myInput");
       filter = input.value.toUpperCase();
-      table = document.getElementById("dataTableAdminUsers");
+      table = document.getElementById("dataTableQuestions");
       tr = table.getElementsByTagName("tr");
       for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td");

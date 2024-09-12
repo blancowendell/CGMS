@@ -179,7 +179,7 @@
 
                         $.each(existingData, (key, item) => {
                             $("#editassessmentname").val(item.assessment_name);
-                            $("#editassessmenttype").val(item.assessment_type);
+                            $("#editassesmenttype").val(item.assessment_type);
                             $("#editdescription").val(item.assessment_description);
                         });
                     } else {
@@ -198,7 +198,7 @@
         $(document).on("click", "#editassessmentsbtn", function () {
             let id = assessment_id;
             let assessmentname = $("#editassessmentname").val();
-            let assessmenttype = $("#editassessmenttype").val();
+            let assessmenttype = $("#editassesmenttype").val();
             let description = $("#editdescription").val();
 
             var message = "";

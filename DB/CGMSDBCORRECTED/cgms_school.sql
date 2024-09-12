@@ -16,31 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `job_requirements`
+-- Table structure for table `school`
 --
 
-DROP TABLE IF EXISTS `job_requirements`;
+DROP TABLE IF EXISTS `school`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `job_requirements` (
-  `jr_id` int NOT NULL AUTO_INCREMENT,
-  `jr_name` text NOT NULL,
-  `jr_strandid` int NOT NULL,
-  `jr_status` varchar(50) NOT NULL,
-  PRIMARY KEY (`jr_id`),
-  KEY `jr_strandid` (`jr_strandid`),
-  CONSTRAINT `job_requirements_ibfk_1` FOREIGN KEY (`jr_strandid`) REFERENCES `academic_strands` (`as_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `school` (
+  `s_school_id` int NOT NULL AUTO_INCREMENT,
+  `s_school_name` longtext NOT NULL,
+  `s_school_code` text,
+  `s_create_date` datetime DEFAULT NULL,
+  `s_create_by` varchar(50) NOT NULL,
+  PRIMARY KEY (`s_school_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `job_requirements`
+-- Dumping data for table `school`
 --
 
-LOCK TABLES `job_requirements` WRITE;
-/*!40000 ALTER TABLE `job_requirements` DISABLE KEYS */;
-INSERT INTO `job_requirements` VALUES (1,'Matalino',2,'Active'),(2,'Mabait',1,'Active');
-/*!40000 ALTER TABLE `job_requirements` ENABLE KEYS */;
+LOCK TABLES `school` WRITE;
+/*!40000 ALTER TABLE `school` DISABLE KEYS */;
+INSERT INTO `school` VALUES (1,'Our Lady of Assumption College','OLAC231','2024-08-11 00:00:00','BOSSING');
+/*!40000 ALTER TABLE `school` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-11 16:09:04
+-- Dump completed on 2024-09-12 16:25:26

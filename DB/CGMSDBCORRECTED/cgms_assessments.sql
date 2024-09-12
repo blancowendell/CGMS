@@ -16,33 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `personality_type`
+-- Table structure for table `assessments`
 --
 
-DROP TABLE IF EXISTS `personality_type`;
+DROP TABLE IF EXISTS `assessments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `personality_type` (
-  `pt_type_id` int NOT NULL AUTO_INCREMENT,
-  `pt_school_id` int NOT NULL,
-  `pt_code` varchar(50) NOT NULL,
-  `pt_description` longtext NOT NULL,
-  `pt_strands_id` json NOT NULL,
-  `pt_create_date` datetime DEFAULT NULL,
-  `pt_create_by` varchar(50) NOT NULL,
-  PRIMARY KEY (`pt_type_id`),
-  KEY `pt_school_id` (`pt_school_id`),
-  CONSTRAINT `personality_type_ibfk_1` FOREIGN KEY (`pt_school_id`) REFERENCES `school` (`s_school_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `assessments` (
+  `a_assessment_id` int NOT NULL AUTO_INCREMENT,
+  `a_assessment_name` varchar(100) DEFAULT NULL,
+  `a_assessment_description` text,
+  `a_assessment_type` varchar(50) DEFAULT NULL,
+  `a_created_by` varchar(50) DEFAULT NULL,
+  `a_created_date` datetime DEFAULT NULL,
+  `a_school_id` int NOT NULL,
+  PRIMARY KEY (`a_assessment_id`),
+  KEY `a_school_id` (`a_school_id`),
+  CONSTRAINT `assessments_ibfk_1` FOREIGN KEY (`a_school_id`) REFERENCES `school` (`s_school_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `personality_type`
+-- Dumping data for table `assessments`
 --
 
-LOCK TABLES `personality_type` WRITE;
-/*!40000 ALTER TABLE `personality_type` DISABLE KEYS */;
-/*!40000 ALTER TABLE `personality_type` ENABLE KEYS */;
+LOCK TABLES `assessments` WRITE;
+/*!40000 ALTER TABLE `assessments` DISABLE KEYS */;
+INSERT INTO `assessments` VALUES (1,'Personality Test','school_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_idschool_id','Personality Test','Tanggol Dimaguiba','2024-09-13 04:16:00',1);
+/*!40000 ALTER TABLE `assessments` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-11 16:09:05
+-- Dump completed on 2024-09-12 16:25:27

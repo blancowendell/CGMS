@@ -16,30 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `school`
+-- Table structure for table `master_access`
 --
 
-DROP TABLE IF EXISTS `school`;
+DROP TABLE IF EXISTS `master_access`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `school` (
-  `s_school_id` int NOT NULL AUTO_INCREMENT,
-  `s_school_name` longtext NOT NULL,
-  `s_school_code` text,
-  `s_create_date` datetime DEFAULT NULL,
-  `s_create_by` varchar(50) NOT NULL,
-  PRIMARY KEY (`s_school_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `master_access` (
+  `ma_accessid` int NOT NULL AUTO_INCREMENT,
+  `ma_accessname` varchar(300) NOT NULL,
+  `ma_createby` varchar(20) NOT NULL,
+  `ma_createdate` varchar(20) NOT NULL,
+  `ma_status` varchar(20) NOT NULL,
+  PRIMARY KEY (`ma_accessid`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `school`
+-- Dumping data for table `master_access`
 --
 
-LOCK TABLES `school` WRITE;
-/*!40000 ALTER TABLE `school` DISABLE KEYS */;
-INSERT INTO `school` VALUES (1,'Our Lady of Assumption College','OLAC231','2024-08-11 00:00:00','BOSSING');
-/*!40000 ALTER TABLE `school` ENABLE KEYS */;
+LOCK TABLES `master_access` WRITE;
+/*!40000 ALTER TABLE `master_access` DISABLE KEYS */;
+INSERT INTO `master_access` VALUES (1,'Admin','Tanggol','2024-08-09','Active'),(2,'Student','Tanggol','2024-08-09','Active');
+/*!40000 ALTER TABLE `master_access` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-11 16:09:05
+-- Dump completed on 2024-09-12 16:25:26

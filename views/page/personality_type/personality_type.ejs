@@ -86,13 +86,13 @@
 
 
 <!-- Edit Modal -->
-<div class="modal fade" id="editassessmentstypemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editpersonalitytypemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header" id="modal-header">
         <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
         colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
-        <h3 class="modal-title" id="exampleModalLabel">Edit Assessments Type</h3>
+        <h3 class="modal-title" id="exampleModalLabel">Edit Personality Type</h3>
         <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body" id="modal-body">
@@ -100,20 +100,16 @@
             <div class="row g-3">
                 <div class="col">
                     <div class="form-floating">
-                        <input type="text" class="form-control border-form-modal" id="editassessmentname" name="editassessmentname" placeholder="Assessment Name">
-                        <label for="floatingInput">Edit Assessment Name</label>
+                        <input type="text" class="form-control border-form-modal" id="editpersonalitycode" name="editpersonalitycode" placeholder="Personality Code Name">
+                        <label for="floatingInput">Personality Code Name</label>
                     </div>
                 </div>
                 <div class="col">
-                    <div class="form-floating">
-                        <select type="text" class="form-control border-form-modal" id="editassesmenttype" name="editassesmenttype" placeholder="Assessment Type">
-                            <option value = "Interest Assessment">Interest Assessment</option>
-                            <option value = "Personality Test">Personality Test</option>
-                            <option value = "Skill Assessment">Skill Assessment</option>
-                        </select>
-                        <label for="floatingInput">Assessment Type</label>
+                    <label for="strandsSelection">Select Strands</label>
+                    <div id="editstrandsSelection" class="border-form-modal" style="padding: 10px; max-height: 300px; overflow-y: auto;">
+                        <!-- Checkboxes will be dynamically loaded here -->
                     </div>
-                </div>
+                </div>                
             </div>
             <br>
             <div class="row g-3">
@@ -121,8 +117,8 @@
                     <label for="description">Description</label>
                     <div class="form-floating">
                         <textarea class="form-control border-form-modal" 
-                                  id="editdescription" 
-                                  name="editdescription" 
+                                  id="editpersonalitydesc" 
+                                  name="editpersonalitydesc" 
                                   placeholder="Description"
                                   style="min-height: 200px; max-height: none; height: auto; resize: vertical; padding: 12px;">
                         </textarea>
@@ -134,7 +130,7 @@
         </div>
         <div class="modal-footer" id="modal-footer">
         <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn bg-gradient-primary" id="editassessmentsbtn">Edit</button>
+        <button type="button" class="btn bg-gradient-primary" id="personalityeditbtn">Edit</button>
         </div>
     </div>
     </div>

@@ -32,6 +32,50 @@ var roleacess = [
       {
         layout: "personality_typelayout",
       },
+      {
+        layout: "questionslayout",
+      },
+      // {
+      //   layout: "approvedapplicationlayout",
+      // },
+      // {
+      //   layout: "master_gradeslayout",
+      // },
+    ],
+  },
+  {
+    role: "Super Admin",
+    routes: [
+      {
+        layout: "sp_admin_indexlayout",
+      },
+      {
+        layout: "sp_admin_schoollayout",
+      },
+      // {
+      //   layout: "assessmentslayout",
+      // },
+      // {
+      //   layout: "careerlayout",
+      // },
+      // {
+      //   layout: "strands_typelayout",
+      // },
+      // {
+      //   layout: "videocliplayout",
+      // },
+      // {
+      //   layout: "job_requirementslayout",
+      // },
+      // {
+      //   layout: "skills_requirementslayout",
+      // },
+      // {
+      //   layout: "calendarlayout",
+      // },
+      // {
+      //   layout: "questionslayout",
+      // },
       // {
       //   layout: "scholarshiplayout",
       // },
@@ -53,7 +97,7 @@ var roleacess = [
         layout: "sp_admin_schoollayout",
       },
       // {
-      //   layout: "assessmentslayout",
+      //   layout: "admin_userlayout",
       // },
       // {
       //   layout: "careerlayout",

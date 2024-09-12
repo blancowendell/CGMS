@@ -16,29 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `master_students`
+-- Table structure for table `strands_type`
 --
 
-DROP TABLE IF EXISTS `master_students`;
+DROP TABLE IF EXISTS `strands_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `master_students` (
-  `ms_studentid` varchar(9) NOT NULL,
-  `ms_firstname` varchar(50) NOT NULL,
-  `ms_lastname` varchar(50) NOT NULL,
-  `ms_middlename` varchar(50) NOT NULL,
-  `ms_email` varchar(100) NOT NULL,
-  PRIMARY KEY (`ms_studentid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `strands_type` (
+  `st_id` int NOT NULL AUTO_INCREMENT,
+  `st_school_id` int NOT NULL,
+  `st_name` varchar(50) NOT NULL,
+  `st_description` text NOT NULL,
+  `st_status` varchar(50) NOT NULL,
+  `st_create_date` date DEFAULT NULL,
+  `st_create_by` varchar(50) NOT NULL,
+  PRIMARY KEY (`st_id`),
+  KEY `st_school_id` (`st_school_id`),
+  CONSTRAINT `strands_type_ibfk_1` FOREIGN KEY (`st_school_id`) REFERENCES `school` (`s_school_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `master_students`
+-- Dumping data for table `strands_type`
 --
 
-LOCK TABLES `master_students` WRITE;
-/*!40000 ALTER TABLE `master_students` DISABLE KEYS */;
-/*!40000 ALTER TABLE `master_students` ENABLE KEYS */;
+LOCK TABLES `strands_type` WRITE;
+/*!40000 ALTER TABLE `strands_type` DISABLE KEYS */;
+INSERT INTO `strands_type` VALUES (1,1,'Academic Strands','TEST','Active','2024-09-13','Tanggol Dimaguiba');
+/*!40000 ALTER TABLE `strands_type` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-11 16:09:05
+-- Dump completed on 2024-09-12 16:25:27

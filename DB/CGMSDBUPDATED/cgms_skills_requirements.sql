@@ -25,11 +25,11 @@ DROP TABLE IF EXISTS `skills_requirements`;
 CREATE TABLE `skills_requirements` (
   `sr_id` int NOT NULL AUTO_INCREMENT,
   `sr_name` text NOT NULL,
-  `sr_strandid` int NOT NULL,
+  `sr_strand_id` int NOT NULL,
   `sr_status` varchar(50) NOT NULL,
   PRIMARY KEY (`sr_id`),
-  KEY `sr_strandid` (`sr_strandid`),
-  CONSTRAINT `skills_requirements_ibfk_1` FOREIGN KEY (`sr_strandid`) REFERENCES `academic_strands` (`as_id`)
+  KEY `sr_strand_id` (`sr_strand_id`),
+  CONSTRAINT `skills_requirements_ibfk_1` FOREIGN KEY (`sr_strand_id`) REFERENCES `academic_strands` (`as_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

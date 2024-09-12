@@ -36,8 +36,6 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let schoolid = req.session.schoolid;
-
-    // Define the SQL query to retrieve data with strand names
     let sql = `
       WITH extracted_ids AS (
     SELECT 
@@ -101,7 +99,7 @@ router.post("/save", (req, res) => {
   try {
     let personalitycode = req.body.personalitycode;
     let personalitydesc = req.body.personalitydesc;
-    let strandsid = req.body.strandsid; // This should be a JSON string
+    let strandsid = req.body.strandsid;
     let create_date = GetCurrentDatetime();
     let create_by = req.session.fullname;
     let schoolid = req.session.schoolid;
@@ -110,7 +108,6 @@ router.post("/save", (req, res) => {
     console.log(personalitydesc);
     console.log(strandsid);
 
-    // Parse the JSON string to an array
     let parsedStrandsid;
     try {
       parsedStrandsid = JSON.parse(strandsid);
@@ -119,7 +116,6 @@ router.post("/save", (req, res) => {
       return res.json(JsonErrorResponse("Invalid JSON format for strandsid"));
     }
 
-    // Ensure that parsedStrandsid is an array
     if (!Array.isArray(parsedStrandsid)) {
       return res.json(JsonErrorResponse("Strandsid is not an array"));
     }
@@ -147,8 +143,8 @@ router.post("/save", (req, res) => {
     ];
 
     let checkStatement = SelectStatement(
-      "SELECT * FROM personality_type WHERE pt_code=? AND pt_strands_id=?",
-      [personalitycode, JSON.stringify(parsedStrandsid)] // Ensure this is a valid JSON string
+      "SELECT * FROM personality_type WHERE pt_code=?",
+      [personalitycode]
     );
 
     Check(checkStatement)
@@ -175,6 +171,153 @@ router.post("/save", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
+router.post("/getpersonalitytype", (req, res) => {
+  try {
+    let schoolid = req.session.schoolid;
+    let type_id = req.body.type_id; 
+    let sql = `
+      WITH extracted_ids AS (
+        SELECT 
+            pt.pt_code,
+            pt.pt_description,
+            pt.pt_create_date,
+            pt.pt_create_by,
+            pt.pt_type_id,
+            JSON_UNQUOTE(JSON_EXTRACT(pt.pt_strands_id, CONCAT('$[', idx, ']'))) AS as_id
+        FROM 
+            personality_type pt
+        JOIN 
+            (SELECT 0 AS idx UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4) AS numbers
+        ON 
+            JSON_LENGTH(pt.pt_strands_id) > numbers.idx
+        WHERE 
+            pt.pt_school_id = '${schoolid}'
+            AND pt.pt_type_id = '${type_id}'
+      )
+
+      SELECT 
+          pt.pt_type_id,
+          pt.pt_code,
+          DATE_FORMAT(pt.pt_create_date, "%d-%m-%Y") as pt_create_date,
+          pt.pt_create_by,
+          pt.pt_description,
+          GROUP_CONCAT(as_str.as_name) AS pt_strand_names,
+          GROUP_CONCAT(pt.as_id) AS pt_strands_id -- Add this line to return the strand IDs
+      FROM 
+          extracted_ids pt
+      LEFT JOIN 
+          academic_strands as_str 
+          ON as_str.as_id = pt.as_id
+      GROUP BY 
+          pt.pt_type_id, 
+          pt.pt_code, 
+          pt.pt_create_date,
+          pt.pt_description,
+          pt.pt_create_by;
+    `;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result.length > 0) {
+        let data = DataModeling(result, "pt_");
+
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse([]));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+router.put("/edit", (req, res) => {
+  try {
+    const { type_id, personalitycode, personalitydesc, strandsid } = req.body;
+    let create_by = req.session.fullname;
+    let create_date = GetCurrentDatetime();
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (personalitycode) {
+      data.push(personalitycode);
+      columns.push("code");
+    }
+
+    if (personalitydesc) {
+      data.push(personalitydesc);
+      columns.push("description");
+    }
+
+    if (strandsid) {
+      columns.push("strands_id");
+      data.push(strandsid); // Remove the JSON.stringify() here since it's already a string
+    }
+
+    if (create_date) {
+      data.push(create_date);
+      columns.push("create_date");
+    }
+
+    if (create_by) {
+      data.push(create_by);
+      columns.push("create_by");
+    }
+
+    if (type_id) {
+      data.push(type_id);
+      arguments.push("type_id");
+    }
+
+    let updateStatement = UpdateStatement(
+      "personality_type",
+      "pt",
+      columns,
+      arguments
+    );
+
+    console.log(updateStatement);
+
+    let checkStatement = SelectStatement(
+      "select * from personality_type where pt_code = ? and pt_description = ? and pt_strands_id = ?",
+      [personalitycode, personalitydesc, JSON.stringify(strandsid)]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          Update(updateStatement, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+
+            console.log(result);
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 
 //#region FUNCTION
 function Check(sql) {

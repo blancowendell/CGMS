@@ -16,31 +16,37 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `skills_requirements`
+-- Table structure for table `academic_strands`
 --
 
-DROP TABLE IF EXISTS `skills_requirements`;
+DROP TABLE IF EXISTS `academic_strands`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `skills_requirements` (
-  `sr_id` int NOT NULL AUTO_INCREMENT,
-  `sr_name` text NOT NULL,
-  `sr_strandid` int NOT NULL,
-  `sr_status` varchar(50) NOT NULL,
-  PRIMARY KEY (`sr_id`),
-  KEY `sr_strandid` (`sr_strandid`),
-  CONSTRAINT `skills_requirements_ibfk_1` FOREIGN KEY (`sr_strandid`) REFERENCES `academic_strands` (`as_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `academic_strands` (
+  `as_id` int NOT NULL AUTO_INCREMENT,
+  `as_strands_type` int NOT NULL,
+  `as_school_id` int NOT NULL,
+  `as_name` varchar(50) NOT NULL,
+  `as_course_description` text NOT NULL,
+  `as_job_description` text NOT NULL,
+  `as_create_by` varchar(50) NOT NULL,
+  `as_create_date` date DEFAULT NULL,
+  PRIMARY KEY (`as_id`),
+  KEY `as_strands_type` (`as_strands_type`),
+  KEY `as_school_id` (`as_school_id`),
+  CONSTRAINT `academic_strands_ibfk_1` FOREIGN KEY (`as_strands_type`) REFERENCES `strands_type` (`st_id`),
+  CONSTRAINT `academic_strands_ibfk_2` FOREIGN KEY (`as_school_id`) REFERENCES `school` (`s_school_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `skills_requirements`
+-- Dumping data for table `academic_strands`
 --
 
-LOCK TABLES `skills_requirements` WRITE;
-/*!40000 ALTER TABLE `skills_requirements` DISABLE KEYS */;
-INSERT INTO `skills_requirements` VALUES (1,'Masipag',1,'Active'),(2,'Mabait',2,'Inactive'),(3,'Bossing',1,'Active');
-/*!40000 ALTER TABLE `skills_requirements` ENABLE KEYS */;
+LOCK TABLES `academic_strands` WRITE;
+/*!40000 ALTER TABLE `academic_strands` DISABLE KEYS */;
+INSERT INTO `academic_strands` VALUES (1,1,1,'ICT','Pindot Pindot Lang','Bantay Com Shop','Tanggol Dimaguiba','2024-09-13'),(2,1,1,'ABM','Luto','Mag Lulu','Tanggol Dimaguiba','2024-09-13');
+/*!40000 ALTER TABLE `academic_strands` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-11 16:09:05
+-- Dump completed on 2024-09-12 16:25:28

@@ -16,31 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `strands_type`
+-- Table structure for table `questions`
 --
 
-DROP TABLE IF EXISTS `strands_type`;
+DROP TABLE IF EXISTS `questions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `strands_type` (
-  `st_id` int NOT NULL AUTO_INCREMENT,
-  `st_name` varchar(50) NOT NULL,
-  `st_description` text NOT NULL,
-  `st_status` varchar(50) NOT NULL,
-  `st_create_date` date NOT NULL,
-  `st_create_by` varchar(50) NOT NULL,
-  PRIMARY KEY (`st_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `questions` (
+  `q_question_id` int NOT NULL AUTO_INCREMENT,
+  `q_school_id` int NOT NULL,
+  `q_assessment_id` int DEFAULT NULL,
+  `q_question_text` text,
+  `q_question_type` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`q_question_id`),
+  KEY `q_school_id` (`q_school_id`),
+  KEY `q_assessment_id` (`q_assessment_id`),
+  CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`q_school_id`) REFERENCES `school` (`s_school_id`),
+  CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`q_assessment_id`) REFERENCES `assessments` (`a_assessment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `strands_type`
+-- Dumping data for table `questions`
 --
 
-LOCK TABLES `strands_type` WRITE;
-/*!40000 ALTER TABLE `strands_type` DISABLE KEYS */;
-INSERT INTO `strands_type` VALUES (1,'Academic Strands','Sample','Active','2024-09-09','Tanggol'),(2,'Technical Vocational Tracks','Sample','Active','2024-09-09','Tanggol'),(3,'Pang Dagat','Marunong dapat lumangoy','Inactive','2024-09-06','Tanggol Dimaguiba');
-/*!40000 ALTER TABLE `strands_type` ENABLE KEYS */;
+LOCK TABLES `questions` WRITE;
+/*!40000 ALTER TABLE `questions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-11 16:09:04
+-- Dump completed on 2024-09-12 16:25:26
