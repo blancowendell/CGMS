@@ -88,14 +88,14 @@ var roleacess = [
     ],
   },
   {
-    role: "Super Admin",
+    role: "Student",
     routes: [
       {
-        layout: "sp_admin_indexlayout",
+        layout: "student_indexlayout",
       },
-      {
-        layout: "sp_admin_schoollayout",
-      },
+      // {
+      //   layout: "sp_admin_schoollayout",
+      // },
       // {
       //   layout: "admin_userlayout",
       // },
@@ -161,7 +161,6 @@ exports.Validator = function (req, res, layout) {
     console.log("hit");
     return res.render(`${layout}`, {
       image: req.session.image,
-      studentid: req.session.studentid,
       fullname: req.session.fullname,
       accesstype: req.session.accesstype,
       status: req.session.status,
@@ -180,7 +179,6 @@ exports.Validator = function (req, res, layout) {
 
           return res.render(`${layout}`, {
             image: req.session.image,
-            studentid: req.session.studentid,
             fullname: req.session.fullname,
             accesstype: req.session.accesstype,
             status: req.session.status,
@@ -195,6 +193,38 @@ exports.Validator = function (req, res, layout) {
       }
     });
   }
+};
+
+
+exports.StudentValidator = function (req, res, layout) {
+  let ismatch = false;
+  let counter = 0;
+
+  roleacess.forEach((key, item) => {
+    counter += 1;
+    var routes = key.routes;
+
+    routes.forEach((value, index) => {
+      // Check if the layout matches
+      if (value.layout == layout) {
+        console.log("Layout: ", layout);
+        ismatch = true;
+
+        return res.render(`${layout}`, {
+          studentid: req.session.studentid,
+          fullname: req.session.fullname,
+          accesstype: req.session.accesstype,
+          schoolid: req.session.schoolid,
+        });
+      }
+    });
+
+    if (counter == roleacess.length) {
+      if (!ismatch) {
+        res.redirect("/student_login");
+      }
+    }
+  });
 };
 
 

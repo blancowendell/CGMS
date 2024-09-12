@@ -152,6 +152,26 @@ exports.AdminLogin = (result, callback) => {
   }
 };
 
+exports.StudentLogin = (result, callback) => {
+  try {
+    const StudentData = [];
+
+    result.forEach((row) => {
+      StudentData.push({
+        studentid: row.studentid,
+        fullname: row.fullname,
+        accesstype: row.accesstype,
+        schoolid: row.schoolid,
+      });
+    });
+
+    return StudentData;
+  } catch (error) {
+    console.log(error);
+    callback(error);
+  }
+};
+
 
 exports.SuperAdminLogin = (result, callback) => {
   try {

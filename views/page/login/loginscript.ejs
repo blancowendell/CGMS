@@ -1,27 +1,27 @@
 <script>
   $(document).ready(function () {
     console.log("Initialize");
-    LoadAccess();
+    // LoadAccess();
     LoadSchholId();
     
-    function LoadAccess() {
-      $.ajax({
-        type: "GET",
-        url: "/access/load",
-        success: function (result) {
-          var data = result.data;
+    // function LoadAccess() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/access/load",
+    //     success: function (result) {
+    //       var data = result.data;
 
-          $.each(data, function (key, item) {
-            var options = new Option(item.accessid, item.accessid);
-            $(options).html(item.accessname);
-            $("#loginUrl").append(options);
-          });
-        },
-        error: function (result) {
-          alert("error: " + result.data);
-        },
-      });
-    }
+    //       $.each(data, function (key, item) {
+    //         var options = new Option(item.accessid, item.accessid);
+    //         $(options).html(item.accessname);
+    //         $("#loginUrl").append(options);
+    //       });
+    //     },
+    //     error: function (result) {
+    //       alert("error: " + result.data);
+    //     },
+    //   });
+    // }
 
 
     function LoadSchholId() {
@@ -47,7 +47,7 @@
     $(document).on("click", "#loginBtn", function () {
       let username = $("#username").val();
       let password = $("#password").val();
-      let accesstypeid = $("#loginUrl").val();
+      // let accesstypeid = $("#loginUrl").val();
       let schoolid = $("#schoolid").val();
 
       var message = "";
@@ -60,9 +60,9 @@
         message += "Password";
       }
 
-      if (accesstypeid === "") {
-        message += "Access Type";
-      }
+      // if (accesstypeid === "") {
+      //   message += "Access Type";
+      // }
 
       if (schoolid === "") {
         message += "School Code";
@@ -77,7 +77,7 @@
           data: {
             username: username,
             password: password,
-            accesstypeid: accesstypeid,
+            // accesstypeid: accesstypeid,
             schoolid: schoolid,
           },
           success: function (result) {
