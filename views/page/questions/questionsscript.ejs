@@ -5,8 +5,9 @@
   let requirementid = "";
   $(document).ready(function () {
     LoadTable();
-    LoadStrandId();
-    EditLoadStrandId();
+    LoadAssessmentType();
+    LoadIfYes();
+    LoadIfNo();
 
     function LoadTable() {
       $("#dataTableQuestions").DataTable({
@@ -84,17 +85,17 @@
       });
     }
 
-    function LoadStrandId() {
+    function LoadAssessmentType() {
       $.ajax({
         type: "GET",
-        url: "/strands_type/loadstrands",
+        url: "/assessments/load",
         success: function (result) {
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.id, item.id);
-            $(options).html(item.name);
-            $("#strandsName").append(options);
+            var options = new Option(item.assessment_id, item.assessment_id);
+            $(options).html(item.assessment_name);
+            $("#asstype").append(options);
           });
         },
         error: function (result) {
@@ -103,18 +104,77 @@
       });
     }
 
-    $(document).on("click", "#jobreqSaveBtn", function () {
-      let strand_id = $("#strandsName").val();
-      let requirement = $("#reqname").val();
+    function LoadIfYes() {
+      $.ajax({
+        type: "GET",
+        url: "/personality_type/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.type_id, item.type_id);
+            $(options).html(item.code);
+            $("#ifyes").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+
+    function LoadIfNo() {
+      $.ajax({
+        type: "GET",
+        url: "/personality_type/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.type_id, item.type_id);
+            $(options).html(item.code);
+            $("#ifno").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#questionSaveBtn", function () {
+      let assessmenttype = $("#asstype").val();
+      let question_text = $("#qttext").val();
+      let ifyes = $("#ifyes").val();
+      let ifno = $("#ifno").val();
+      let ifyesname = $("#ifyesname").val();
+      let ifnoname = $("#ifnoname").val();
 
       var message = "";
 
-      if (strand_id == "") {
-        message += "Strand Name is required. ";
+      if (assessmenttype == "" || assessmenttype == null) {
+        message += "Assessment Type is required. ";
       }
 
-      if (requirement == "") {
-        message += "Requirement Name is required. ";
+      if (question_text == "" || question_text == null) {
+        message += "Question Text is required. ";
+      }
+
+      if (ifyes == "" || ifyes == null) {
+        message += "If Yes is required. ";
+      }
+
+      if (ifno == "" || ifno == null) {
+        message += "If No is required. ";
+      }
+
+      if (ifyesname == "" || ifyesname == null) {
+        message += "If Yes Name is required. ";
+      }
+
+      if (ifnoname == "" || ifnoname == null) {
+        message += "If No Name is required. ";
       }
 
       if (message !== "") {
@@ -122,10 +182,14 @@
       } else {
         $.ajax({
           type: "POST",
-          url: "/skills_requirements/save",
+          url: "/questions/save",
           data: {
-            strandsName: strand_id,
-            reqname: requirement,
+            assessment_id: assessmenttype,
+            question_text: question_text,
+            ifyes: ifyes,
+            ifno: ifno,
+            ifyesname: ifyesname,
+            ifnoname: ifnoname,
           },
           success: function (result) {
             if (result.msg == "success") {

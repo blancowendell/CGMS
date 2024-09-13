@@ -27,6 +27,7 @@ var questionsRouter = require("./routes/questions");
 var student_loginRouter = require("./routes/student_login");
 var student_resgisterRouter = require("./routes/student_registration");
 var student_indexRouter = require("./routes/student_index");
+var student_careerguideRouter = require("./routes/student_careerguide");
 
 var app = express();
 
@@ -66,6 +67,7 @@ app.use("/questions", questionsRouter);
 app.use("/student_login", student_loginRouter);
 app.use("/student_registration", student_resgisterRouter);
 app.use("/student_index", student_indexRouter);
+app.use("/student_careerguide", student_careerguideRouter);
 
 
 // catch 404 and forward to error handler

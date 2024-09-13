@@ -63,3 +63,98 @@ router.get("/load", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
+
+router.post("/save", (req, res) => {
+  try {
+    const { assessment_id, question_text, ifyes, ifno, ifyesname, ifnoname } = req.body;
+    let created_by = req.session.fullname;
+    let created_date = GetCurrentDatetime();
+
+    let insertQuestions = InsertStatement("questions", "q", [
+      "assessment_id",
+      "question_text",
+      "question_type",
+      "created_by",
+      "created_date",
+    ]);
+
+    let insertChoices = InsertStatement("master_choices", "mc", [
+      "name",
+      "personality_id",
+      "created_by",
+      "created_date",
+    ]);
+
+    let dataChoicesifYes = [
+      [
+        ifyesname,
+        ifyes,
+        created_by,
+        created_date,
+      ],
+    ];
+
+    let dataChoicesifNo = [
+      [
+        ifnoname,
+        ifno,
+        created_by,
+        created_date,
+      ],
+    ];
+
+    let dataQuestions = [
+      [
+        assessment_id,
+        question_text,
+        ifyes,
+        ifno,
+        created_by,
+        created_date,
+      ],
+    ];
+
+    let checkStatement = SelectStatement(
+      "select * from questions where q_assessment_id = ? and q_question_text = ? and q_question_type = ?",
+      [assessment_id, question_text, ifyes]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        console.log(result);
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          InsertTable(sql, data, (err, result) => {
+            if (err) {
+              console.log(err);
+              res.json(JsonErrorResponse(err));
+            }
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+//#region FUNCTION
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
+  });
+}
+//#endregion

@@ -53,7 +53,7 @@ var roleacess = [
         layout: "sp_admin_schoollayout",
       },
       // {
-      //   layout: "assessmentslayout",
+      //   layout: "admin_userlayout",
       // },
       // {
       //   layout: "careerlayout",
@@ -93,9 +93,9 @@ var roleacess = [
       {
         layout: "student_indexlayout",
       },
-      // {
-      //   layout: "sp_admin_schoollayout",
-      // },
+      {
+        layout: "student_careerguidelayout",
+      },
       // {
       //   layout: "admin_userlayout",
       // },

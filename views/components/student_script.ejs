@@ -117,12 +117,12 @@
       console.log('clicked');
       $.ajax({
         type: "POST",
-        url: "/sp_admin_login/logout",
+        url: "/student_login/logout",
         success: function (result) {
           toastr.success("Log out Successfully", "Ba Bye!!!");
           setTimeout(() => {
             window.location.reload();
-            location.replace("/sp_admin_login");
+            location.replace("/student_login");
           }, 1500); // Wait for the toast to display before redirecting
         },
         error: function (err) {

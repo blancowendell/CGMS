@@ -45,25 +45,63 @@
             <form>
             <div class="col">
                 <div class="form-floating">
-                <select type="text" class="form-control border-form-modal" id="strandsName" name="strandsName" placeholder="First Name">
-                    <option selected disabled>Strand Type</option>
+                <select type="text" class="form-control border-form-modal" id="asstype" name="asstype" placeholder="Assessment Type">
+                    <option selected disabled>Assessment Type</option>
                 </select>
-                <label for="floatingInput">Strand Name</label>
+                <label for="floatingInput">Assessment Type</label>
                 </div>
             </div>
             <br>
             <div class="col">
+                <label for="description">Question Text</label>
                 <div class="form-floating">
-                <input type="text" class="form-control border-form-modal" id="reqname" name="reqname" placeholder="First Name">
-                <label for="floatingInput">Skills Name</label>
+                    <textarea class="form-control border-form-modal" 
+                              id="qttext" 
+                              name="qttext" 
+                              placeholder="Description"
+                              style="min-height: 200px; max-height: none; height: auto; resize: vertical; padding: 12px;">
+                    </textarea>
+                </div>
+            </div>       
+            <br>
+            <div class = "row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                    <select type="text" class="form-control border-form-modal" id="ifyes" name="ifyes" placeholder="Assessment Type">
+                        <option selected disabled>Select Personality Type</option>
+                    </select>
+                    <label for="floatingInput">If Yes?</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="ifyesname" name="ifyesname" placeholder="Desc">
+                    <label for="floatingInput">If Yes? Name</label>
+                    </div>
                 </div>
             </div>
             <br>
+            <div class = "row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                    <select type="text" class="form-control border-form-modal" id="ifno" name="ifno" placeholder="Assessment Type">
+                        <option selected disabled>Select Personality Type</option>
+                    </select>
+                    <label for="floatingInput">If No?</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="ifnoname" name="ifnoname" placeholder="Desc">
+                    <label for="floatingInput">If No? Name</label>
+                    </div>
+                </div>
+            </div>
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
         <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn bg-gradient-primary" id="jobreqSaveBtn">Save</button>
+        <button type="button" class="btn bg-gradient-primary" id="questionSaveBtn">Save</button>
         </div>
     </div>
     </div>

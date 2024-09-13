@@ -32,78 +32,6 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-// router.post("/register", (req, res) => {
-//   try {
-//     let username = req.body.username;
-//     let password = req.body.password;
-//     let schoolid = req.body.schoolid;
-//     let firstname = req.body.firstname;
-//     let middlename = req.body.middlename;
-//     let lastname = req.body.lastname;
-//     let email = req.body.email;
-//     let accesstypeid = 1;
-
-//     Encrypter(password, (err, encrypted) => {
-//       if (err) {
-//         console.error("Error: ", err);
-//         res.json(JsonErrorResponse(err));
-//       } else {
-//         let sql = InsertStatement("master_students", "ms_", [
-//           "username",
-//           "password",
-//           "school_id",
-//           "firstname",
-//           "middlename",
-//           "lastname",
-//           "email",
-//           "access_id",
-//         ]);
-
-//         let data = [
-//           [
-//             username,
-//             encrypted,
-//             schoolid,
-//             firstname,
-//             middlename,
-//             lastname,
-//             email,
-//             accesstypeid,
-//           ],
-//         ];
-
-//         let checkStatement = SelectStatement(
-//           "select * from master_students where ms_firstname=? and mas_lastname=? and ms_school_id=?",
-//           [firstname, lastname, schoolid]
-//         );
-
-//         Check(checkStatement)
-//           .then((result) => {
-//             if (result != 0) {
-//               return res.json(JsonWarningResponse(MessageStatus.EXIST));
-//             } else {
-//               InsertTable(sql, data, (err, result) => {
-//                 if (err) {
-//                   console.log(err);
-//                   res.json(JsonErrorResponse(err));
-//                 }
-
-//                 res.json(JsonSuccess());
-//               });
-//             }
-//           })
-//           .catch((error) => {
-//             console.log(error);
-//             res.json(JsonErrorResponse(error));
-//           });
-//       }
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.json(JsonErrorResponse(error));
-//   }
-// });
-
 router.post("/register", (req, res) => {
   try {
     let {
@@ -115,7 +43,7 @@ router.post("/register", (req, res) => {
       lastname,
       email,
     } = req.body;
-    let accesstypeid = 1;
+    let accesstypeid = 2;
 
     // Encrypt the password before storing it
     Encrypter(password, (err, encrypted) => {
