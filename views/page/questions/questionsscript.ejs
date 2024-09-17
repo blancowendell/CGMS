@@ -2,12 +2,17 @@
   let userid = "";
   let base64String = "";
   let currentPassword = "";
-  let requirementid = "";
+  let question_id = "";
+  let globalYesChoiceId = "";
+  let globalNoChoiceId = "";
   $(document).ready(function () {
     LoadTable();
     LoadAssessmentType();
+    EditLoadAssessmentType();
     LoadIfYes();
     LoadIfNo();
+    EditLoadIfYes();
+    EditLoadIfNo();
 
     function LoadTable() {
       $("#dataTableQuestions").DataTable({
@@ -28,15 +33,15 @@
 
             $.each(data, (key, item) => {
               var action = `
-                <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editjobreqmodal">
+                <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editquestionsmodal">
                   <i class="fas fa-fw fa-pen"></i>
                 </button>
               `;
 
               finalData.push({
                 question_id: item.question_id,
-                assessment: item.assessment,
-                question_text: item.question_text,
+                question_name: item.question_name,
+                assessment_name: item.assessment_name,
                 question_type: item.question_type,
                 action: action,
               });
@@ -46,28 +51,28 @@
           },
         },
         columns: [
-          { data: "id" },
-          { data: "name" },
-          { data: "strands" },
-          { data: "status" },
+          { data: "question_id" },
+          { data: "question_name" },
+          { data: "assessment_name" },
+          { data: "question_type" },
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
-          var jobStatusCell = $(row).find("td:eq(2)");
-          var jobStatusText = data.strands;
+          // var jobStatusCell = $(row).find("td:eq(2)");
+          // var jobStatusText = data.assessment_name;
 
-          var jobStatusClass = "";
-          if (jobStatusText === "STEM") {
-            jobStatusClass =
-              "badge badge-sm bg-gradient-success text-white rounded-pill";
-          } else if (jobStatusText === "HE") {
-            jobStatusClass =
-              "badge badge-sm bg-gradient-danger text-white rounded-pill";
-          }
+          // var jobStatusClass = "";
+          // if (jobStatusText === "STEM") {
+          //   jobStatusClass =
+          //     "badge badge-sm bg-gradient-success text-white rounded-pill";
+          // } else if (jobStatusText === "HE") {
+          //   jobStatusClass =
+          //     "badge badge-sm bg-gradient-danger text-white rounded-pill";
+          // }
 
-          jobStatusCell.html(
-            `<span class="${jobStatusClass}">${jobStatusText}</span>`
-          );
+          // jobStatusCell.html(
+          //   `<span class="${jobStatusClass}">${jobStatusText}</span>`
+          // );
 
           $("td", row).each(function () {
             this.style.textAlign = "center";
@@ -145,6 +150,7 @@
 
     $(document).on("click", "#questionSaveBtn", function () {
       let assessmenttype = $("#asstype").val();
+      let questionname = $("#questionname").val();
       let question_text = $("#qttext").val();
       let ifyes = $("#ifyes").val();
       let ifno = $("#ifno").val();
@@ -155,6 +161,10 @@
 
       if (assessmenttype == "" || assessmenttype == null) {
         message += "Assessment Type is required. ";
+      }
+
+      if (questionname == "" || questionname == null) {
+        message += "Question Name is required. ";
       }
 
       if (question_text == "" || question_text == null) {
@@ -185,6 +195,7 @@
           url: "/questions/save",
           data: {
             assessment_id: assessmenttype,
+            question_name: questionname,
             question_text: question_text,
             ifyes: ifyes,
             ifno: ifno,
@@ -211,7 +222,7 @@
       }
     });
 
-    $("#dataTableAdminUsers tbody").on("click", "tr", function () {
+    $("#dataTableQuestions tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
         .closest("tr")
@@ -219,21 +230,60 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      requirementid = dataRow[0];
+      question_id = dataRow[0];
       console.log(dataRow);
     });
 
-    function EditLoadStrandId() {
+    function EditLoadAssessmentType() {
       $.ajax({
         type: "GET",
-        url: "/strands_type/loadstrands",
+        url: "/assessments/load",
         success: function (result) {
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.id, item.id);
-            $(options).html(item.name);
-            $("#editstrandsName").append(options);
+            var options = new Option(item.assessment_id, item.assessment_id);
+            $(options).html(item.assessment_name);
+            $("#editasstype").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadIfYes() {
+      $.ajax({
+        type: "GET",
+        url: "/personality_type/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.type_id, item.type_id);
+            $(options).html(item.code);
+            $("#editifyes").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+
+    function EditLoadIfNo() {
+      $.ajax({
+        type: "GET",
+        url: "/personality_type/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.type_id, item.type_id);
+            $(options).html(item.code);
+            $("#editifno").append(options);
           });
         },
         error: function (result) {
@@ -245,63 +295,145 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/skills_requirements/viewjobrequirements",
+        url: "/questions/getquestion",
         data: {
-          requirementid: requirementid,
+          question_id: question_id,
         },
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
+            if (existingData.length > 0) {
+              const questionDetails = existingData[0];
 
-            $.each(existingData, (key, item) => {
-              $("#editstrandsName").val(item.strand_id);
-              $("#editreqname").val(item.name);
-              $("#editstatus").val(item.status);
-            });
+              $("#editasstype").val(questionDetails.assessment_id);
+              $("#editquestionname").val(questionDetails.question_name);
+              $("#editqttext").val(questionDetails.question_text);
+
+              const yesChoice = existingData.find(item => item.choice_type == 'yes');
+              const noChoice = existingData.find(item => item.choice_type == 'no');
+
+              if (yesChoice) {
+                $("#editifyes").val(yesChoice.personality_id);
+                $("#editifyesname").val(yesChoice.choice_name); 
+              }
+
+              if (noChoice) {
+                $("#editifno").val(noChoice.personality_id); 
+                $("#editifnoname").val(noChoice.choice_name); 
+              }
+
+
+              fetchChoicesId(question_id);
+            }
           } else {
-            toastr.error("Error fetching employee data", "Error");
+            toastr.error("Error fetching question data", "Error");
           }
         },
         error: function (err) {
-          toastr.error(
-            "An error occurred while fetching employee data",
-            "Error"
-          );
+          toastr.error("An error occurred while fetching the question data", "Error");
         },
       });
     });
 
-    $(document).on("click", "#jobreqEditBtn", function () {
-      let id = requirementid;
-      let strand_id = $("#editstrandsName").val();
-      let requirement = $("#editreqname").val();
-      let status = $("#editstatus").val();
+    function fetchChoicesId(question_id) {
+      $.ajax({
+        type: "POST",
+        url: "questions/getchoicesidyes",
+        data: {
+          question_id: question_id
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            globalYesChoiceId = result.data.length > 0 ? result.data[0].id : null;
+            console.log("Global Yes Choice ID:", globalYesChoiceId);
+          } else {
+            toastr.error("Error fetching 'Yes' choice ID", "Error");
+          }
+        },
+        error: function (err) {
+          toastr.error("An error occurred while fetching 'Yes' choice ID", "Error");
+        }
+      });
+      $.ajax({
+        type: "POST",
+        url: "questions/getchoicesidno",
+        data: {
+          question_id: question_id
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            globalNoChoiceId = result.data.length > 0 ? result.data[0].id : null;
+            console.log("Global No Choice ID:", globalNoChoiceId);
+          } else {
+            toastr.error("Error fetching 'No' choice ID", "Error");
+          }
+        },
+        error: function (err) {
+          toastr.error("An error occurred while fetching 'No' choice ID", "Error");
+        }
+      });
+    }
+
+    $(document).on("click", "#questionEditBtn", function () {
+      let id = question_id;
+      let NoChoiceId = globalNoChoiceId;
+      let YesChoiceId = globalYesChoiceId;
+      let assessment_id = $("#editasstype").val();
+      let question_name = $("#editquestionname").val();
+      let question_text = $("#editqttext").val();
+      let ifyes = $("#editifyes").val();
+      let ifno = $("#editifno").val();
+      let ifyesname = $("#editifyesname").val();
+      let ifnoname = $("#editifnoname").val();
 
       var message = "";
 
-      if (strand_id === "") {
-        message += "Strand Name is required. ";
+      if (assessment_id === "") {
+        message += "Assessment Type is required. ";
       }
 
-      if (requirement === "") {
-        message += "Requirement Name is required. ";
+      if (question_name === "") {
+        message += "Question Name is required. ";
       }
 
-      if (status === "") {
-        message += "Select Status is required. ";
+      if (question_text === "") {
+        message += "Question Text is required. ";
       }
+
+      if (ifyes === "") {
+        message += "If Yes is required. ";
+      }
+
+      if (ifno === "") {
+        message += "If No is required. ";
+      }
+
+      if (ifyesname === "") {
+        message += "If Yes Name is required. ";
+      }
+
+      if (ifnoname === "") {
+        message += "If No Name is required. ";
+      }
+
 
       if (message !== "") {
         toastr.error(message, "Validation Error");
       } else {
         $.ajax({
           type: "PUT",
-          url: "skills_requirements/edit",
+          url: "/questions/edit",
           data: {
-            requirementid: id,
-            strand_id: strand_id,
-            name: requirement,
-            status: status,
+            question_id: id,
+            globalNoChoiceId: NoChoiceId,
+            globalYesChoiceId: YesChoiceId,
+            assessment_id: assessment_id,
+            question_name: question_name,
+            question_text: question_text,
+            ifyes: ifyes,
+            ifno: ifno,
+            ifyesname: ifyesname,
+            ifnoname: ifnoname,
           },
           success: function (result) {
             if (result.msg === "success") {

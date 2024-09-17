@@ -15,8 +15,8 @@
                 <thead>
                     <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">ID</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Question Name</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Assessment Type</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Question Text</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Question Type</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Action</th>
                     </tr>             
@@ -34,126 +34,167 @@
 <!-- Modal Structure -->
 <div class="modal fade" id="addquestionsmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
-        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
-        <h3 class="modal-title" id="exampleModalLabel">Add Questions</h3>
-        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-            <form>
-            <div class="col">
-                <div class="form-floating">
-                <select type="text" class="form-control border-form-modal" id="asstype" name="asstype" placeholder="Assessment Type">
-                    <option selected disabled>Assessment Type</option>
-                </select>
-                <label for="floatingInput">Assessment Type</label>
-                </div>
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+            <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+            colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+            <h3 class="modal-title" id="exampleModalLabel">Add Questions</h3>
+            <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
-            <br>
-            <div class="col">
-                <label for="description">Question Text</label>
-                <div class="form-floating">
-                    <textarea class="form-control border-form-modal" 
-                              id="qttext" 
-                              name="qttext" 
-                              placeholder="Description"
-                              style="min-height: 200px; max-height: none; height: auto; resize: vertical; padding: 12px;">
-                    </textarea>
-                </div>
-            </div>       
-            <br>
-            <div class = "row g-3">
+            <div class="modal-body" id="modal-body">
+                <form>
                 <div class="col">
                     <div class="form-floating">
-                    <select type="text" class="form-control border-form-modal" id="ifyes" name="ifyes" placeholder="Assessment Type">
-                        <option selected disabled>Select Personality Type</option>
+                    <select type="text" class="form-control border-form-modal" id="asstype" name="asstype" placeholder="Assessment Type">
+                        <option selected disabled>Assessment Type</option>
                     </select>
-                    <label for="floatingInput">If Yes?</label>
+                    <label for="floatingInput">Assessment Type</label>
                     </div>
                 </div>
+                <br>
                 <div class="col">
                     <div class="form-floating">
-                    <input type="text" class="form-control border-form-modal" id="ifyesname" name="ifyesname" placeholder="Desc">
-                    <label for="floatingInput">If Yes? Name</label>
+                    <input type="text" class="form-control border-form-modal" id="questionname" name="questionname" placeholder="Name">
+                    <label for="floatingInput">Question Name</label>
                     </div>
                 </div>
+                <br>
+                <div class="col">
+                    <label for="description">Question Text</label>
+                    <div class="form-floating">
+                        <textarea class="form-control border-form-modal" 
+                                id="qttext" 
+                                name="qttext" 
+                                placeholder="Description"
+                                style="min-height: 200px; max-height: none; height: auto; resize: vertical; padding: 12px;">
+                        </textarea>
+                    </div>
+                </div>       
+                <br>
+                <div class = "row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <select type="text" class="form-control border-form-modal" id="ifyes" name="ifyes" placeholder="Assessment Type">
+                            <option selected disabled>Select Personality Type</option>
+                        </select>
+                        <label for="floatingInput">If Yes?</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control border-form-modal" id="ifyesname" name="ifyesname" placeholder="Desc">
+                        <label for="floatingInput">If Yes? Name</label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class = "row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <select type="text" class="form-control border-form-modal" id="ifno" name="ifno" placeholder="Assessment Type">
+                            <option selected disabled>Select Personality Type</option>
+                        </select>
+                        <label for="floatingInput">If No?</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control border-form-modal" id="ifnoname" name="ifnoname" placeholder="Desc">
+                        <label for="floatingInput">If No? Name</label>
+                        </div>
+                    </div>
+                </div>
+                </form>
             </div>
-            <br>
-            <div class = "row g-3">
-                <div class="col">
-                    <div class="form-floating">
-                    <select type="text" class="form-control border-form-modal" id="ifno" name="ifno" placeholder="Assessment Type">
-                        <option selected disabled>Select Personality Type</option>
-                    </select>
-                    <label for="floatingInput">If No?</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control border-form-modal" id="ifnoname" name="ifnoname" placeholder="Desc">
-                    <label for="floatingInput">If No? Name</label>
-                    </div>
-                </div>
+            <div class="modal-footer" id="modal-footer">
+            <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn bg-gradient-primary" id="questionSaveBtn">Save</button>
             </div>
-            </form>
         </div>
-        <div class="modal-footer" id="modal-footer">
-        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn bg-gradient-primary" id="questionSaveBtn">Save</button>
-        </div>
-    </div>
     </div>
 </div>
 
 
 
 <!-- Edit Modal -->
-<div class="modal fade" id="editjobreqmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editquestionsmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
-        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
-        <h3 class="modal-title" id="exampleModalLabel">Edit Skills Requirements</h3>
-        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-            <form>
-            <div class="col">
-                <div class="form-floating">
-                <select class="form-control border-form-modal" id="editstrandsName" name="editstrandsName" placeholder="First Name">
-                    <option selected disabled>Strand Type</option>
-                </select>
-                <label for="floatingInput">Strand Name</label>
-                </div>
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+            <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+            colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+            <h3 class="modal-title" id="exampleModalLabel">Edit Questions</h3>
+            <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
-            <br>
-            <div class="col">
-                <div class="form-floating">
-                <input type="text" class="form-control border-form-modal" id="editreqname" name="editreqname" placeholder="First Name">
-                <label for="floatingInput">Skills Name</label>
+            <div class="modal-body" id="modal-body">
+                <form>
+                <div class="col">
+                    <div class="form-floating">
+                    <select type="text" class="form-control border-form-modal" id="editasstype" name="editasstype" placeholder="Assessment Type">
+                        <option selected disabled>Assessment Type</option>
+                    </select>
+                    <label for="floatingInput">Assessment Type</label>
+                    </div>
                 </div>
-            </div>
-            <br>
-            <div class="col">
-                <div class="form-floating">
-                <select type="text" class="form-control border-form-modal" id="editstatus" name="editstatus" placeholder="First Name">
-                    <option selected disabled>Select Status</option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
-                <label for="floatingInput">Status</label>
+                <br>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editquestionname" name="editquestionname" placeholder="Name">
+                    <label for="floatingInput">Question Name</label>
+                    </div>
                 </div>
+                <br>
+                <div class="col">
+                    <label for="description">Question Text</label>
+                    <div class="form-floating">
+                        <textarea class="form-control border-form-modal" 
+                                id="editqttext" 
+                                name="editqttext" 
+                                placeholder="Description"
+                                style="min-height: 200px; max-height: none; height: auto; resize: vertical; padding: 12px;">
+                        </textarea>
+                    </div>
+                </div>       
+                <br>
+                <div class = "row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <select type="text" class="form-control border-form-modal" id="editifyes" name="editifyes" placeholder="Assessment Type">
+                            <option selected disabled>Select Personality Type</option>
+                        </select>
+                        <label for="floatingInput">If Yes?</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control border-form-modal" id="editifyesname" name="editifyesname" placeholder="Desc">
+                        <label for="floatingInput">If Yes? Name</label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class = "row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <select type="text" class="form-control border-form-modal" id="editifno" name="editifno" placeholder="Assessment Type">
+                            <option selected disabled>Select Personality Type</option>
+                        </select>
+                        <label for="floatingInput">If No?</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control border-form-modal" id="editifnoname" name="editifnoname" placeholder="Desc">
+                        <label for="floatingInput">If No? Name</label>
+                        </div>
+                    </div>
+                </div>
+                </form>
             </div>
-            <br>
-            </form>
+            <div class="modal-footer" id="modal-footer">
+            <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn bg-gradient-primary" id="questionEditBtn">Save</button>
+            </div>
         </div>
-        <div class="modal-footer" id="modal-footer">
-        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn bg-gradient-primary" id="jobreqEditBtn">Save</button>
-        </div>
-    </div>
     </div>
 </div>
