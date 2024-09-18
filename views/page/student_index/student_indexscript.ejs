@@ -1,3 +1,67 @@
 <script>
-    $(document).ready(function () {});
+    $(document).ready(function () {
+        // Define an array of colors for the cards
+        const colors = ['blue', 'green', 'red', 'purple', 'orange', 'yellow']; 
+
+        // Fetch data from the API when the page loads
+        $.ajax({
+            url: '/student_index/dashboard',
+            method: 'GET',
+            success: function (response) {
+                console.log("API Response:", response); // Log the full response to inspect
+
+                let data = response.data;
+
+                // Check if the data is valid and if it's an array
+                if (Array.isArray(data)) {
+                    let groupedData = {};
+
+                    // Group data by 'name'
+                    data.forEach(item => {
+                        if (!groupedData[item.name]) {
+                            groupedData[item.name] = [];
+                        }
+                        groupedData[item.name].push(item); // Group items under their 'name'
+                    });
+
+                    // Iterate through the grouped data and create separate rows
+                    for (let name in groupedData) {
+                        let sectionHeader = `<h3>${name}</h3>`;
+                        let rowHtml = `<div class="row" id="${name.replace(/\s+/g, '-').toLowerCase()}-row"></div>`; // Row for each category
+
+                        // Append the header and row to the container
+                        $('#categories-container').append(sectionHeader);
+                        $('#categories-container').append(rowHtml);
+
+                        // Iterate over each grouped item and create cards
+                        groupedData[name].forEach((item, index) => {
+                            // Cycle through colors array using the index
+                            let color = colors[index % colors.length]; 
+
+                            let cardHtml = `
+                                <div class="col-md-4 col-sm-8 content-card">
+                                    <div class="card-big-shadow">
+                                        <div class="card card-just-text" data-background="color" data-color="${color}" data-radius="none">
+                                            <div class="content" style="color: black;"> <!-- Ensures the text is black -->
+                                                <h6 class="category" style="color: black;">${item.name}</h6>
+                                                <h4 class="title"><a href="#" style="color: black;">${item.academicstrand}</a></h4>
+                                                <p class="description" style="color: black;">${item.description}</p>
+                                            </div>
+                                        </div> <!-- end card -->
+                                    </div>
+                                </div>`;
+
+                            // Append the card to the appropriate row
+                            $(`#${name.replace(/\s+/g, '-').toLowerCase()}-row`).append(cardHtml);
+                        });
+                    }
+                } else {
+                    console.error("Data is not an array or is empty:", data);
+                }
+            },
+            error: function (error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    });
 </script>

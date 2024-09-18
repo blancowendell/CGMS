@@ -28,3 +28,38 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
+
+
+router.get("/dashboard", function (req, res) {
+  try {
+    let schoolId = req.session.schoolid;
+    let sql = `SELECT
+    st_name,
+    as_name as st_academicstrand,
+    as_course_description as st_description
+    FROM strands_type
+    INNER JOIN academic_strands ON strands_type.st_id = as_strands_type
+    WHERE st_school_id = '${schoolId}'`;
+    
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "st_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error))
+  }
+});
