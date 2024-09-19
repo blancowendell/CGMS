@@ -288,8 +288,8 @@ router.post("/savestrands", (req, res) => {
       ],
     ];
     let checkStatement = SelectStatement(
-      "select * from academic_strands where as_strands_type=? and as_name=? and as_course_description=? and as_job_description=?",
-      [strandsType, strandsName, coursedesc, jobdesc]
+      "select * from academic_strands where as_strands_type=? and as_name=?",
+      [strandsType, strandsName,]
     );
 
     Check(checkStatement)

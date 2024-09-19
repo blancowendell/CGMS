@@ -196,35 +196,49 @@ exports.Validator = function (req, res, layout) {
 };
 
 
+
 exports.StudentValidator = function (req, res, layout) {
+  // console.log(layout);
+
   let ismatch = false;
   let counter = 0;
+  // //console.log(roleacess.length)
+  if (req.session.accesstype == "Student" && layout == "student_indexlayout") {
+    console.log("hit");
+    return res.render(`${layout}`, {
+      studentid: req.session.studentid,
+      fullname: req.session.fullname,
+      accesstype: req.session.accesstype,
+      schoolid: req.session.schoolid,
+    });
+  } else {
+    roleacess.forEach((key, item) => {
+      counter += 1;
+      var routes = key.routes;
 
-  roleacess.forEach((key, item) => {
-    counter += 1;
-    var routes = key.routes;
+      routes.forEach((value, index) => {
+        // console.log(`${key.role} - ${value.layout}`);
 
-    routes.forEach((value, index) => {
-      // Check if the layout matches
-      if (value.layout == layout) {
-        console.log("Layout: ", layout);
-        ismatch = true;
+        if (key.role == req.session.accesstype && value.layout == layout) {
+          console.log("Role: ", req.session.accesstype, "Layout: ", layout);
+          ismatch = true;
 
-        return res.render(`${layout}`, {
-          studentid: req.session.studentid,
-          fullname: req.session.fullname,
-          accesstype: req.session.accesstype,
-          schoolid: req.session.schoolid,
-        });
+          return res.render(`${layout}`, {
+            studentid: req.session.studentid,
+            fullname: req.session.fullname,
+            accesstype: req.session.accesstype,
+            schoolid: req.session.schoolid,
+          });
+        }
+      });
+
+      if (counter == roleacess.length) {
+        if (!ismatch) {
+          res.redirect("/student_login");
+        }
       }
     });
-
-    if (counter == roleacess.length) {
-      if (!ismatch) {
-        res.redirect("/student_login");
-      }
-    }
-  });
+  }
 };
 
 
