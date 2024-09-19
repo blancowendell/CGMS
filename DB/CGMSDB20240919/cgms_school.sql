@@ -16,38 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `master_students`
+-- Table structure for table `school`
 --
 
-DROP TABLE IF EXISTS `master_students`;
+DROP TABLE IF EXISTS `school`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `master_students` (
-  `ms_studentid` int NOT NULL AUTO_INCREMENT,
-  `ms_firstname` varchar(50) NOT NULL,
-  `ms_lastname` varchar(50) NOT NULL,
-  `ms_middlename` varchar(50) NOT NULL,
-  `ms_email` varchar(100) NOT NULL,
-  `ms_school_id` int NOT NULL,
-  `ms_username` varchar(300) NOT NULL,
-  `ms_password` longtext NOT NULL,
-  `ms_access_id` int DEFAULT NULL,
-  PRIMARY KEY (`ms_studentid`),
-  KEY `ms_school_id` (`ms_school_id`),
-  KEY `fk_ms_access_id` (`ms_access_id`),
-  CONSTRAINT `fk_ms_access_id` FOREIGN KEY (`ms_access_id`) REFERENCES `master_access` (`ma_accessid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `master_students_ibfk_1` FOREIGN KEY (`ms_school_id`) REFERENCES `school` (`s_school_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `school` (
+  `s_school_id` int NOT NULL AUTO_INCREMENT,
+  `s_school_name` longtext NOT NULL,
+  `s_school_code` text,
+  `s_create_date` datetime DEFAULT NULL,
+  `s_create_by` varchar(50) NOT NULL,
+  PRIMARY KEY (`s_school_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `master_students`
+-- Dumping data for table `school`
 --
 
-LOCK TABLES `master_students` WRITE;
-/*!40000 ALTER TABLE `master_students` DISABLE KEYS */;
-INSERT INTO `master_students` VALUES (3,'Wendell','Blanco','L','markanasarias6@gmail.com',1,'wblanco','542cd7af7e9c771697005ed48d97b1ac',2);
-/*!40000 ALTER TABLE `master_students` ENABLE KEYS */;
+LOCK TABLES `school` WRITE;
+/*!40000 ALTER TABLE `school` DISABLE KEYS */;
+INSERT INTO `school` VALUES (1,'Our Lady of Assumption College','OLAC231','2024-08-11 00:00:00','BOSSING');
+/*!40000 ALTER TABLE `school` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -59,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 17:55:53
+-- Dump completed on 2024-09-19 22:46:27

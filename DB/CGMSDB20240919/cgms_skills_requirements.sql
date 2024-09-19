@@ -16,30 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `school`
+-- Table structure for table `skills_requirements`
 --
 
-DROP TABLE IF EXISTS `school`;
+DROP TABLE IF EXISTS `skills_requirements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `school` (
-  `s_school_id` int NOT NULL AUTO_INCREMENT,
-  `s_school_name` longtext NOT NULL,
-  `s_school_code` text,
-  `s_create_date` datetime DEFAULT NULL,
-  `s_create_by` varchar(50) NOT NULL,
-  PRIMARY KEY (`s_school_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `skills_requirements` (
+  `sr_id` int NOT NULL AUTO_INCREMENT,
+  `sr_school_id` int NOT NULL,
+  `sr_name` text NOT NULL,
+  `sr_strand_id` int NOT NULL,
+  `sr_status` varchar(50) NOT NULL,
+  PRIMARY KEY (`sr_id`),
+  KEY `sr_school_id` (`sr_school_id`),
+  KEY `sr_strand_id` (`sr_strand_id`),
+  CONSTRAINT `skills_requirements_ibfk_1` FOREIGN KEY (`sr_school_id`) REFERENCES `school` (`s_school_id`),
+  CONSTRAINT `skills_requirements_ibfk_2` FOREIGN KEY (`sr_strand_id`) REFERENCES `academic_strands` (`as_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `school`
+-- Dumping data for table `skills_requirements`
 --
 
-LOCK TABLES `school` WRITE;
-/*!40000 ALTER TABLE `school` DISABLE KEYS */;
-INSERT INTO `school` VALUES (1,'Our Lady of Assumption College','OLAC231','2024-08-11 00:00:00','BOSSING');
-/*!40000 ALTER TABLE `school` ENABLE KEYS */;
+LOCK TABLES `skills_requirements` WRITE;
+/*!40000 ALTER TABLE `skills_requirements` DISABLE KEYS */;
+INSERT INTO `skills_requirements` VALUES (1,1,'Matalino',1,'Inactive'),(2,1,'Masipag',2,'Inactive');
+/*!40000 ALTER TABLE `skills_requirements` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 17:55:53
+-- Dump completed on 2024-09-19 22:46:25

@@ -36,7 +36,7 @@ CREATE TABLE `academic_strands` (
   KEY `as_school_id` (`as_school_id`),
   CONSTRAINT `academic_strands_ibfk_1` FOREIGN KEY (`as_strands_type`) REFERENCES `strands_type` (`st_id`),
   CONSTRAINT `academic_strands_ibfk_2` FOREIGN KEY (`as_school_id`) REFERENCES `school` (`s_school_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `academic_strands` (
 
 LOCK TABLES `academic_strands` WRITE;
 /*!40000 ALTER TABLE `academic_strands` DISABLE KEYS */;
-INSERT INTO `academic_strands` VALUES (1,1,1,'ICT','Pindot Pindot Lang','Bantay Com Shop','Tanggol Dimaguiba','2024-09-13'),(2,1,1,'ABM','Luto','Mag Lulu','Tanggol Dimaguiba','2024-09-13'),(3,2,1,'HE','sample','sample','Tanggol Dimaguiba','2024-09-13');
+INSERT INTO `academic_strands` VALUES (1,1,1,'ICT','Pindot Pindot Lang','Bantay Com Shop','Tanggol Dimaguiba','2024-09-13'),(2,1,1,'ABM','Luto','Mag Lulu','Tanggol Dimaguiba','2024-09-13'),(3,2,1,'HE','sample','sample','Tanggol Dimaguiba','2024-09-13'),(4,1,1,'GAS','sample','sample','Tanggol Dimaguiba','2024-09-18'),(5,1,1,'HUMMS','SAMPLE','SAMPLE','Tanggol Dimaguiba','2024-09-18');
 /*!40000 ALTER TABLE `academic_strands` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 17:55:53
+-- Dump completed on 2024-09-19 22:46:25

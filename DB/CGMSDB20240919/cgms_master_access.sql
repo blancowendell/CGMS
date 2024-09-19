@@ -16,34 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `skills_requirements`
+-- Table structure for table `master_access`
 --
 
-DROP TABLE IF EXISTS `skills_requirements`;
+DROP TABLE IF EXISTS `master_access`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `skills_requirements` (
-  `sr_id` int NOT NULL AUTO_INCREMENT,
-  `sr_school_id` int NOT NULL,
-  `sr_name` text NOT NULL,
-  `sr_strand_id` int NOT NULL,
-  `sr_status` varchar(50) NOT NULL,
-  PRIMARY KEY (`sr_id`),
-  KEY `sr_school_id` (`sr_school_id`),
-  KEY `sr_strand_id` (`sr_strand_id`),
-  CONSTRAINT `skills_requirements_ibfk_1` FOREIGN KEY (`sr_school_id`) REFERENCES `school` (`s_school_id`),
-  CONSTRAINT `skills_requirements_ibfk_2` FOREIGN KEY (`sr_strand_id`) REFERENCES `academic_strands` (`as_id`)
+CREATE TABLE `master_access` (
+  `ma_accessid` int NOT NULL AUTO_INCREMENT,
+  `ma_accessname` varchar(300) NOT NULL,
+  `ma_createby` varchar(20) NOT NULL,
+  `ma_createdate` varchar(20) NOT NULL,
+  `ma_status` varchar(20) NOT NULL,
+  PRIMARY KEY (`ma_accessid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `skills_requirements`
+-- Dumping data for table `master_access`
 --
 
-LOCK TABLES `skills_requirements` WRITE;
-/*!40000 ALTER TABLE `skills_requirements` DISABLE KEYS */;
-INSERT INTO `skills_requirements` VALUES (1,1,'Matalino',1,'Inactive'),(2,1,'Masipag',2,'Inactive');
-/*!40000 ALTER TABLE `skills_requirements` ENABLE KEYS */;
+LOCK TABLES `master_access` WRITE;
+/*!40000 ALTER TABLE `master_access` DISABLE KEYS */;
+INSERT INTO `master_access` VALUES (1,'Admin','Tanggol','2024-08-09','Active'),(2,'Student','Tanggol','2024-08-09','Active');
+/*!40000 ALTER TABLE `master_access` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 17:55:53
+-- Dump completed on 2024-09-19 22:46:25
