@@ -57,7 +57,7 @@ router.get("/loadquestion", function (req, res) {
       if (result != 0) {
         let data = DataModeling(result, "q_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -71,8 +71,13 @@ router.get("/loadquestion", function (req, res) {
 
 
 router.post("/submitanswers", function (req, res) {
+  console.log('HIT');
+  
   try {
     const { questionId, answerText, choiceId } = req.body;
+
+    console.log(req.body);
+    
     let schoolId = req.session.schoolid;
     let studentId = req.session.studentid
 
@@ -181,6 +186,46 @@ router.get("/viewresult", function (req, res) {
     res.json(JsonErrorResponse(error))
   }
 });
+
+
+
+router.get("/checkstudent", function (req, res) {
+  try {
+    let school_id = req.session.schoolid;
+    let student_id = req.session.studentid;
+
+    let sql = `SELECT * FROM student_answers
+      WHERE sa_student_id = '${student_id}'
+      AND sa_school_id = '${school_id}'`;
+
+    console.log(sql);
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+      
+
+      // Check if result is an array and has elements
+      if (Array.isArray(result) && result.length === 0) {
+        res.json({
+          msg: "notexist",
+        });
+      } else {
+        res.json({
+          msg: "exist",
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 
 
 //#region FUNCTION

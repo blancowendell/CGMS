@@ -1,102 +1,127 @@
 <script>
-    $(document).ready(function() {
-      // Load questions via AJAX
-      $.ajax({
-        url: "/student_careerguide/loadquestion",
-        type: "GET",
-        success: function(response) {
-          if (response && response.data && response.data.length > 0) {
-            // Render the questions dynamically
-            renderQuestions(response.data);
-          } else {
-            $("#questions-container").html("<p>No questions available</p>");
-          }
-        },
-        error: function(error) {
-          console.error("Error loading questions:", error);
-          $("#questions-container").html("<p>Failed to load questions. Try again later.</p>");
+  $(document).ready(function () {
+    $.ajax({
+      url: "student_careerguide/checkstudent",
+      type: "GET",
+      success: function (response) {
+        if (response && response.msg === "exist") {
+          $.ajax({
+            url: "/student_careerguide/viewresult",
+            type: "GET",
+            success: function (response) {
+              if (response && response.msg === 'success' && response.data) {
+                $("#results-container").empty();
+                response.data.forEach(result => {
+                  if (result) {
+                    let resultHtml = `
+                      <div class="card mt-4">
+                        <div class="card-body">
+                          <h4 class="card-title">Personality Type: ${result.personality_code || 'N/A'}</h4>
+                          <p><strong>Description:</strong> ${result.personality_description || 'N/A'}</p>
+                          <p><strong>Strands:</strong> ${result.strand_names || 'N/A'}</p>
+                          <p><strong>Recommended Courses:</strong> ${result.course_descriptions || 'N/A'}</p>
+                          <p><strong>Recommended Jobs:</strong> ${result.job_descriptions || 'N/A'}</p>
+                          <button class="btn bg-gradient-primary view-strand" data-id="${result.personality_type_id}">View Strands</button>
+                        </div>
+                      </div>
+                    `;
+                    $("#results-container").append(resultHtml);
+                  }
+                });
+              } else {
+                $("#results-container").html("<p>No result found for the student.</p>");
+              }
+            },
+            error: function (error) {
+              console.error("Error loading results:", error);
+              $("#results-container").html("<p>Failed to load results. Please try again later.</p>");
+            }
+          });
+        } else if (response && response.msg === "notexist") {
+          $.ajax({
+            url: "/student_careerguide/loadquestion",
+            type: "GET",
+            success: function (response) {
+              if (response && response.data && response.data.length > 0) {
+                renderQuestions(response.data);
+              } else {
+                $("#questions-container").html("<p>No questions available</p>");
+              }
+            },
+            error: function (error) {
+              console.error("Error loading questions:", error);
+              $("#questions-container").html("<p>Failed to load questions. Try again later.</p>");
+            }
+          });
+        } else {
+          $("#questions-container").html("<p>An error occurred. Please try again later.</p>");
+        }
+      },
+      error: function (error) {
+        console.error("Error checking student status:", error);
+        $("#questions-container").html("<p>Failed to check student status. Please try again later.</p>");
+      }
+    });
+
+    function renderQuestions(questions) {
+      let questionsHtml = "";
+
+      questions.forEach((question) => {
+        const questionId = question.question_id;
+        const questionName = question.question_name || "Untitled Question";
+        const questionText = question.question_text || "No text available";
+        const choiceYes = question.choices_yes || "Yes";
+        const choiceNo = question.choices_no || "No";
+        const idYes = question.id_yes || "";
+        const idNo = question.id_no || "";
+
+        questionsHtml += `
+          <h4 class="fw-bold text-center mt-3">${questionName}</h4>
+          <form class="question-form" data-question-id="${questionId}">
+            <p class="fw-bold">${questionText}</p>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" name="question_${questionId}" id="radio_yes_${questionId}" value="${idYes}" />
+              <label class="form-check-label" for="radio_yes_${questionId}">${choiceYes}</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" name="question_${questionId}" id="radio_no_${questionId}" value="${idNo}" />
+              <label class="form-check-label" for="radio_no_${questionId}">${choiceNo}</label>
+            </div>
+          </form>
+        `;
+      });
+      $("#questions-container").html(questionsHtml);
+    }
+    $("#submit-questions").click(function () {
+      $(".question-form").each(function () {
+        let questionId = $(this).data("question-id");
+        let selectedRadio = $(this).find("input[type='radio']:checked");
+        let selectedOption = selectedRadio.val();
+        let answerText = selectedRadio.siblings("label").text().trim(); 
+
+        if (questionId && selectedOption && answerText) {
+          $.ajax({
+            url: "/student_careerguide/submitanswers",
+            type: "POST",
+            data: {
+              questionId: questionId,
+              answerText: answerText,
+              choiceId: selectedOption
+            },
+            success: function (response) {
+              console.log("Form submitted successfully:", response);
+              toastr.success('Answer for question ' + questionId + ' submitted successfully!');
+              window.location.reload();
+            },
+            error: function (error) {
+              console.error("Error submitting answer for question " + questionId + ":", error);
+              toastr.error('Failed to submit answer for question ' + questionId + '.');
+            }
+          });
+        } else {
+          toastr.warning('Please select an answer for question ' + questionId + '.');
         }
       });
-  
-      // Function to render questions dynamically
-      function renderQuestions(questions) {
-        let questionsHtml = "";
-  
-        questions.forEach((question) => {
-          // Extract the question and choices data
-          const questionId = question.question_id; // Use actual question_id
-          const questionName = question.question_name || "Untitled Question";
-          const questionText = question.question_text || "No text available";
-          const choiceYes = question.choices_yes || "Yes";
-          const choiceNo = question.choices_no || "No";
-          const idYes = question.id_yes || "";
-          const idNo = question.id_no || "";
-  
-          // Create the HTML structure for each question
-          questionsHtml += `
-            <h4 class="fw-bold text-center mt-3">${questionName}</h4>
-            <form class="question-form" data-question-id="${questionId}">
-              <p class="fw-bold">${questionText}</p>
-              <div class="form-check mb-2">
-                <input class="form-check-input" type="radio" name="question_${questionId}" id="radio_yes_${questionId}" value="${idYes}" />
-                <label class="form-check-label" for="radio_yes_${questionId}">
-                  ${choiceYes}
-                </label>
-              </div>
-              <div class="form-check mb-2">
-                <input class="form-check-input" type="radio" name="question_${questionId}" id="radio_no_${questionId}" value="${idNo}" />
-                <label class="form-check-label" for="radio_no_${questionId}">
-                  ${choiceNo}
-                </label>
-              </div>
-            </form>
-          `;
-        });
-  
-        // Append generated HTML to the container
-        $("#questions-container").html(questionsHtml);
-      }
-  
-      // On click event for submitting answers
-      $("#submit-questions").click(function() {
-        // Loop through each form to collect the data
-        $(".question-form").each(function() {
-          // Get the actual questionId from the form's data attribute
-          let questionId = $(this).data("question-id");
-
-          // Get the selected radio option
-          let selectedRadio = $(this).find("input[type='radio']:checked");
-
-          // Get the selected option value (choiceId) and text (answerText)
-          let selectedOption = selectedRadio.val();
-          let answerText = selectedRadio.siblings("label").text().trim(); // Get the choice text
-
-          // If a question and option are selected, send the AJAX request
-          if (questionId && selectedOption && answerText) {
-            $.ajax({
-              url: "/student_careerguide/submitanswers",
-              type: "POST",
-              data: {
-                questionId: questionId, // Use the actual questionId from the form data
-                answerText: answerText, // Use the choice text
-                choiceId: selectedOption
-              }, 
-              success: function(response) {
-                console.log("Form submitted successfully:", response);
-                // Handle success message using toast
-                toastr.success('Answer for question ' + questionId + ' submitted successfully!');
-              },
-              error: function(error) {
-                console.error("Error submitting answer for question " + questionId + ":", error);
-                // Handle error message using toast
-                toastr.error('Failed to submit answer for question ' + questionId + '.');
-              }
-            });
-          } else {
-            // If no option is selected for a question
-            toastr.warning('Please select an answer for question ' + questionId + '.');
-          }
-        });
-      });
     });
+  });
 </script>
