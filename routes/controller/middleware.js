@@ -96,9 +96,9 @@ var roleacess = [
       {
         layout: "student_careerguidelayout",
       },
-      // {
-      //   layout: "admin_userlayout",
-      // },
+      {
+        layout: "student_explorationlayout",
+      },
       // {
       //   layout: "careerlayout",
       // },
