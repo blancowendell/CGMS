@@ -1,0 +1,174 @@
+<script>
+  let studentid = "";
+  $(document).ready(function () {
+    LoadTable();
+
+    function LoadTable() {
+      $("#dataTableStudents").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/master_student/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+
+            $.each(data, (key, item) => {
+              var action = `
+                              <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#viewstudentsmodal">
+                              <i class="fas fa-fw fa-pen"></i>
+                              </button>
+                          `;
+
+              finalData.push({
+                studentid: item.studentid,
+                fullname: item.fullname,
+                email: item.email,
+                school_name: item.school_name,
+                username: item.username,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "studentid" },
+          { data: "fullname" },
+          { data: "email" },
+          { data: "school_name" },
+          { data: "username" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          // var jobStatusCell = $(row).find("td:eq(2)");
+          // var jobStatusText = data.assessment_type;
+
+          // var jobStatusClass = "";
+          // if (jobStatusText === "Personality Test") {
+          //     jobStatusClass =
+          //         "badge badge-sm bg-gradient-success text-white rounded-pill";
+          // } else if (jobStatusText === "Interest Assessment") {
+          //     jobStatusClass =
+          //         "badge badge-sm bg-gradient-danger text-white rounded-pill";
+          // }
+
+          // else if (jobStatusText === "Skill Assessment") {
+          //     jobStatusClass =
+          //         "badge badge-sm bg-gradient-warning text-black rounded-pill";
+          // }
+
+          // jobStatusCell.html(
+          //     `<span class="${jobStatusClass}">${jobStatusText}</span>`
+          // );
+
+          $("td", row).each(function () {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+            this.style.fontSize = "14px";
+          });
+        },
+        initComplete: function () {
+          $("#dataTableStrandsType thead th").css({
+            "font-size": "14px",
+            "font-weight": "bold",
+            "text-align": "center",
+          });
+        },
+      });
+    }
+
+    $("#dataTableStudents tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      studentid = dataRow[0];
+      console.log(dataRow);
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/master_student/getstudent",
+        data: {
+          studentid: studentid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editfullname").val(item.fullname);
+              $("#editstudentid").val(item.studentid);
+              $("#editemail").val(item.email);
+              $("#editschoolname").val(item.school_name);
+              $("#editusername").val(item.username);
+              $("#editpassword").val(item.password);
+            });
+          } else {
+            toastr.error("Error fetching employee data", "Error");
+          }
+        },
+        error: function (err) {
+          toastr.error(
+            "An error occurred while fetching employee data",
+            "Error"
+          );
+        },
+      });
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableStudents");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    $(".toggle-password").on("click", function () {
+      const passwordField = $("#editpassword");
+      const eyeIcon = $("#eyeIcon");
+
+      // Toggle between text and password field type
+      const fieldType =
+        passwordField.attr("type") === "password" ? "text" : "password";
+      passwordField.attr("type", fieldType);
+
+      // Toggle the eye icon class
+      if (fieldType === "password") {
+        eyeIcon.removeClass("bx-show").addClass("bx-hide");
+      } else {
+        eyeIcon.removeClass("bx-hide").addClass("bx-show");
+      }
+    });
+  });
+</script>

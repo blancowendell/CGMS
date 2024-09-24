@@ -35,9 +35,9 @@ var roleacess = [
       {
         layout: "questionslayout",
       },
-      // {
-      //   layout: "approvedapplicationlayout",
-      // },
+      {
+        layout: "master_studentlayout",
+      },
       // {
       //   layout: "master_gradeslayout",
       // },
@@ -100,7 +100,7 @@ var roleacess = [
         layout: "student_explorationlayout",
       },
       // {
-      //   layout: "careerlayout",
+      //   layout: "master_studentlayout",
       // },
       // {
       //   layout: "strands_typelayout",
