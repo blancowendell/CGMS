@@ -38,9 +38,9 @@ var roleacess = [
       {
         layout: "master_studentlayout",
       },
-      // {
-      //   layout: "master_gradeslayout",
-      // },
+      {
+        layout: "announcementslayout",
+      },
     ],
   },
   {

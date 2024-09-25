@@ -30,6 +30,7 @@ var student_indexRouter = require("./routes/student_index");
 var student_careerguideRouter = require("./routes/student_careerguide");
 var student_explorationRouter = require("./routes/student_exploration");
 var master_studentRouter = require("./routes/master_student");  
+var announcementsRouter = require("./routes/announcements");
 
 var app = express();
 
@@ -72,6 +73,7 @@ app.use("/student_index", student_indexRouter);
 app.use("/student_careerguide", student_careerguideRouter);
 app.use("/student_exploration", student_explorationRouter);
 app.use("/master_student", master_studentRouter);
+app.use("/announcements", announcementsRouter);
 
 
 // catch 404 and forward to error handler

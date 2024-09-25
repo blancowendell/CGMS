@@ -153,6 +153,13 @@ a:hover, a:focus {
   height: 250px;
 }
 
+#editannoncementpreview,
+#annoncementpreview{
+  margin-top: 50px;
+  width: 750px;
+  height: 250px;
+}
+
 
 
 :root {
