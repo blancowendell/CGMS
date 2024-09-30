@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("./components/student_header.ejs")%>
+
+<body class="g-sidenav-show   bg-gray-100">
+  <div class="min-height-300 bg-success position-absolute w-100"></div>
+  <%- include("./components/student_sidebar.ejs")%>
+  <main class="main-content position-relative border-radius-lg ">
+    <!-- Navbar -->
+    <%- include("./components/student_topbar.ejs")%>
+    <!-- End Navbar -->
+    <%- include("./page/student_aboutus/student_aboutus.ejs")%>
+  </main>
+  <div class="fixed-plugin">
+    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+      <i class="fa fa-cog py-2"> </i>
+    </a>
+    <%- include("./components/student_leftsidebar.ejs")%>
+  </div>
+  <!--   Core JS Files   -->
+  <%- include("./components/script.ejs")%>
+  <%- include("./page/student_aboutus/student_aboutusscript.ejs")%>
+</body>
+
+</html>

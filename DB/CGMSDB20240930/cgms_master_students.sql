@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: cgms
+-- Host: 127.0.0.1    Database: cgms
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,7 +37,7 @@ CREATE TABLE `master_students` (
   KEY `fk_ms_access_id` (`ms_access_id`),
   CONSTRAINT `fk_ms_access_id` FOREIGN KEY (`ms_access_id`) REFERENCES `master_access` (`ma_accessid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `master_students_ibfk_1` FOREIGN KEY (`ms_school_id`) REFERENCES `school` (`s_school_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `master_students` (
 
 LOCK TABLES `master_students` WRITE;
 /*!40000 ALTER TABLE `master_students` DISABLE KEYS */;
-INSERT INTO `master_students` VALUES (3,'Wendell','Blanco','L','markanasarias6@gmail.com',1,'wblanco','542cd7af7e9c771697005ed48d97b1ac',2);
+INSERT INTO `master_students` VALUES (3,'Wendell','Blanco','L','markanasarias6@gmail.com',1,'wblanco','542cd7af7e9c771697005ed48d97b1ac',2),(4,'Mark','Anasarias','D','wdblanco.spcpc@gmail.com',1,'marka','542cd7af7e9c771697005ed48d97b1ac',2),(5,'Jover Brylle ','Edem','De Vera','joverbrylleedem.spcpc@gmail.com',1,'Pogi123','53cab390b44c85cbd3611b866086e1dc',2);
 /*!40000 ALTER TABLE `master_students` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-19 22:46:25
+-- Dump completed on 2024-09-30 16:25:33

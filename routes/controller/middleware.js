@@ -41,6 +41,9 @@ var roleacess = [
       {
         layout: "announcementslayout",
       },
+      {
+        layout: "career_explorationlayout",
+      },
     ],
   },
   {
@@ -99,12 +102,15 @@ var roleacess = [
       {
         layout: "student_explorationlayout",
       },
-      // {
-      //   layout: "master_studentlayout",
-      // },
-      // {
-      //   layout: "strands_typelayout",
-      // },
+      {
+        layout: "student_helpcenterlayout",
+      },
+      {
+        layout: "master_studentlayout",
+      },
+      {
+        layout: "student_aboutuslayout",
+      },
       // {
       //   layout: "videocliplayout",
       // },

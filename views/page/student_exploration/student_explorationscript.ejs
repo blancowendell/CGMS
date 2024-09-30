@@ -1,0 +1,65 @@
+<script>
+  $(document).ready(function () {
+    $.ajax({
+      url: "/student_exploration/loadexploration",
+      type: "GET",
+      success: function (response) {
+        if (response && response.data && response.data.length > 0) {
+          let explorationHtml = "";
+          response.data.forEach((exploration) => {
+            const title = exploration.tittle || "Explore the World of Coding";
+            const description =
+              exploration.description ||
+              "Learn the essentials of web development and explore the various technologies used to create dynamic web applications.";
+            const youtubeLink = exploration.youtube_link
+              ? exploration.youtube_link.replace("watch?v=", "embed/")
+              : "https://www.youtube.com/embed/dQw4w9WgXcQ";
+
+            explorationHtml += `
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="bg-white p-4 rounded shadow">
+                                        <!-- Title -->
+                                        <h3 class="mb-3">${title}</h3>
+                                        <!-- Description -->
+                                        <p class="mb-4">${description}</p>
+                                        <!-- Button to trigger modal -->
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#videoModal" data-video-src="${youtubeLink}" data-video-title="${title}">
+                                            Watch Video
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+          });
+          $("#explorationContainer").append(explorationHtml);
+        } else {
+          $("#explorationContainer").append(
+            "<p>No exploration data available.</p>"
+          );
+        }
+      },
+      error: function (error) {
+        console.error("Error loading exploration data:", error);
+        $("#explorationContainer").append(
+          "<p>Failed to load exploration data. Please try again later.</p>"
+        );
+      },
+    });
+    $("#videoModal").on("show.bs.modal", function (event) {
+      const button = $(event.relatedTarget);
+      const videoSrc = button.data("video-src");
+      const videoTitle = button.data("video-title");
+
+      const modalTitle = $(this).find(".modal-title");
+      modalTitle.text(videoTitle);
+      const modalFrame = $(this).find("#videoFrame");
+      modalFrame.attr("src", videoSrc); 
+    });
+
+    $("#videoModal").on("hidden.bs.modal", function () {
+      const modalFrame = $(this).find("#videoFrame");
+      modalFrame.attr("src", "");
+    });
+  });
+</script>

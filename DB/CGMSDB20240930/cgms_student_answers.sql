@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: cgms
+-- Host: 127.0.0.1    Database: cgms
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -40,7 +40,7 @@ CREATE TABLE `student_answers` (
   CONSTRAINT `student_answers_ibfk_2` FOREIGN KEY (`sa_strand_id`) REFERENCES `academic_strands` (`as_id`),
   CONSTRAINT `student_answers_ibfk_3` FOREIGN KEY (`sa_school_id`) REFERENCES `school` (`s_school_id`),
   CONSTRAINT `student_answers_ibfk_4` FOREIGN KEY (`sa_choice`) REFERENCES `master_choices` (`mc_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,7 +49,6 @@ CREATE TABLE `student_answers` (
 
 LOCK TABLES `student_answers` WRITE;
 /*!40000 ALTER TABLE `student_answers` DISABLE KEYS */;
-INSERT INTO `student_answers` VALUES (6,3,4,'Sa bahay lang',NULL,1,4),(7,3,5,'Alone',NULL,1,5),(8,3,6,'With others',NULL,1,8);
 /*!40000 ALTER TABLE `student_answers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -62,4 +61,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-19 22:46:25
+-- Dump completed on 2024-09-30 16:25:33

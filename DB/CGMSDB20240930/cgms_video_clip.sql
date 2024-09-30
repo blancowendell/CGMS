@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: cgms
+-- Host: 127.0.0.1    Database: cgms
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,7 +37,7 @@ CREATE TABLE `video_clip` (
   KEY `vc_strandsid` (`vc_strandsid`),
   CONSTRAINT `video_clip_ibfk_1` FOREIGN KEY (`vc_school_id`) REFERENCES `school` (`s_school_id`),
   CONSTRAINT `video_clip_ibfk_2` FOREIGN KEY (`vc_strandsid`) REFERENCES `academic_strands` (`as_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -60,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-19 22:46:26
+-- Dump completed on 2024-09-30 16:25:34

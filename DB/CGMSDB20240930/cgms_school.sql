@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: cgms
+-- Host: 127.0.0.1    Database: cgms
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,33 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `job_descriptions`
+-- Table structure for table `school`
 --
 
-DROP TABLE IF EXISTS `job_descriptions`;
+DROP TABLE IF EXISTS `school`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `job_descriptions` (
-  `jd_id` int NOT NULL AUTO_INCREMENT,
-  `jd_school_id` int NOT NULL,
-  `jd_name` text NOT NULL,
-  `jd_strand_id` int NOT NULL,
-  `jd_status` varchar(50) NOT NULL,
-  PRIMARY KEY (`jd_id`),
-  KEY `jd_school_id` (`jd_school_id`),
-  KEY `jd_strand_id` (`jd_strand_id`),
-  CONSTRAINT `job_descriptions_ibfk_1` FOREIGN KEY (`jd_school_id`) REFERENCES `school` (`s_school_id`),
-  CONSTRAINT `job_descriptions_ibfk_2` FOREIGN KEY (`jd_strand_id`) REFERENCES `academic_strands` (`as_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `school` (
+  `s_school_id` int NOT NULL AUTO_INCREMENT,
+  `s_school_name` longtext NOT NULL,
+  `s_school_code` text,
+  `s_create_date` datetime DEFAULT NULL,
+  `s_create_by` varchar(50) NOT NULL,
+  PRIMARY KEY (`s_school_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `job_descriptions`
+-- Dumping data for table `school`
 --
 
-LOCK TABLES `job_descriptions` WRITE;
-/*!40000 ALTER TABLE `job_descriptions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `job_descriptions` ENABLE KEYS */;
+LOCK TABLES `school` WRITE;
+/*!40000 ALTER TABLE `school` DISABLE KEYS */;
+INSERT INTO `school` VALUES (1,'Our Lady of Assumption College','OLAC231','2024-08-11 00:00:00','BOSSING');
+/*!40000 ALTER TABLE `school` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-19 22:46:25
+-- Dump completed on 2024-09-30 16:25:35

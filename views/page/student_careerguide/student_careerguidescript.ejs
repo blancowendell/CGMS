@@ -21,7 +21,7 @@
                           <p><strong>Strands:</strong> ${result.strand_names || 'N/A'}</p>
                           <p><strong>Recommended Courses:</strong> ${result.course_descriptions || 'N/A'}</p>
                           <p><strong>Recommended Jobs:</strong> ${result.job_descriptions || 'N/A'}</p>
-                          <button class="btn bg-gradient-primary view-strand" data-id="${result.personality_type_id}">View Strands</button>
+                          <button class="btn bg-gradient-success view-strand" data-id="${result.personality_type_id}">View Strands</button>
                         </div>
                       </div>
                     `;
@@ -38,20 +38,38 @@
             }
           });
         } else if (response && response.msg === "notexist") {
-          $.ajax({
-            url: "/student_careerguide/loadquestion",
-            type: "GET",
-            success: function (response) {
-              if (response && response.data && response.data.length > 0) {
-                renderQuestions(response.data);
-              } else {
-                $("#questions-container").html("<p>No questions available</p>");
+          // Show the "start survey" card
+          let startSurveyHtml = `
+            <div class="card mt-4">
+              <div class="card-body text-center">
+                <h4 class="card-title">Are you ready to start the survey?</h4>
+                <p>Once you start, you can complete the survey to get your personality and career recommendations.</p>
+                <button id="start-survey-btn" class="btn btn-success">Start Survey</button>
+              </div>
+            </div>
+          `;
+          $("#start-survey-container").html(startSurveyHtml);
+
+          // Handle the "Start Survey" button click
+          $("#start-survey-btn").click(function () {
+            $.ajax({
+              url: "/student_careerguide/loadquestion",
+              type: "GET",
+              success: function (response) {
+                if (response && response.data && response.data.length > 0) {
+                  renderQuestions(response.data);
+                  $("#start-survey-container").addClass("d-none"); // Hide the start survey card
+                  $("#questions-container").removeClass("d-none"); // Show questions
+                  $("#submit-questions").removeClass("d-none"); // Show submit button
+                } else {
+                  $("#questions-container").html("<p>No questions available</p>");
+                }
+              },
+              error: function (error) {
+                console.error("Error loading questions:", error);
+                $("#questions-container").html("<p>Failed to load questions. Try again later.</p>");
               }
-            },
-            error: function (error) {
-              console.error("Error loading questions:", error);
-              $("#questions-container").html("<p>Failed to load questions. Try again later.</p>");
-            }
+            });
           });
         } else {
           $("#questions-container").html("<p>An error occurred. Please try again later.</p>");
@@ -92,6 +110,7 @@
       });
       $("#questions-container").html(questionsHtml);
     }
+
     $("#submit-questions").click(function () {
       $(".question-form").each(function () {
         let questionId = $(this).data("question-id");

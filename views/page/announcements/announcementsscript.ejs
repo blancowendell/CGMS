@@ -4,7 +4,7 @@
 
   $(document).ready(function () {
     console.log("hello");
-    //LoadTable();
+    LoadTable();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
@@ -32,7 +32,7 @@
               var status = item.status;
 
               action = `
-                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editannouncementmodal"><i class="fas fa-fw fa-pen"></i></button>
+                    <button id="editBtn" class="btn text-success" name="editBtn" data-bs-toggle="modal" data-bs-target="#editannouncementmodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
 
               var imgElement = document.createElement("img");
@@ -47,9 +47,6 @@
                 tittle: item.tittle,
                 type: item.type,
                 targetdate: item.targetdate,
-                description: item.description,
-                createby: item.createby,
-                createdate: item.createdate,
                 status: item.status,
                 action: action,
               });
@@ -70,36 +67,37 @@
           { data: "tittle" },
           { data: "type" },
           { data: "targetdate" },
-          { data: "description" },
-          { data: "createby" },
-          { data: "createdate" },
           { data: "status" },
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
-          //miyaka
-          var statusCell = $(row).find("td:eq(8)");
+          var jobStatusCell = $(row).find("td:eq(5)");
+          var jobStatusText = data.status;
 
-          var statusText = data.status;
-
-          var statusClass = "";
-
-          switch (statusText.toLowerCase()) {
-            case "active":
-              statusClass = "active-status";
-              break;
-            case "inactive":
-              statusClass = "inactive-status";
-              break;
-            default:
-              statusClass = "";
+          var jobStatusClass = "";
+          if (jobStatusText === "Active") {
+            jobStatusClass =
+              "badge badge-sm bg-gradient-success text-white rounded-pill";
+          } else if (jobStatusText === "Inactive") {
+            jobStatusClass =
+              "badge badge-sm bg-gradient-danger text-white rounded-pill";
           }
 
-          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+          jobStatusCell.html(
+            `<span class="${jobStatusClass}">${jobStatusText}</span>`
+          );
 
-          $("td", row).each(function (index) {
+          $("td", row).each(function () {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
+            this.style.fontSize = "14px";
+          });
+        },
+        initComplete: function () {
+          $("#dataTableStrandsType thead th").css({
+            "font-size": "14px",
+            "font-weight": "bold",
+            "text-align": "center",
           });
         },
 
@@ -131,10 +129,11 @@
 
     $(document).on("click", "#announcementsavebtn", function () {
       let image = base64String;
-      let tittle = $("#announcementtittle").val();
+      let tittle = $("#announcementtitle").val();
       let type = $("#announcementtype").val();
       let targetdate = $("#targetdate").val();
       let description = $("#announcementdescription").val();
+      let enddate = $("#enddate").val();
 
       var message = "";
 
@@ -158,41 +157,44 @@
         message += "TITTLE ";
       }
 
+      if (enddate == "") {
+        message += "TITTLE ";
+      }
+
       if (message !== "") {
-        swal("Validation Error", message, "error");
+        toastr.error(message, "Validation Error");
       } else {
         $.ajax({
           type: "POST",
-          url: "/announcement/save",
+          url: "/announcements/save",
           data: {
             image: image,
             tittle: tittle,
             type: type,
             targetdate: targetdate,
+            enddate: enddate,
             description: description,
           },
+          beforeSend: function () {
+            showSpinnerToast("Saving...", "Please wait");
+          },
           success: function (result) {
+            clearToast();
+
             if (result.msg == "success") {
-              swal({
-                title: "Saved Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              }).then((results) => {
+              showSuccessToast("Saved Successfully", "Success");
+
+              setTimeout(function () {
                 window.location.reload();
-              });
+              }, 2000);
               LoadTable();
             } else {
-              swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
-                button: "OK!",
-              });
+              toastr.warning("Data already exists!", "Warning");
             }
           },
           error: function (err) {
-            swal("Data already exist!", "You clicked the button!", "warning");
+            clearToast();
+            toastr.warning("Data already exists!", "Warning");
           },
         });
       }
@@ -212,7 +214,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/announcement/getannouncement",
+        url: "/announcements/getannouncement",
         data: {
           bulletinid: bulletinid,
         },
@@ -222,38 +224,85 @@
 
             $.each(existingData, (key, item) => {
               $("#editdepartmentid").val(item.bulletinid);
-              $("#editannouncementtittle").val(item.tittle);
-              $("#editpreview").attr(
+              $("#editannouncementtitle").val(item.tittle);
+              $("#editannoncementpreview").attr(
                 "src",
                 "data:image/jpg;base64," + item.image
               );
-              $("#editannouncementdescription").val(item.description);
+              base64String = item.image;
+              //$("#editannouncementdescription").val(item.description);
+              $("#editannouncementdescription").summernote(
+                "code",
+                item.description
+              );
               $("#editannouncementstatus").val(item.status);
               $("#editannouncementtype").val(item.type);
               $("#edittargetdate").val(item.targetdate);
+              $("#editenddate").val(item.enddate);
             });
           } else {
-            swal("Error fetching employee data", message, "error");
+            toastr.error("Error fetching employee data", "Error");
           }
         },
         error: function (err) {
-          swal(
+          toastr.error(
             "An error occurred while fetching employee data",
-            message,
-            "error"
+            "Error"
           );
         },
       });
     });
 
+    $("#editannouncementdescription").summernote({
+      placeholder: "Enter the description here...",
+      tabsize: 2,
+      height: 200,
+      toolbar: [
+        ["style", ["style"]],
+        ["font", ["bold", "italic", "underline", "clear"]],
+        ["fontname", ["fontname"]],
+        ["color", ["color"]],
+        ["para", ["ul", "ol", "paragraph"]],
+        ["table", ["table"]],
+        ["insert", ["link", "picture", "video"]],
+        ["view", ["fullscreen", "codeview", "help"]],
+        ["custom", ["responsive"]],
+      ],
+      buttons: {
+        responsive: function (context) {
+          var ui = $.summernote.ui;
+          var button = ui.button({
+            contents: '<i class="fa fa-mobile"></i> Responsive',
+            tooltip: "Add responsive styles",
+            click: function () {
+              var currentContent = context.invoke("code");
+              var responsiveContent = `<div class="responsive">${currentContent}</div>`;
+              context.invoke("code", responsiveContent);
+            },
+          });
+          return button.render();
+        },
+      },
+    });
+
     $(document).on("click", "#editannouncementsavebtn", function () {
       let id = bulletinid;
-      let image = base64String;
       let tittle = $("#editannouncementtittle").val();
-      let description = $("#editannouncementdescription").val();
+      let description = $("#editannouncementdescription").summernote("code");
       let status = $("#editannouncementstatus").val();
       let type = $("#editannouncementtype").val();
       let targetdate = $("#edittargetdate").val();
+      let enddate = $("#editenddate").val();
+      let image = base64String;
+
+      console.log(id, "id");
+      console.log(tittle, "tittle");
+      console.log(description, "description");
+      console.log(status, "status");
+      console.log(type, "type");
+      console.log(targetdate, "targetdate");
+      console.log(enddate, "enddate");
+      console.log(image, "image");
 
       var message = "";
 
@@ -281,49 +330,46 @@
         message += "targetdate is required. ";
       }
 
+      if (enddate === "") {
+        message += "enddate is required. ";
+      }
+
       if (message !== "") {
-        swal("Validation Error", message, "error");
+        toastr.error(message, "Validation Error");
       } else {
         $.ajax({
-          type: "POST",
-          url: "/announcement/update",
+          type: "PUT",
+          url: "/announcements/edit",
           data: {
             bulletinid: id,
             image: image,
             tittle: tittle,
             type: type,
             targetdate: targetdate,
+            enddate: enddate,
             description: description,
             status: status,
           },
+          beforeSend: function () {
+            showSpinnerToast("Saving...", "Please wait");
+          },
           success: function (result) {
+            clearToast();
+
             if (result.msg == "success") {
-              swal({
-                title: "Update Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              }).then((results) => {
+              showSuccessToast("Saved Successfully", "Success");
+
+              setTimeout(function () {
                 window.location.reload();
-              });
+              }, 2000);
               LoadTable();
-            } else if (result.msg == "exist") {
-              swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
-                button: "OK!",
-              });
             } else {
-              swal(
-                "Data already exists!",
-                "You clicked the button!",
-                "warning"
-              );
+              toastr.warning("Data already exists!", "Warning");
             }
           },
           error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
+            clearToast();
+            toastr.warning("Data already exists!", "Warning");
           },
         });
       }
@@ -363,7 +409,7 @@
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = function () {
-        const preview = document.getElementById("editpreview");
+        const preview = document.getElementById("editannoncementpreview");
         preview.src = reader.result;
       };
       editimage();

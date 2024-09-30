@@ -31,6 +31,9 @@ var student_careerguideRouter = require("./routes/student_careerguide");
 var student_explorationRouter = require("./routes/student_exploration");
 var master_studentRouter = require("./routes/master_student");  
 var announcementsRouter = require("./routes/announcements");
+var career_explorationRouter = require("./routes/career_exploration");
+var student_helpcenterRouter = require("./routes/student_helpcenter");
+var student_aboutusRouter = require("./routes/student_aboutus");
 
 var app = express();
 
@@ -74,6 +77,9 @@ app.use("/student_careerguide", student_careerguideRouter);
 app.use("/student_exploration", student_explorationRouter);
 app.use("/master_student", master_studentRouter);
 app.use("/announcements", announcementsRouter);
+app.use("/career_exploration", career_explorationRouter);
+app.use("/student_helpcenter", student_helpcenterRouter);
+app.use("/student_aboutus", student_aboutusRouter);
 
 
 // catch 404 and forward to error handler

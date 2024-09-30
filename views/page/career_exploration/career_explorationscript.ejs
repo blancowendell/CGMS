@@ -1,0 +1,358 @@
+<script>
+    let clipvideoid = "";
+    $(document).ready(function () {
+      let base64String = "";
+      LoadTable();
+      LoadStrandId();
+      EditLoadStrandId();
+  
+      function LoadTable() {
+        $("#dataTableCareerExploration").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 600,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/career_exploration/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = `
+                    <button id="editBtn" class="btn text-success" name="editBtn" data-bs-toggle="modal" data-bs-target="#viewvideoclipmodal">
+                      <i class="fas fa-fw fa-pen"></i>
+                    </button>
+                  `;
+  
+                finalData.push({
+                  explorationid: item.explorationid,
+                  tittle: item.tittle,
+                  strand: item.strand,
+                  description: item.description,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columns: [
+            { data: "explorationid" },
+            { data: "tittle" },
+            { data: "strand" },
+            { data: "description" },
+            { data: "action" },
+          ],
+        //   createdRow: function (row, data, dataIndex) {
+        //     var jobStatusCell = $(row).find("td:eq(2)");
+        //     var jobStatusText = data.strands;
+  
+        //     var jobStatusClass = "";
+        //     if (jobStatusText === "STEM") {
+        //       jobStatusClass =
+        //         "badge badge-sm bg-gradient-success text-white rounded-pill";
+        //     } else if (jobStatusText === "HE") {
+        //       jobStatusClass =
+        //         "badge badge-sm bg-gradient-danger text-white rounded-pill";
+        //     }
+  
+        //     jobStatusCell.html(
+        //       `<span class="${jobStatusClass}">${jobStatusText}</span>`
+        //     );
+  
+        //     $("td", row).each(function () {
+        //       this.style.textAlign = "center";
+        //       this.style.verticalAlign = "middle";
+        //       this.style.fontSize = "14px";
+        //     });
+        //   },
+        //   initComplete: function () {
+        //     $("#dataTableStrandsType thead th").css({
+        //       "font-size": "14px",
+        //       "font-weight": "bold",
+        //       "text-align": "center",
+        //     });
+        //   },
+        });
+      }
+  
+      function LoadStrandId() {
+        $.ajax({
+          type: "GET",
+          url: "/strands_type/loadstrands",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.id, item.id);
+              $(options).html(item.name);
+              $("#strandsName").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+      $("#clipUpload").on("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+  
+          reader.onload = function () {
+            base64String = reader.result; // Store Base64 string of the video
+            $("#videoPreview").attr("src", base64String).show(); // Display the video preview
+          };
+  
+          reader.onerror = function (error) {
+            toastr.error("Error uploading video file: " + error);
+          };
+        }
+      });
+  
+      $("#videoclipsubmit").on("click", function (e) {
+        e.preventDefault();
+  
+        let clipname = $("#clipName").val();
+        let strandsname = $("#strandsName").val();
+        let clipdescription = $("#clipDescription").val();
+        let clipupload = base64String;
+        let youtubelink = $("#youtubeLink").val();
+  
+        var message = "";
+  
+        if (clipname == "") {
+          message += "Clip name is required. ";
+        }
+  
+        if (strandsname == "") {
+          message += "Strands name is required. ";
+        }
+  
+        if (clipdescription == "") {
+          message += "Clip description is required. ";
+        }
+  
+        if (clipupload == "") {
+          message += "Video upload is required. ";
+        }
+  
+        if (message !== "") {
+          toastr.error(message, "Validation Error");
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "/career_exploration/save",
+            data: {
+              clipname: clipname,
+              strandsname: strandsname,
+              clipdescription: clipdescription,
+              clipupload: clipupload,
+              youtubelink: youtubelink,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                toastr.success("Saved Successfully", "Success");
+  
+                // Reload page after toast
+                setTimeout(function () {
+                  window.location.reload();
+                }, 2000);
+              } else {
+                toastr.warning("Data already exists!", "Warning");
+              }
+            },
+            error: function (err) {
+              toastr.warning("Data already exists!", "Warning");
+            },
+          });
+        }
+      });
+  
+      $("#dataTableCareerExploration tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+        clipvideoid = dataRow[0];
+        console.log(dataRow);
+      });
+  
+      function EditLoadStrandId() {
+        $.ajax({
+          type: "GET",
+          url: "/strands_type/loadstrands",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.id, item.id);
+              $(options).html(item.name);
+              $("#strandNameInput").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+      $(document).on("click", "#editBtn", function () {
+        $.ajax({
+          type: "POST",
+          url: "/career_exploration/viewvideo",
+          data: {
+            clipvideoid: clipvideoid,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+              $.each(existingData, (key, item) => {
+                // Populate modal fields with fetched data
+                $("#clipTitleInput").val(item.tittle);
+                $("#strandNameInput").val(item.strand_id);
+                $("#descriptionInput").val(item.description);
+                $("#youtubeLinkInput").val(item.youtube_link);
+  
+                // Set video preview
+                if (item.video && item.video.startsWith("data:video/mp4;base64,")) {
+                  const videoSource = item.video; // Base64 encoded video
+                  $("#videoSource").attr("src", videoSource);
+                  $("#previewvideo")[0].load(); // Reload the video element to reflect changes
+                } else {
+                  // Handle missing or invalid video file
+                  console.warn("Invalid or missing video data.");
+                  $("#videoSource").attr("src", "");
+                }
+  
+                // Handle YouTube link
+                const youtubeLink = item.youtube_link;
+                if (youtubeLink && youtubeLink.includes("v=")) {
+                  const videoId = youtubeLink.split("v=")[1].split("&")[0];
+                  const youtubeEmbedUrl = `https://www.youtube.com/embed/${videoId}`;
+                  $("#youtubeVideo").attr("src", youtubeEmbedUrl);
+                } else {
+                  // Fallback: If the YouTube link is missing or malformed, clear the iframe or show a default message
+                  $("#youtubeVideo").attr("src", "");
+                  console.warn("Invalid or missing YouTube link.");
+                }
+              });
+  
+              // Show the modal
+              $("#viewvideoclipmodal").modal("show");
+            } else {
+              toastr.error("Error fetching video data", result.message, "error");
+            }
+          },
+          error: function (err) {
+            toastr.error( 
+                "An error occurred while fetching video data",
+                err.message || "An unknown error occurred",
+                "error" 
+                );
+          },
+        });
+      });
+  
+      $(document).on("change", "#videoUploadInput", function (event) {
+        const file = event.target.files[0];
+        if (file && file.type === "video/mp4") {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            base64String = e.target.result; // Store the Base64 string in the variable
+            $("#videoSource").attr("src", base64String);
+            $("#previewvideo")[0].load(); // Reload the video element to reflect changes
+          };
+          reader.readAsDataURL(file);
+        } else {
+          console.warn("Invalid file type. Please upload a valid MP4 video.");
+        }
+      });
+  
+      // Handle YouTube link input change
+      $(document).on("input", "#youtubeLinkInput", function () {
+        const youtubeLink = $(this).val();
+        if (youtubeLink && youtubeLink.includes("v=")) {
+          const videoId = youtubeLink.split("v=")[1].split("&")[0];
+          const youtubeEmbedUrl = `https://www.youtube.com/embed/${videoId}`;
+          $("#youtubeVideo").attr("src", youtubeEmbedUrl);
+        } else {
+          // Fallback: If the YouTube link is missing or malformed, clear the iframe or show a default message
+          $("#youtubeVideo").attr("src", "");
+          console.warn("Invalid or missing YouTube link.");
+        }
+      });
+  
+      $(document).on("click", "#editClipDetails", function () {
+        let clipName = $("#clipTitleInput").val();
+        let strandName = $("#strandNameInput").val();
+        let clipDescription = $("#descriptionInput").val();
+        let youtubeLink = $("#youtubeLinkInput").val();
+        let clipUpload = base64String;
+  
+        console.log(clipUpload, "clipUpload");
+  
+        var message = "";
+  
+        if (clipName === "") {
+          message += "Clip name is required. ";
+        }
+  
+        if (strandName === "") {
+          message += "Strand name is required. ";
+        }
+  
+        if (clipDescription === "") {
+          message += "Clip description is required. ";
+        }
+  
+        if (youtubeLink === "") {
+          message += "YouTube link is required. ";
+        }
+  
+        if (message !== "") {
+          toastr.error(message, "Validation Error");
+        } else {
+          $.ajax({
+            type: "PUT",
+            url: "/career_exploration/edit",
+            data: {
+              clipvideoid: clipvideoid,
+              clipName: clipName,
+              strandName: strandName,
+              clipDescription: clipDescription,
+              youtubeLink: youtubeLink,
+              clipUpload: clipUpload,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                toastr.success("Saved Successfully", "Success");
+  
+                // Reload page after toast
+                setTimeout(function () {
+                  window.location.reload();
+                }, 2000);
+              } else {
+                toastr.warning("Data already exists!", "Warning");
+              }
+            },
+            error: function (err) {
+              toastr.warning("Data already exists!", "Warning");
+            },
+          });
+        }
+      });
+    });
+  </script>
+  

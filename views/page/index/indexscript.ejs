@@ -1,0 +1,37 @@
+<script>
+    const ctx = document.getElementById('jobChart').getContext('2d');
+    const jobChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['IT/Software Development', 'Healthcare', 'Business/Finance', 'Education', 'Construction', 'Customer Service'],
+            datasets: [{
+                label: 'Number of Job Openings',
+                data: [5000, 4200, 3900, 3500, 3000, 2700],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>

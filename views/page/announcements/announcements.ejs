@@ -5,7 +5,7 @@
           <div class="card-header pb-0 d-flex justify-content-between align-items-center">
             <h6>Announcement</h6>
             <!-- Modal Trigger Button -->
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#announcementmodal">
+            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#announcementmodal">
                 Add Announcement
             </button>
           </div>
@@ -100,7 +100,93 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn bg-gradient-primary" id="saveassessmentsbtn">Save</button>
+                <button type="button" class="btn bg-gradient-success" id="announcementsavebtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Modal Structure -->
+<div class="modal fade" id="editannouncementmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel">Edit Announcement</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <form>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                                <label class="form-label" for="editannouncementimage"></label>
+                                <div class="text-center mb-3">
+                                    <img id="editannoncementpreview" src="https://via.placeholder.com/250" class="rounded border-form-modal" alt="Image Preview">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <input type="file" name="editannouncementimage" id="editannouncementimage" class="form-control border-form-modal" accept="image/*">
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                              <select class="form-control border-form-modal" id="editannouncementstatus" name="editannouncementstatus">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                              </select>
+                              <label for="editannouncementstatus">Status</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                                <input type="text" class="form-control border-form-modal" id="editannouncementtitle" name="announcementtitle" placeholder="Title">
+                                <label for="editannouncementtitle">Title</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <select class="form-control border-form-modal" id="editannouncementtype" name="editannouncementtype">
+                                    <option value="Event">Event</option>
+                                    <option value="Announcement">Announcement</option>
+                                </select>
+                                <label for="editannouncementtype">Announcement Type</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                                <input type="date" class="form-control border-form-modal" id="edittargetdate" name="edittargetdate" placeholder="Target Date">
+                                <label for="edittargetdate">Start Date</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <input type="date" class="form-control border-form-modal" id="editenddate" name="editenddate" placeholder="End Date">
+                                <label for="editenddate">End Date</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                        <div class="col">
+                            <label for="announcementdescription">Description</label>
+                            <div class="form-floating">
+                                <textarea class="form-control border-form-modal" id="editannouncementdescription" name="editannouncementdescription" rows="4" placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn bg-gradient-success" id="editannouncementsavebtn">Save</button>
             </div>
         </div>
     </div>

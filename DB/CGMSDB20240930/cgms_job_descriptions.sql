@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: cgms
+-- Host: 127.0.0.1    Database: cgms
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,34 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `job_requirements`
+-- Table structure for table `job_descriptions`
 --
 
-DROP TABLE IF EXISTS `job_requirements`;
+DROP TABLE IF EXISTS `job_descriptions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `job_requirements` (
-  `jr_id` int NOT NULL AUTO_INCREMENT,
-  `jr_school_id` int NOT NULL,
-  `jr_name` text NOT NULL,
-  `jr_strand_id` int NOT NULL,
-  `jr_status` varchar(50) NOT NULL,
-  PRIMARY KEY (`jr_id`),
-  KEY `jr_school_id` (`jr_school_id`),
-  KEY `jr_strand_id` (`jr_strand_id`),
-  CONSTRAINT `job_requirements_ibfk_1` FOREIGN KEY (`jr_school_id`) REFERENCES `school` (`s_school_id`),
-  CONSTRAINT `job_requirements_ibfk_2` FOREIGN KEY (`jr_strand_id`) REFERENCES `academic_strands` (`as_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `job_descriptions` (
+  `jd_id` int NOT NULL AUTO_INCREMENT,
+  `jd_school_id` int NOT NULL,
+  `jd_name` text NOT NULL,
+  `jd_strand_id` int NOT NULL,
+  `jd_status` varchar(50) NOT NULL,
+  PRIMARY KEY (`jd_id`),
+  KEY `jd_school_id` (`jd_school_id`),
+  KEY `jd_strand_id` (`jd_strand_id`),
+  CONSTRAINT `job_descriptions_ibfk_1` FOREIGN KEY (`jd_school_id`) REFERENCES `school` (`s_school_id`),
+  CONSTRAINT `job_descriptions_ibfk_2` FOREIGN KEY (`jd_strand_id`) REFERENCES `academic_strands` (`as_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `job_requirements`
+-- Dumping data for table `job_descriptions`
 --
 
-LOCK TABLES `job_requirements` WRITE;
-/*!40000 ALTER TABLE `job_requirements` DISABLE KEYS */;
-INSERT INTO `job_requirements` VALUES (1,1,'Bossing',1,'Active'),(2,1,'Magalulu',2,'Active');
-/*!40000 ALTER TABLE `job_requirements` ENABLE KEYS */;
+LOCK TABLES `job_descriptions` WRITE;
+/*!40000 ALTER TABLE `job_descriptions` DISABLE KEYS */;
+INSERT INTO `job_descriptions` VALUES (1,1,'Developer',1,'Active');
+/*!40000 ALTER TABLE `job_descriptions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-19 22:46:26
+-- Dump completed on 2024-09-30 16:25:35
