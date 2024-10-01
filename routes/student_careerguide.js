@@ -227,6 +227,46 @@ router.get("/checkstudent", function (req, res) {
 });
 
 
+router.post("/viewstrand", (req, res) => {
+  try {
+    let schoolId = req.session.schoolid;
+    let strands = req.body.strand;
+    let sql = `SELECT 
+    vc_file,
+    vc_description,
+    vc_youtubelink,
+    as_name as vc_strand,
+    as_course_description as vc_strand_desc,
+    as_job_description as vc_job_desc,
+    jd_name as vc_job_name
+    FROM video_clip
+    INNER JOIN academic_strands ON video_clip.vc_strandsid = as_id
+    INNER JOIN skills_requirements ON academic_strands.as_id = sr_strand_id
+    INNER JOIN job_descriptions ON academic_strands.as_id = jd_strand_id
+    INNER JOIN job_requirements ON academic_strands.as_id = jr_strand_id
+    WHERE vc_school_id = '${schoolId}'
+    AND vc_strandsid IN ('${strands}')`;
+    
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+      
+      if (result != 0) {
+        let data = DataModeling(result, "vc_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+    console.log(error);
+  }
+});
+
+
 
 //#region FUNCTION
 function Check(sql) {

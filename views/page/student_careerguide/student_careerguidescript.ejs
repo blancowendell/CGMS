@@ -21,10 +21,34 @@
                           <p><strong>Strands:</strong> ${result.strand_names || 'N/A'}</p>
                           <p><strong>Recommended Courses:</strong> ${result.course_descriptions || 'N/A'}</p>
                           <p><strong>Recommended Jobs:</strong> ${result.job_descriptions || 'N/A'}</p>
-                          <button class="btn bg-gradient-success view-strand" data-id="${result.personality_type_id}">View Strands</button>
+                          
+                          <!-- Centered dialog and image -->
+                          <div style="text-align: center; background-color: #f0f9ff; padding: 15px; border-radius: 10px; margin-top: 20px;">
+                            <img src="/img/career.png" alt="Person thinking" style="display: block; margin: 0 auto 20px auto; max-width: 20%; height: auto;">
+                            <h5 style="font-weight: bold;">We think that you are qualified for the strand: <span style="color: #28a745;">${result.strand_names || 'N/A'}</span></h5>
+                          </div>
+
+                          <!-- Updated button with JavaScript redirect -->
+                          <button class="btn bg-gradient-success view-strand" onclick="window.location.href='/student_exploration';">
+                            View Strands
+                          </button>
                         </div>
                       </div>
                     `;
+                    // let resultHtml = `
+                    //   <div class="card mt-4">
+                    //     <div class="card-body">
+                    //       <h4 class="card-title">Personality Type: ${result.personality_code || 'N/A'}</h4>
+                    //       <p><strong>Description:</strong> ${result.personality_description || 'N/A'}</p>
+                    //       <p><strong>Strands:</strong> ${result.strand_names || 'N/A'}</p>
+                    //       <p><strong>Recommended Courses:</strong> ${result.course_descriptions || 'N/A'}</p>
+                    //       <p><strong>Recommended Jobs:</strong> ${result.job_descriptions || 'N/A'}</p>
+                    //       <button class="btn bg-gradient-success view-strand" onclick="window.location.href='/student_exploration';">
+                    //         View Strands
+                    //       </button>
+                    //     </div>
+                    //   </div>
+                    // `;
                     $("#results-container").append(resultHtml);
                   }
                 });
@@ -50,7 +74,6 @@
           `;
           $("#start-survey-container").html(startSurveyHtml);
 
-          // Handle the "Start Survey" button click
           $("#start-survey-btn").click(function () {
             $.ajax({
               url: "/student_careerguide/loadquestion",
