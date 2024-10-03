@@ -103,3 +103,105 @@ router.post("/viewstrand", function (req, res) {
     res.json(JsonErrorResponse(error))
   }
 });
+
+
+router.get("/notification", (req, res) => {
+  try {
+    let studentid = req.session.studentid;
+
+    let sql = `SELECT 
+    b_bulletinid as n_bulletinid,
+    b_createby as n_createby,
+    b_image as n_image,
+    b_tittle as n_tittle
+    FROM notification
+    INNER JOIN bulletin ON notification.n_bulletinid = b_bulletinid
+    WHERE n_student_id = '${studentid}'
+    AND n_isread = 'NO'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "n_");
+
+        console.log(data,'result');
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error))
+  }
+});
+
+router.get("/countnotification", (req, res) => {
+  try {
+    let studentid = req.session.studentid;
+    let sql = `SELECT
+    count(n_notificationid) as n_countnotif
+    FROM notification
+    WHERE n_student_id = '${studentid}'
+    AND n_isrecieved = 'NO'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "n_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error))
+  }
+});
+
+
+router.post("/viewnotification", (req, res) => {
+  try {
+    let notificationid = req.body.notificationid;
+    let sql = `
+    SELECT 
+    b_bulletinid,
+    b_createby,
+    b_image,
+    b_tittle,
+    b_description,
+    b_targetdate,
+    b_enddate
+    FROM bulletin
+    WHERE b_bulletinid = '${notificationid}'`;
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "b_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error))
+  }
+});

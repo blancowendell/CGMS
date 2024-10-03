@@ -5,7 +5,45 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 
+/* Base styling for the avatar image */
+.avatar-sm {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover; /* Ensure the image fills the space while maintaining aspect ratio */
+}
 
+/* Ensure the image remains responsive and scales properly */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Media query for mobile views */
+@media (max-width: 576px) {
+  .avatar {
+    display: none; /* This should not be present */
+  }
+
+  /* Reduce the size of the image in the notification dropdown for mobile */
+  .avatar-sm {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Adjust the font size for mobile to fit properly */
+  .dropdown-item h6 {
+    font-size: 0.875rem; /* Smaller font for mobile view */
+  }
+
+  .dropdown-item p {
+    font-size: 0.75rem;
+  }
+}
+
+
+
+ 
  body{margin-top:20px;}
 
 .card-big-shadow {
