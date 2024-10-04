@@ -110,10 +110,12 @@ router.get("/notification", (req, res) => {
     let studentid = req.session.studentid;
 
     let sql = `SELECT 
+
     b_bulletinid as n_bulletinid,
     b_createby as n_createby,
     b_image as n_image,
-    b_tittle as n_tittle
+    b_tittle as n_tittle,
+    n_notificationid
     FROM notification
     INNER JOIN bulletin ON notification.n_bulletinid = b_bulletinid
     WHERE n_student_id = '${studentid}'
@@ -183,8 +185,9 @@ router.post("/viewnotification", (req, res) => {
     b_description,
     b_targetdate,
     b_enddate
-    FROM bulletin
-    WHERE b_bulletinid = '${notificationid}'`;
+    FROM bulletin 
+    INNER JOIN notification ON bulletin.b_bulletinid = n_bulletinid
+    WHERE n_notificationid = '${notificationid}'`;
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -203,5 +206,66 @@ router.post("/viewnotification", (req, res) => {
   } catch (error) {
     console.log(error);
     res.json(JsonErrorResponse(error))
+  }
+});
+
+
+
+router.put("/deletenotification", (req, res) => {
+  try {
+    const { notificationId } = req.body;
+    let isRecieved = 'YES'
+    let isRead = 'YES'
+    let isDeleated = 'YES'
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (isRecieved) {
+      data.push(isRecieved);
+      columns.push("isrecieved");
+    }
+
+    if (isRead) {
+      data.push(isRead);
+      columns.push("isread");
+    }
+
+    if (isDeleated) {
+      data.push(isDeleated);
+      columns.push("isdeleate");
+    }
+
+
+    if (notificationId) {
+      data.push(notificationId);
+      arguments.push("notificationid");
+    }
+
+    let updateStatement = UpdateStatement(
+      "notification",
+      "n",
+      columns,
+      arguments
+    );
+
+    console.log(updateStatement);
+
+    // let checkStatement = SelectStatement(
+    //   "select * from notification where n_notificationid = ? and st_description = ? and st_status = ?",
+    //   [name, description, status]
+    // );
+
+    Update(updateStatement, data, (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      console.log(result);
+
+      res.json(JsonSuccess());
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
   }
 });

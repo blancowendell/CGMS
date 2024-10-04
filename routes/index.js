@@ -21,7 +21,7 @@ const currentMonth = moment().format("MM");
 // const nodemailer = require('nodemailer');
 const { DataModeling } = require("../routes/model/cgmsdb");
 require("dotenv").config();
-const googleTrends = require("google-trends-api");
+const axios = require('axios');
 
 /* GET home page. */
 // router.get("/", function (req, res, next) {
@@ -35,9 +35,15 @@ module.exports = router;
 
 router.get('/trending_jobs', async (req, res) => {
   try {
-    const response = await fetch('https://remoteok.io/api?location=Philippines');
-    const data = await response.json();
+    const response = await axios.get('https://remoteok.io/api?location=Philippines', {
+      maxRedirects: 5,
+      headers: {
+        'User-Agent': 'Your User Agent',
+      },
+    });
     
+    const data = response.data;
+
     if (data && Array.isArray(data)) {
       const jobTitles = data.slice(0, 10).map(job => job.position);
       res.json(jobTitles);
@@ -49,7 +55,6 @@ router.get('/trending_jobs', async (req, res) => {
     res.status(500).send('Error fetching data from Remote OK API');
   }
 });
-
 
 
 router.get("/loadmoststrand", (req, res) => {

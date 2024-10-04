@@ -32,7 +32,6 @@ router.post("/change-password", async (req, res) => {
     }
 
     try {
-        // Step 1: Fetch user by token
         const sql = `SELECT ms_email FROM master_students WHERE ms_reset_password_token = '${token}'`;
         console.log(sql);
         
@@ -43,11 +42,14 @@ router.post("/change-password", async (req, res) => {
                 return res.status(500).json(JsonErrorResponse("Database error occurred"));
             }
 
+            console.log(result,'resultch');
+            
+
             if (result.length === 0) {
                 return res.status(400).json(JsonErrorResponse("Invalid or expired token"));
             }
 
-            const email = result[0].email;
+            const email = result[0].ms_email;
 
             // Step 2: Use custom Encrypter function to encrypt the new password
             Encrypter(newPassword, (encryptionError, encryptedPassword) => {

@@ -82,57 +82,57 @@
       });
   
   
-      $(document).on("click", "#forgotPasswordBtn", function (event) {
-        event.preventDefault(); // Prevent the default form submission
+      // $(document).on("click", "#forgotPasswordBtn", function (event) {
+      //   event.preventDefault(); // Prevent the default form submission
   
-        let email = $("#forgotEmail").val();
+      //   let email = $("#forgotEmail").val();
   
-        if (email === "") {
-          swal({
-            icon: 'warning',
-            title: 'Required',
-            text: 'Please fill up email',
-          });
-        } else {
-          $.ajax({
-            type: "POST",
-            url: "/login/forgotpassword",
-            data: {
-              email: email,
-            },
-            success: function (result) {
-              if (result.msg === "success") {
-                swal({
-                  icon: 'success',
-                  title: 'Success',
-                  text: 'Password reset link sent to your email!',
-                }).then(() => {
-                  window.location.reload();
-                });
-              } else if (result.msg === "notexist") {
-                swal({
-                  icon: 'error',
-                  title: 'Error',
-                  text: 'Email does not exist. Please try again!',
-                });
-              } else {
-                swal({
-                  icon: 'error',
-                  title: 'Error',
-                  text: 'An error occurred while processing your request.',
-                });
-              }
-            },
-            error: function (err) {
-              swal({
-                icon: 'error',
-                title: 'Error',
-                text: 'A server error occurred.',
-              });
-            },
-          });
-        }
-      });
+      //   if (email === "") {
+      //     swal({
+      //       icon: 'warning',
+      //       title: 'Required',
+      //       text: 'Please fill up email',
+      //     });
+      //   } else {
+      //     $.ajax({
+      //       type: "POST",
+      //       url: "/login/forgotpassword",
+      //       data: {
+      //         email: email,
+      //       },
+      //       success: function (result) {
+      //         if (result.msg === "success") {
+      //           swal({
+      //             icon: 'success',
+      //             title: 'Success',
+      //             text: 'Password reset link sent to your email!',
+      //           }).then(() => {
+      //             window.location.reload();
+      //           });
+      //         } else if (result.msg === "notexist") {
+      //           swal({
+      //             icon: 'error',
+      //             title: 'Error',
+      //             text: 'Email does not exist. Please try again!',
+      //           });
+      //         } else {
+      //           swal({
+      //             icon: 'error',
+      //             title: 'Error',
+      //             text: 'An error occurred while processing your request.',
+      //           });
+      //         }
+      //       },
+      //       error: function (err) {
+      //         swal({
+      //           icon: 'error',
+      //           title: 'Error',
+      //           text: 'A server error occurred.',
+      //         });
+      //       },
+      //     });
+      //   }
+      // });
   
   
       $(".toggle-password").on("click", function () {

@@ -49,6 +49,7 @@ router.post("/reset-password", async (req, res) => {
 
   const host = process.env._HOST_ADMIN;
   const port = process.env._PORT_ADMIN;
+  const emailhost = process.env._HOST_EMAIL;
 
   if (!email) {
     return res.status(400).json(JsonErrorResponse("Email is required"));
@@ -69,7 +70,7 @@ router.post("/reset-password", async (req, res) => {
 
       // Generate a token and store it in the database with an expiry time (if needed)
       const token = crypto.randomBytes(20).toString('hex');
-      const resetLink = `http://${host}:${port}/resetpassword?token=${token}`;
+      const resetLink = `http://${emailhost}:${port}/resetpassword?token=${token}`;
 
       // Update the token in the database for that user
       const updateTokenSql = `UPDATE master_students SET ms_reset_password_token = '${token}' WHERE ms_email = '${email}'`;

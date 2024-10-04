@@ -36,6 +36,8 @@ var student_helpcenterRouter = require("./routes/student_helpcenter");
 var student_aboutusRouter = require("./routes/student_aboutus");
 var forgotpasswordRouter = require("./routes/forgotpassword");
 var resetpasswordRouter = require("./routes/resetpassword");
+var forgotpassword_adminRouter = require("./routes/forgotpassword_admin");
+var resetpassword_adminRouter = require("./routes/resetpassword_admin");
 
 var app = express();
 
@@ -84,6 +86,8 @@ app.use("/student_helpcenter", student_helpcenterRouter);
 app.use("/student_aboutus", student_aboutusRouter);
 app.use("/forgotpassword", forgotpasswordRouter);
 app.use("/resetpassword", resetpasswordRouter);
+app.use("/forgotpassword_admin", forgotpassword_adminRouter);
+app.use("/resetpassword_admin", resetpassword_adminRouter);
 
 
 // catch 404 and forward to error handler

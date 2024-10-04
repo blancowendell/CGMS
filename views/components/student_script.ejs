@@ -113,7 +113,7 @@
 
 <script>
   $(document).ready(function () {
-    $(document).on("click", "#logoutBtn", function () {
+    $(document).on("click", "#logoutBtnStudent", function () {
       console.log('clicked');
       $.ajax({
         type: "POST",
@@ -148,7 +148,7 @@
       </div>
       <div class="modal-footer logout-footer">
         <button class="btn btn-gradient-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-gradient-success" id="logoutBtn" name="logoutBtn">Log Out</button>
+        <button class="btn btn-gradient-success" id="logoutBtnStudent" name="logoutBtnStudent">Log Out</button>
       </div>
     </div>
   </div>

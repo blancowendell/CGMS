@@ -1,5 +1,6 @@
+<!-- jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
   $(document).ready(function () {
     fetchNotifications();
@@ -42,7 +43,7 @@
               console.log("Notification:", notification); // Debugging line
               notificationList += `
             <li class="mb-2">
-            <a class="dropdown-item border-radius-md notification-item" data-id="${notification.bulletinid}" href="javascript:;">
+            <a class="dropdown-item border-radius-md notification-item" data-id="${notification.notificationid}" href="javascript:;">
                 <div class="d-flex py-1">
                 <div class="my-auto">
                     <img src="data:image/jpeg;base64,${notification.image}" class="avatar avatar-sm img-fluid me-3" alt="Notification Image" style="max-width: 50px; max-height: 50px;">
@@ -90,33 +91,42 @@
       });
     }
 
+
     function attachClickEvent() {
       $(".notification-item").on("click", function () {
-        const notificationId = $(this).data("id");
+        const notificationId = $(this).data("id"); // Capture notification ID
         console.log("Notification ID:", notificationId);
 
-        // Call the API to get the notification details
         $.ajax({
           url: "/student_index/viewnotification",
           type: "POST",
           contentType: "application/json",
           data: JSON.stringify({ notificationid: notificationId }),
-          success: function (data) {
-            // Populate the modal with the notification details
-            if (data && data.success) {
-              const notification = data.data; // Assuming the data is in this structure
-              $("#modalNotificationImage").attr(
-                "src",
-                `data:image/jpeg;base64,${notification.image}`
-              );
+          success: function (response) {
+            console.log("AJAX response:", response);
+
+            if (response && response.msg === 'success' && response.data.length > 0) {
+              const notification = response.data[0];
+              $("#modalNotificationImage").attr("src", `data:image/jpeg;base64,${notification.image}`);
               $("#modalNotificationTitle").text(notification.tittle);
-              $("#modalNotificationDescription").text(notification.description);
+
+              // Use .html() to render the styled content from Summernote
+              $("#modalNotificationDescription").html(notification.description);
+
               $("#modalNotificationCreator").text(notification.createby);
               $("#modalNotificationTargetDate").text(notification.targetdate);
               $("#modalNotificationEndDate").text(notification.enddate);
 
               // Show the modal
               $("#notificationDetailsModal").modal("show");
+              console.log("Modal shown for notification ID:", notificationId);
+
+              // Attach delete action to the delete button
+              $("#deleteNotificationButton").off("click").on("click", function () {
+                deleteNotification(notificationId);
+              });
+            } else {
+              console.error("No valid data received.");
             }
           },
           error: function (error) {
@@ -125,6 +135,52 @@
         });
       });
     }
+
+    // Function to delete the notification
+    function deleteNotification(notificationId) {
+      // SweetAlert2 Toast-style confirmation
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: true,
+        showCancelButton: true, // Add cancel button
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+        timerProgressBar: true,
+      });
+
+      Toast.fire({
+        icon: 'warning',
+        title: 'Are you sure you want to delete?',
+        text: "You won't be able to undo this!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // If confirmed, proceed with deletion
+          $.ajax({
+            url: "/student_index/deletenotification", // API endpoint for deletion
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({ notificationId: notificationId }),
+            success: function (response) {
+              console.log("Notification deleted:", response);
+
+              if (response && response.msg === 'success') {
+                toastr.success("Notification deleted successfully.");
+                $("#notificationDetailsModal").modal("hide"); // Close the modal
+                location.reload(); // Optional: Reload to update notification list
+              } else {
+                toastr.error("Failed to delete the notification.");
+              }
+            },
+            error: function (error) {
+              console.error("Error deleting notification:", error);
+              toastr.error("An error occurred while deleting the notification.");
+            },
+          });
+        }
+      });
+    }
+
 
     // function fetchNotifications() {
     //   $.ajax({

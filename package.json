@@ -16,6 +16,7 @@
     "sass": "^1.78.0"
   },
   "dependencies": {
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "connect-mongodb-session": "^5.0.0",
     "cookie-parser": "^1.4.6",
@@ -30,6 +31,7 @@
     "mongoose": "^8.6.0",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
+    "node-fetch": "^3.3.2",
     "node-linq": "^0.0.5",
     "nodemailer": "^6.9.15"
   }
