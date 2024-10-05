@@ -69,18 +69,17 @@ router.post("/viewstrand", function (req, res) {
   try {
     let strand_id = req.body.strand_id;
     let sql = `SELECT
-    as_name,
-    jd_name as as_job_desc,
-    jr_name as as_job_req,
-    sr_name as as_job_skill,
-    vc_description as as_video_desc,
-    vc_file as as_video_file,
-    vc_youtubelink as as_video_link
+      as_name,
+      as_job_description as as_job_desc,
+      jr_name as as_job_req,
+      sr_name as as_job_skill,
+      vc_description as as_video_desc,
+      vc_file as as_video_file,
+      vc_youtubelink as as_video_link
     FROM academic_strands
-    INNER JOIN job_descriptions ON academic_strands.as_id = jd_strand_id
-    INNER JOIN job_requirements ON academic_strands.as_id = jr_strand_id
-    INNER JOIN skills_requirements ON academic_strands.as_id = sr_strand_id
-    INNER JOIN video_clip ON academic_strands.as_id = vc_strandsid
+    LEFT JOIN job_requirements ON academic_strands.as_id = jr_strand_id
+    LEFT JOIN skills_requirements ON academic_strands.as_id = sr_strand_id
+    LEFT JOIN video_clip ON academic_strands.as_id = vc_strandsid
     WHERE as_id = '${strand_id}'`;
 
     Select(sql, (err, result) => {

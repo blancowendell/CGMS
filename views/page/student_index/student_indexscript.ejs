@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   $(document).ready(function () {
     const colors = ["blue", "green", "red", "purple", "orange", "yellow"];
     $.ajax({
@@ -47,7 +47,7 @@
             });
           }
           $(".content").on("click", function () {
-            let strandId = $(this).data("strand-id"); 
+            let strandId = $(this).data("strand-id");
             loadStrandDetails(strandId);
           });
         } else {
@@ -59,35 +59,128 @@
       },
     });
 
+    // function loadStrandDetails(strandId) {
+    //   $.ajax({
+    //     url: "/student_index/viewstrand",
+    //     method: "POST",
+    //     data: { strand_id: strandId },
+    //     success: function (response) {
+    //       if (response && response.data && response.data.length > 0) {
+    //         let strand = response.data[0];
+
+    //         $("#modal-strand-name").text(strand.as_name);
+    //         $("#modal-job-description").text(strand.job_desc);
+    //         $("#modal-job-requirements").text(strand.job_req);
+    //         $("#modal-skill-requirements").text(strand.job_skill);
+    //         $("#modal-video-description").text(strand.video_desc);
+
+    //         if (
+    //           strand.video_file &&
+    //           strand.video_file.startsWith("data:video/mp4;base64,")
+    //         ) {
+    //           const videoSource = strand.video_file;
+    //           $("#modal-video-source").attr("src", videoSource);
+    //           $("#modal-video-player")[0].load();
+    //           $("#modal-video-player").show();
+    //         } else {
+
+    //           console.warn("Invalid or missing video data.");
+    //           $("#modal-video-source").attr("src", "");
+    //           $("#modal-video-player").hide();
+    //         }
+    //         if (strand.video_link) {
+    //           let videoLink = strand.video_link;
+
+    //           if (
+    //             videoLink.includes("youtube.com") ||
+    //             videoLink.includes("youtu.be")
+    //           ) {
+    //             let videoId = extractYouTubeId(videoLink);
+    //             let embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    //             $("#modal-video-iframe").attr("src", embedUrl).show();
+    //           } else {
+    //             $("#modal-video-iframe").hide();
+    //           }
+    //         } else {
+    //           $("#modal-video-iframe").hide();
+    //         }
+
+    //         $("#strandModal").modal("show");
+    //       } else {
+    //         console.error("No strand data returned:", response);
+    //       }
+    //     },
+    //     error: function (error) {
+    //       console.error("Error fetching strand details:", error);
+    //     },
+    //   });
+    // }
     function loadStrandDetails(strandId) {
       $.ajax({
         url: "/student_index/viewstrand",
         method: "POST",
-        data: { strand_id: strandId }, 
+        data: { strand_id: strandId },
         success: function (response) {
           if (response && response.data && response.data.length > 0) {
             let strand = response.data[0];
 
-            $("#modal-strand-name").text(strand.as_name);
-            $("#modal-job-description").text(strand.job_desc);
-            $("#modal-job-requirements").text(strand.job_req);
-            $("#modal-skill-requirements").text(strand.job_skill);
-            $("#modal-video-description").text(strand.video_desc);
+            // Strand Name
+            $("#modal-strand-name").text(strand.as_name || "N/A");
 
+            // Job Description
+            if (strand.job_desc) {
+              $("#modal-job-description")
+                .text(strand.job_desc)
+                .closest("p")
+                .show();
+            } else {
+              $("#modal-job-description").closest("p").hide();
+            }
+
+            // Job Requirements
+            if (strand.job_req) {
+              $("#modal-job-requirements")
+                .text(strand.job_req)
+                .closest("p")
+                .show();
+            } else {
+              $("#modal-job-requirements").closest("p").hide();
+            }
+
+            // Skills Requirements
+            if (strand.job_skill) {
+              $("#modal-skill-requirements")
+                .text(strand.job_skill)
+                .closest("p")
+                .show();
+            } else {
+              $("#modal-skill-requirements").closest("p").hide();
+            }
+
+            // Video Description
+            if (strand.video_desc) {
+              $("#modal-video-description")
+                .text(strand.video_desc)
+                .closest("p")
+                .show();
+            } else {
+              $("#modal-video-description").closest("p").hide();
+            }
+
+            // Video File (MP4)
             if (
               strand.video_file &&
               strand.video_file.startsWith("data:video/mp4;base64,")
             ) {
-              const videoSource = strand.video_file; 
+              const videoSource = strand.video_file;
               $("#modal-video-source").attr("src", videoSource);
-              $("#modal-video-player")[0].load(); 
+              $("#modal-video-player")[0].load();
               $("#modal-video-player").show();
             } else {
-
-              console.warn("Invalid or missing video data.");
-              $("#modal-video-source").attr("src", "");
-              $("#modal-video-player").hide(); 
+              $("#modal-video-player").hide();
             }
+
+            // YouTube Video Link
             if (strand.video_link) {
               let videoLink = strand.video_link;
 
@@ -97,14 +190,13 @@
               ) {
                 let videoId = extractYouTubeId(videoLink);
                 let embedUrl = `https://www.youtube.com/embed/${videoId}`;
-                $("#modal-video-iframe").attr("src", embedUrl).show(); 
+                $("#modal-video-iframe").attr("src", embedUrl).show();
               } else {
-                $("#modal-video-iframe").hide(); 
+                $("#modal-video-iframe").hide();
               }
             } else {
-              $("#modal-video-iframe").hide(); 
+              $("#modal-video-iframe").hide();
             }
-
             $("#strandModal").modal("show");
           } else {
             console.error("No strand data returned:", response);
@@ -115,6 +207,152 @@
         },
       });
     }
+
+    function extractYouTubeId(url) {
+      const regex =
+        /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+      const matches = url.match(regex);
+      return matches ? matches[1] : null;
+    }
+  });
+</script> -->
+<script>
+  $(document).ready(function () {
+    const colors = ["blue", "green", "red", "purple", "orange", "yellow"];
+
+    $.ajax({
+      url: "/student_index/dashboard",
+      method: "GET",
+      success: function (response) {
+        console.log("API Response:", response);
+
+        let data = response.data;
+
+        if (Array.isArray(data)) {
+          let groupedData = {};
+          data.forEach((item) => {
+            if (!groupedData[item.name]) {
+              groupedData[item.name] = [];
+            }
+            groupedData[item.name].push(item);
+          });
+
+          for (let name in groupedData) {
+            let sectionHeader = `<h3>${name}</h3>`;
+            let rowHtml = `<div class="row" id="${name
+              .replace(/\s+/g, "-")
+              .toLowerCase()}-row"></div>`;
+
+            $("#categories-container").append(sectionHeader);
+            $("#categories-container").append(rowHtml);
+
+            groupedData[name].forEach((item, index) => {
+              let color = colors[index % colors.length];
+              let cardHtml = `
+              <div class="col-md-4 col-sm-8 content-card">
+                <div class="card-big-shadow">
+                  <div class="card card-just-text" data-background="color" data-color="${color}" data-radius="none">
+                    <div class="content" style="color: black;" data-strand-id="${item.strand}">
+                      <h6 class="category" style="color: black;">${item.name}</h6>
+                      <h4 class="title"><a href="#" style="color: black;">${item.academicstrand}</a></h4>
+                      <p class="description" style="color: black;">${item.description}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+
+              $(`#${name.replace(/\s+/g, "-").toLowerCase()}-row`).append(
+                cardHtml
+              );
+            });
+          }
+        } else {
+          console.error("Data is not an array or is empty:", data);
+        }
+      },
+      error: function (error) {
+        console.error("Error fetching data:", error);
+      },
+    });
+
+    $("#categories-container").on("click", ".content", function () {
+      let strandId = $(this).data("strand-id");
+
+      console.log("Clicked strandId:", strandId); 
+
+      if (strandId) {
+        loadStrandDetails(strandId);
+      } else {
+        console.error("No strand ID found for this card.");
+      }
+    });
+
+    function loadStrandDetails(strandId) {
+      $("#modal-strand-name").text("Loading...");
+      $("#modal-job-description").text("").closest("p").hide();
+      $("#modal-job-requirements").text("").closest("p").hide();
+      $("#modal-skill-requirements").text("").closest("p").hide();
+      $("#modal-video-description").text("").closest("p").hide();
+      $("#modal-video-player").hide();
+      $("#modal-video-source").attr("src", "");
+      $("#modal-video-iframe").attr("src", "").hide();
+
+      $.ajax({
+        url: "/student_index/viewstrand",
+        method: "POST",
+        data: { strand_id: strandId },
+        success: function (response) {
+          if (response && response.data && response.data.length > 0) {
+            let strand = response.data[0];
+
+            $("#modal-strand-name").text(strand.as_name || "N/A");
+            $("#modal-job-description")
+              .text(strand.job_desc || "N/A")
+              .closest("p")
+              .toggle(!!strand.job_desc);
+            $("#modal-job-requirements")
+              .text(strand.job_req || "N/A")
+              .closest("p")
+              .toggle(!!strand.job_req);
+            $("#modal-skill-requirements")
+              .text(strand.job_skill || "N/A")
+              .closest("p")
+              .toggle(!!strand.job_skill);
+            $("#modal-video-description")
+              .text(strand.video_desc || "N/A")
+              .closest("p")
+              .toggle(!!strand.video_desc);
+
+            if (
+              strand.video_file &&
+              strand.video_file.startsWith("data:video/mp4;base64,")
+            ) {
+              $("#modal-video-source").attr("src", strand.video_file);
+              $("#modal-video-player")[0].load();
+              $("#modal-video-player").show();
+            } else {
+              $("#modal-video-player").hide();
+            }
+            if (strand.video_link) {
+              let videoId = extractYouTubeId(strand.video_link);
+              let embedUrl = `https://www.youtube.com/embed/${videoId}`;
+              $("#modal-video-iframe").attr("src", embedUrl).show();
+            } else {
+              $("#modal-video-iframe").hide();
+            }
+
+            // Show the modal
+            $("#strandModal").modal("show");
+          } else {
+            console.error("No strand data returned:", response);
+          }
+        },
+        error: function (error) {
+          console.error("Error fetching strand details:", error);
+        },
+      });
+    }
+
     function extractYouTubeId(url) {
       const regex =
         /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
