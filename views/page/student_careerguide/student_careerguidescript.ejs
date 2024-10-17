@@ -16,11 +16,10 @@
                     let resultHtml = `
                       <div class="card mt-4">
                         <div class="card-body">
-                          <h4 class="card-title">Personality Type: ${result.personality_code || 'N/A'}</h4>
+                          <h4 class="card-title">Personality Type</h4>
                           <p><strong>Description:</strong> ${result.personality_description || 'N/A'}</p>
-                          <p><strong>Strands:</strong> ${result.strand_names || 'N/A'}</p>
-                          <p><strong>Recommended Courses:</strong> ${result.course_descriptions || 'N/A'}</p>
-                          <p><strong>Recommended Jobs:</strong> ${result.job_descriptions || 'N/A'}</p>
+                          <p><strong>Recommended Strands:</strong> ${result.strand_names || 'N/A'}</p>
+                          <p><strong>Possible  Jobs:</strong> ${result.job_descriptions || 'N/A'}</p>
                           
                           <!-- Centered dialog and image -->
                           <div style="text-align: center; background-color: #f0f9ff; padding: 15px; border-radius: 10px; margin-top: 20px;">
@@ -35,6 +34,9 @@
                         </div>
                       </div>
                     `;
+
+                    // <p><strong>Strands:</strong> ${result.strand_names || 'N/A'}</p>
+                    // <p><strong>Recommended Strands:</strong> ${result.course_descriptions || 'N/A'}</p>
                     // let resultHtml = `
                     //   <div class="card mt-4">
                     //     <div class="card-body">
