@@ -33,7 +33,7 @@ router.get("/load", (req, res) => {
     try {
         let sql = `SELECT 
         ms_studentid,
-        CONCAT(ms_lastname,' ',ms_firstname,' ',ms_lastname) AS ms_fullname,
+        CONCAT(ms_lastname,' ',ms_firstname) AS ms_fullname,
         ms_email,
         s_school_name as ms_school_name,
         ms_username

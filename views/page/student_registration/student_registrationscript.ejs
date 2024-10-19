@@ -1,280 +1,373 @@
 <script>
-    $(document).ready(function () {
-        console.log("Initialize");
-        LoadSchholId();
-        function LoadSchholId() {
-            $.ajax({
-                type: "GET",
-                url: "/sp_admin_school/load",
-                success: function (result) {
-                    var data = result.data;
+  $(document).ready(function () {
+    console.log("Initialize");
+    LoadSchholId();
+    function LoadSchholId() {
+      $.ajax({
+        type: "GET",
+        url: "/sp_admin_school/load",
+        success: function (result) {
+          var data = result.data;
 
-                    $.each(data, function (key, item) {
-                        var options = new Option(item.school_id, item.school_id);
-                        $(options).html(item.school_name);
-                        $("#schoolid").append(options);
-                    });
-                },
-                error: function (result) {
-                    alert("error: " + result.data);
-                },
-            });
-        }
+          $.each(data, function (key, item) {
+            var options = new Option(item.school_id, item.school_id);
+            $(options).html(item.school_name);
+            $("#schoolid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
 
+    //   $(document).on("click", "#registerBtn", function () {
+    //     let username = $("#username").val();
+    //     let password = $("#password").val();
+    //     let schoolid = $("#schoolid").val();
+    //     let firstname = $("#firstname").val();
+    //     let middlename = $("#middlename").val();
+    //     let lastname = $("#lastname").val();
+    //     let email = $("#email").val();
 
-        //   $(document).on("click", "#registerBtn", function () {
-        //     let username = $("#username").val();
-        //     let password = $("#password").val();
-        //     let schoolid = $("#schoolid").val();
-        //     let firstname = $("#firstname").val();
-        //     let middlename = $("#middlename").val();
-        //     let lastname = $("#lastname").val();
-        //     let email = $("#email").val();
+    //     var message = "";
 
-        //     var message = "";
+    //     if (username === "" || username === null) {
+    //       message += "Username ";
+    //     }
 
-        //     if (username === "" || username === null) {
-        //       message += "Username ";
-        //     }
+    //     if (password === "" || password === null) {
+    //       message += "Password";
+    //     }
 
-        //     if (password === "" || password === null) {
-        //       message += "Password";
-        //     }
+    //     if (schoolid === "" || schoolid === null) {
+    //       message += "School Code";
+    //     }
 
-        //     if (schoolid === "" || schoolid === null) {
-        //       message += "School Code";
-        //     }
+    //     if (firstname === "" || firstname === null) {
+    //       message += "First Name";
+    //     }
 
-        //     if (firstname === "" || firstname === null) {
-        //       message += "First Name";
-        //     }
+    //     if (middlename === "" || middlename === null) {
+    //       message += "Middle Name";
+    //     }
 
-        //     if (middlename === "" || middlename === null) {
-        //       message += "Middle Name";
-        //     }
+    //     if (lastname === "" || lastname === null) {
+    //       message += "Last Name";
+    //     }
 
-        //     if (lastname === "" || lastname === null) {
-        //       message += "Last Name";
-        //     }
+    //     if (email === "" || email === null) {
+    //       message += "Email";
+    //     }
 
-        //     if (email === "" || email === null) {
-        //       message += "Email";
-        //     }
+    //     if (message !== "") {
+    //       toastr.error(`Please fill up ${message}`, "Required");
+    //     } else {
+    //       $.ajax({
+    //         type: "POST",
+    //         url: "/student_registration/register",
+    //         data: {
+    //           username: username,
+    //           password: password,
+    //           schoolid: schoolid,
+    //           firstname: firstname,
+    //           middlename: middlename,
+    //           lastname: lastname,
+    //           email: email,
+    //         },
+    //         success: function (result) {
+    //           if (result.msg === "success") {
+    //             toastr.success("Login Successful!", "Success");
+    //             setTimeout(() => {
+    //               if (result.data[0]) {
+    //                 location.replace("/student_index");
+    //               } else {
+    //                 location.replace("/student_index");
+    //               }
+    //             }, 2000); // Wait 2 seconds for toast to display before redirect
+    //           } else if (result.msg === "graduated") {
+    //             toastr.error(
+    //               "Your account is inactive. Please be guided accordingly.",
+    //               "Graduated"
+    //             );
+    //           } else if (result.msg === "incorrect") {
+    //             toastr.error(
+    //               "Incorrect Credentials. Please try again!",
+    //               "Incorrect"
+    //             );
+    //           }
+    //         },
+    //         error: function (err) {
+    //           toastr.error("An error occurred while saving data.", "Error");
+    //         },
+    //       });
+    //     }
+    //   });
 
-        //     if (message !== "") {
-        //       toastr.error(`Please fill up ${message}`, "Required");
-        //     } else {
-        //       $.ajax({
-        //         type: "POST",
-        //         url: "/student_registration/register",
-        //         data: {
-        //           username: username,
-        //           password: password,
-        //           schoolid: schoolid,
-        //           firstname: firstname,
-        //           middlename: middlename,
-        //           lastname: lastname,              
-        //           email: email,
-        //         },
-        //         success: function (result) {
-        //           if (result.msg === "success") {
-        //             toastr.success("Login Successful!", "Success");
-        //             setTimeout(() => {
-        //               if (result.data[0]) {
-        //                 location.replace("/student_index");
-        //               } else {
-        //                 location.replace("/student_index");
-        //               }
-        //             }, 2000); // Wait 2 seconds for toast to display before redirect
-        //           } else if (result.msg === "graduated") {
-        //             toastr.error(
-        //               "Your account is inactive. Please be guided accordingly.",
-        //               "Graduated"
-        //             );
-        //           } else if (result.msg === "incorrect") {
-        //             toastr.error(
-        //               "Incorrect Credentials. Please try again!",
-        //               "Incorrect"
-        //             );
-        //           }
-        //         },
-        //         error: function (err) {
-        //           toastr.error("An error occurred while saving data.", "Error");
-        //         },
-        //       });
-        //     }
-        //   });
+    // $(document).on("click", "#registerBtn", function () {
+    //     let username = $("#username").val();
+    //     let password = $("#password").val();
+    //     let schoolid = $("#schoolid").val();
+    //     let firstname = $("#firstname").val();
+    //     let middlename = $("#middlename").val();
+    //     let lastname = $("#lastname").val();
+    //     let email = $("#email").val();
 
+    //     var message = "";
 
-        $(document).on("click", "#registerBtn", function () {
-            let username = $("#username").val();
-            let password = $("#password").val();
-            let schoolid = $("#schoolid").val();
-            let firstname = $("#firstname").val();
-            let middlename = $("#middlename").val();
-            let lastname = $("#lastname").val();
-            let email = $("#email").val();
+    //     if (username === "" || username === null) {
+    //         message += "Username ";
+    //     }
 
-            var message = "";
+    //     if (password === "" || password === null) {
+    //         message += "Password";
+    //     }
 
-            if (username === "" || username === null) {
-                message += "Username ";
+    //     if (schoolid === "" || schoolid === null) {
+    //         message += "School Code";
+    //     }
+
+    //     if (firstname === "" || firstname === null) {
+    //         message += "First Name";
+    //     }
+
+    //     if (middlename === "" || middlename === null) {
+    //         message += "Middle Name";
+    //     }
+
+    //     if (lastname === "" || lastname === null) {
+    //         message += "Last Name";
+    //     }
+
+    //     if (email === "" || email === null) {
+    //         message += "Email";
+    //     }
+
+    //     if (message !== "") {
+    //         toastr.error(`Please fill up ${message}`, "Required");
+    //     } else {
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "/student_registration/register",
+    //             data: {
+    //                 username: username,
+    //                 password: password,
+    //                 schoolid: schoolid,
+    //                 firstname: firstname,
+    //                 middlename: middlename,
+    //                 lastname: lastname,
+    //                 email: email,
+    //             },
+    //             success: function (result) {
+    //                 // Handling success scenario
+    //                 if (result.msg === "success") {
+    //                     toastr.success("Registration Successful! Click OK to login.", "Success", {
+    //                         closeButton: true,
+    //                         onHidden: function () {
+    //                             // Automatically login the user after success toast is closed
+    //                             $.ajax({
+    //                                 type: "POST",
+    //                                 url: "/student_login/login", // Replace with your login API endpoint
+    //                                 data: {
+    //                                     username: username,
+    //                                     password: password,
+    //                                     schoolid: schoolid
+    //                                 },
+    //                                 success: function (loginResult) {
+    //                                     if (loginResult.msg === "success") {
+    //                                         location.replace("/student_index"); // Redirect after login success
+    //                                     } else {
+    //                                         toastr.error("Login failed. Please try again.", "Error");
+    //                                     }
+    //                                 },
+    //                                 error: function (err) {
+    //                                     toastr.error("An error occurred during login.", "Error");
+    //                                 }
+    //                             });
+    //                         }
+    //                     });
+    //                 }
+    //                 // Handle user already exists scenario
+    //                 else if (result.msg === "exist") {
+    //                     toastr.error("The user already exists in the system.", "User Exists");
+    //                 }
+    //                 // Handle graduation scenario (account inactive)
+    //                 else if (result.msg === "graduated") {
+    //                     toastr.error("Your account is inactive. Please be guided accordingly.", "Graduated");
+    //                 }
+    //                 // Handle incorrect credentials scenario
+    //                 else if (result.msg === "incorrect") {
+    //                     toastr.error("Incorrect Credentials. Please try again!", "Incorrect");
+    //                 }
+    //             },
+    //             error: function (err) {
+    //                 toastr.error("An error occurred while saving data.", "Error");
+    //             }
+    //         });
+
+    //     }
+    // });
+
+    $(document).on("click", "#registerBtn", function () {
+      let username = $("#username").val();
+      let password = $("#password").val();
+      let schoolid = $("#schoolid").val();
+      let firstname = $("#firstname").val();
+      let middlename = $("#middlename").val();
+      let lastname = $("#lastname").val();
+      let email = $("#email").val();
+
+      var message = "";
+
+      if (username === "" || username === null) {
+        message += "Username ";
+      }
+
+      if (password === "" || password === null) {
+        message += "Password";
+      }
+
+      if (schoolid === "" || schoolid === null) {
+        message += "School Code";
+      }
+
+      if (firstname === "" || firstname === null) {
+        message += "First Name";
+      }
+
+      if (middlename === "" || middlename === null) {
+        message += "Middle Name";
+      }
+
+      if (lastname === "" || lastname === null) {
+        message += "Last Name";
+      }
+
+      if (email === "" || email === null) {
+        message += "Email";
+      }
+
+      if (message !== "") {
+        toastr.error(`Please fill up ${message}`, "Required");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/student_registration/register",
+          data: {
+            username: username,
+            password: password,
+            schoolid: schoolid,
+            firstname: firstname,
+            middlename: middlename,
+            lastname: lastname,
+            email: email,
+          },
+          success: function (result) {
+            // Handling success scenario
+            if (result.msg === "success") {
+              toastr.success(
+                "Registration Successful! You will be redirected to the login page.",
+                "Success",
+                {
+                  closeButton: true,
+                  onHidden: function () {
+                    // Redirect to the login page where they can input their credentials manually
+                    location.replace("/student_login");
+                  },
+                }
+              );
             }
-
-            if (password === "" || password === null) {
-                message += "Password";
+            // Handle user already exists scenario
+            else if (result.msg === "exist") {
+              toastr.error(
+                "The user already exists in the system.",
+                "User Exists"
+              );
             }
-
-            if (schoolid === "" || schoolid === null) {
-                message += "School Code";
+            // Handle graduation scenario (account inactive)
+            else if (result.msg === "graduated") {
+              toastr.error(
+                "Your account is inactive. Please be guided accordingly.",
+                "Graduated"
+              );
             }
-
-            if (firstname === "" || firstname === null) {
-                message += "First Name";
+            // Handle incorrect credentials scenario
+            else if (result.msg === "incorrect") {
+              toastr.error(
+                "Incorrect Credentials. Please try again!",
+                "Incorrect"
+              );
             }
-
-            if (middlename === "" || middlename === null) {
-                message += "Middle Name";
-            }
-
-            if (lastname === "" || lastname === null) {
-                message += "Last Name";
-            }
-
-            if (email === "" || email === null) {
-                message += "Email";
-            }
-
-            if (message !== "") {
-                toastr.error(`Please fill up ${message}`, "Required");
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "/student_registration/register",
-                    data: {
-                        username: username,
-                        password: password,
-                        schoolid: schoolid,
-                        firstname: firstname,
-                        middlename: middlename,
-                        lastname: lastname,
-                        email: email,
-                    },
-                    success: function (result) {
-                        // Handling success scenario
-                        if (result.msg === "success") {
-                            toastr.success("Registration Successful! Click OK to login.", "Success", {
-                                closeButton: true,
-                                onHidden: function () {
-                                    // Automatically login the user after success toast is closed
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "/student_login/login", // Replace with your login API endpoint
-                                        data: {
-                                            username: username,
-                                            password: password,
-                                            schoolid: schoolid
-                                        },
-                                        success: function (loginResult) {
-                                            if (loginResult.msg === "success") {
-                                                location.replace("/student_index"); // Redirect after login success
-                                            } else {
-                                                toastr.error("Login failed. Please try again.", "Error");
-                                            }
-                                        },
-                                        error: function (err) {
-                                            toastr.error("An error occurred during login.", "Error");
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                        // Handle user already exists scenario
-                        else if (result.msg === "exist") {
-                            toastr.error("The user already exists in the system.", "User Exists");
-                        }
-                        // Handle graduation scenario (account inactive)
-                        else if (result.msg === "graduated") {
-                            toastr.error("Your account is inactive. Please be guided accordingly.", "Graduated");
-                        }
-                        // Handle incorrect credentials scenario
-                        else if (result.msg === "incorrect") {
-                            toastr.error("Incorrect Credentials. Please try again!", "Incorrect");
-                        }
-                    },
-                    error: function (err) {
-                        toastr.error("An error occurred while saving data.", "Error");
-                    }
-                });
-
-            }
+          },
+          error: function (err) {
+            toastr.error("An error occurred while saving data.", "Error");
+          },
         });
-
-
-
-        $(document).on("click", "#forgotPasswordBtn", function (event) {
-            event.preventDefault(); // Prevent the default form submission
-
-            let email = $("#forgotEmail").val();
-
-            if (email === "") {
-                swal({
-                    icon: 'warning',
-                    title: 'Required',
-                    text: 'Please fill up email',
-                });
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "/login/forgotpassword",
-                    data: {
-                        email: email,
-                    },
-                    success: function (result) {
-                        if (result.msg === "success") {
-                            swal({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'Password reset link sent to your email!',
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        } else if (result.msg === "notexist") {
-                            swal({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Email does not exist. Please try again!',
-                            });
-                        } else {
-                            swal({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while processing your request.',
-                            });
-                        }
-                    },
-                    error: function (err) {
-                        swal({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'A server error occurred.',
-                        });
-                    },
-                });
-            }
-        });
-
-
-        $(".toggle-password").on("click", function () {
-            const passwordInput = $("#password");
-            const passwordFieldType = passwordInput.attr("type");
-            if (passwordFieldType === "password") {
-                passwordInput.attr("type", "text");
-                $(this).find("i").removeClass("fa-eye").addClass("fa-eye-slash");
-            } else {
-                passwordInput.attr("type", "password");
-                $(this).find("i").removeClass("fa-eye-slash").addClass("fa-eye");
-            }
-        });
+      }
     });
+
+    $(document).on("click", "#forgotPasswordBtn", function (event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      let email = $("#forgotEmail").val();
+
+      if (email === "") {
+        swal({
+          icon: "warning",
+          title: "Required",
+          text: "Please fill up email",
+        });
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/login/forgotpassword",
+          data: {
+            email: email,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal({
+                icon: "success",
+                title: "Success",
+                text: "Password reset link sent to your email!",
+              }).then(() => {
+                window.location.reload();
+              });
+            } else if (result.msg === "notexist") {
+              swal({
+                icon: "error",
+                title: "Error",
+                text: "Email does not exist. Please try again!",
+              });
+            } else {
+              swal({
+                icon: "error",
+                title: "Error",
+                text: "An error occurred while processing your request.",
+              });
+            }
+          },
+          error: function (err) {
+            swal({
+              icon: "error",
+              title: "Error",
+              text: "A server error occurred.",
+            });
+          },
+        });
+      }
+    });
+
+    $(".toggle-password").on("click", function () {
+      const passwordInput = $("#password");
+      const passwordFieldType = passwordInput.attr("type");
+      if (passwordFieldType === "password") {
+        passwordInput.attr("type", "text");
+        $(this).find("i").removeClass("fa-eye").addClass("fa-eye-slash");
+      } else {
+        passwordInput.attr("type", "password");
+        $(this).find("i").removeClass("fa-eye-slash").addClass("fa-eye");
+      }
+    });
+  });
 </script>
